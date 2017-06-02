@@ -1,0 +1,1002 @@
+{
+  "appid": "536ae6e0-72b2-4ae1-9520-810acaddd2d1",
+  "name": "TruSTAR",
+  "description": "This App integrates with <b>TruSTAR</b> to provide various <b>hunting</b> and <b>reporting</b> actions in addition to ingestion of latest indicators. Input to all the hunt actions must be greater than 3 characters.",
+  "publisher": "Phantom",
+  "package_name": "phantom_trustar",
+  "license": "Copyright (c) Phantom Cyber Corporation 2017",
+  "main_module": "trustar_connector.pyc",
+  "type": "investigative",
+  "app_version": "1.0.1",
+  "utctime_updated": "",
+  "product_vendor": "TruSTAR Technology",
+  "product_name": "TruSTAR",
+  "product_version_regex": ".*",
+  "min_phantom_version": "2.1.452",
+  "logo": "trustar-logo.png",
+  "configuration": {
+    "url": {
+      "required": true,
+      "description": "URL (eg: https://api.trustar.co)",
+      "data_type": "string",
+      "order": 0
+    },
+    "client_id": {
+      "required": true,
+      "order": 1,
+      "data_type": "string",
+      "description": "OAuth client ID"
+    },
+    "client_secret": {
+      "required": true,
+      "order": 2,
+      "data_type": "password",
+      "description": "OAuth client secret key"
+    }
+  },
+  "actions": [
+    {
+      "action": "test connectivity",
+      "description": "Validate credentials provided for connectivity",
+      "type": "test",
+      "identifier": "test_asset_connectivity",
+      "read_only": true,
+      "parameters": {},
+      "output": [],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "hunt ip",
+      "description": "Look for information about an IP/CIDR",
+      "type": "investigate",
+      "identifier": "hunt_ip",
+      "read_only": true,
+      "parameters": {
+        "ip": {
+          "required": true,
+          "contains": [
+            "ip"
+          ],
+          "description": "IP/CIDR to hunt",
+          "data_type": "string",
+          "primary": true,
+          "order": 0
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Hunt IP"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.ip",
+          "data_type": "string",
+          "contains": [
+            "ip"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_correlated_reports",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.summary.possible_reason",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "hunt url",
+      "description": "Look for information about a URL",
+      "type": "investigate",
+      "identifier": "hunt_url",
+      "read_only": true,
+      "parameters": {
+        "url": {
+          "required": true,
+          "contains": [
+            "url"
+          ],
+          "description": "URL to hunt",
+          "data_type": "string",
+          "primary": true,
+          "order": 0
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Hunt URL"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.url",
+          "data_type": "string",
+          "contains": [
+            "url"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_correlated_reports",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.summary.possible_reason",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "hunt domain",
+      "description": "Look for information about a domain",
+      "type": "investigate",
+      "identifier": "hunt_domain",
+      "read_only": true,
+      "parameters": {
+        "domain": {
+          "required": true,
+          "contains": [
+            "domain",
+            "url"
+          ],
+          "description": "Domain to hunt",
+          "data_type": "string",
+          "primary": true,
+          "order": 0
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Hunt Domain"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.domain",
+          "data_type": "string",
+          "contains": [
+            "domain",
+            "url"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_correlated_reports",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.summary.possible_reason",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "hunt file",
+      "description": "Look for information about a file",
+      "type": "investigate",
+      "identifier": "hunt_file",
+      "read_only": true,
+      "parameters": {
+        "file": {
+          "required": true,
+          "contains": [
+            "hash",
+            "file name",
+            "md5",
+            "sha1",
+            "sha256"
+          ],
+          "description": "File to hunt",
+          "data_type": "string",
+          "primary": true,
+          "order": 0
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Hunt File"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.file",
+          "data_type": "string",
+          "contains": [
+            "hash",
+            "file name",
+            "md5",
+            "sha1",
+            "sha256"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_correlated_reports",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.summary.possible_reason",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "hunt email",
+      "description": "Look for information about an email",
+      "type": "investigate",
+      "identifier": "hunt_email",
+      "read_only": true,
+      "parameters": {
+        "email": {
+          "required": true,
+          "contains": [
+            "email"
+          ],
+          "description": "Email address to hunt",
+          "data_type": "string",
+          "primary": true,
+          "order": 0
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Hunt Email"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.email",
+          "data_type": "string",
+          "contains": [
+            "email"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_correlated_reports",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.summary.possible_reason",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "hunt cve number",
+      "description": "Look for information about a CVE(Common Vulnerability and Exposure) number",
+      "type": "investigate",
+      "identifier": "hunt_cve_number",
+      "read_only": true,
+      "parameters": {
+        "cve_number": {
+          "required": true,
+          "contains": [
+            "trustar cve number"
+          ],
+          "description": "CVE(Common Vulnerability and Exposure) number to hunt",
+          "data_type": "string",
+          "primary": true,
+          "order": 0
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Hunt CVE Number"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.cve_number",
+          "data_type": "string",
+          "contains": [
+            "trustar cve number"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_correlated_reports",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.summary.possible_reason",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "hunt malware",
+      "description": "Look for information about a malware",
+      "type": "investigate",
+      "identifier": "hunt_malware",
+      "read_only": true,
+      "parameters": {
+        "malware": {
+          "required": true,
+          "contains": [
+            "trustar malware"
+          ],
+          "description": "Malware to hunt",
+          "data_type": "string",
+          "primary": true,
+          "order": 0
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Hunt Malware"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.malware",
+          "data_type": "string",
+          "contains": [
+            "trustar malware"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_correlated_reports",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.summary.possible_reason",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "hunt registry key",
+      "description": "Look for information about a registry key",
+      "type": "investigate",
+      "identifier": "hunt_registry_key",
+      "read_only": true,
+      "parameters": {
+        "registry_key": {
+          "required": true,
+          "contains": [
+            "trustar registry key"
+          ],
+          "description": "Registry key to hunt",
+          "data_type": "string",
+          "primary": true,
+          "order": 0
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Hunt Registry Key"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.registry_key",
+          "data_type": "string",
+          "contains": [
+            "trustar registry key"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_correlated_reports",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.summary.possible_reason",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "on poll",
+      "description": "Action to ingest latest indicators",
+      "verbose": "During on poll, the latest indicators from TruSTAR are queried. Containers are uniquely identified by the source to which the indicators belong, interval for which they were queried and the time when they are queried. The indicators are ingested as artifacts. TruSTAR can fetch the latest indicators encountered in last 24 hours only.</p><p>For the first scheduled and manual ingestion, indicators encountered in last 24 hours are ingested. For the subsequent polls, indicators encountered during the interval configured in the asset are ingested. The polling interval should be in hours, ranging from 1 to 24.<br></p><table><tbody><tr class='plain'><th>IOC</th><th>Artifact Name</th><th>CEF Field</th></tr><tr><td>File</td><td>File Artifact</td><td>fileHashMd5, fileHashSha1, fileHashSha256, filePath</td></tr><tr><td>IP</td><td>IP Artifact</td><td>destinationAddress</td></tr><tr><td>URL</td><td>URL Artifact</td><td>requestURL</td></tr><tr><td>Domain</td><td>Domain Artifact</td><td>destinationDnsDomain</td></tr><tr><td>Email</td><td>Email Artifact</td><td>email</td></tr><tr><td>Malware</td><td>Malware Artifact</td><td>malware</td></tr><tr><td>Registry Key</td><td>Registry Key Artifact</td><td>registryKey</td></tr><tr><td>CVE</td><td>CVE Artifact</td><td>cs3</td></tr></tbody></table>",
+      "type": "ingest",
+      "identifier": "on_poll",
+      "read_only": true,
+      "parameters": {
+        "container_id": {
+          "description": "Parameter ignored in this app",
+          "data_type": "string",
+          "order": 0,
+          "allow_list": true
+        },
+        "container_count": {
+          "description": "Parameter ignored in this app",
+          "data_type": "numeric",
+          "order": 1
+        },
+        "start_time": {
+          "description": "Start of time range, in epoch time (milliseconds)",
+          "data_type": "numeric",
+          "order": 2
+        },
+        "artifact_count": {
+          "description": "Parameter ignored in this app",
+          "data_type": "numeric",
+          "order": 3
+        },
+        "end_time": {
+          "description": "End of time range, in epoch time (milliseconds)",
+          "data_type": "numeric",
+          "order": 4
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "table",
+        "title": "On Poll"
+      },
+      "output": [],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "get report",
+      "description": "Get report details",
+      "type": "investigate",
+      "identifier": "get_report",
+      "read_only": true,
+      "parameters": {
+        "report_id": {
+          "required": true,
+          "contains": [
+            "trustar report id"
+          ],
+          "description": "Report ID",
+          "data_type": "string",
+          "primary": true
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "view": "trustar_view.display_action_details",
+        "title": "Get Report"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.sector.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.sector.label",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportBody",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.updated",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.created",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.correlationCount",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.title",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.distributionType",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.enclaves.*.id",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.enclaves.*.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.timeBegan",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.IP",
+          "data_type": "string",
+          "contains": [
+            "ip"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.CIDR_BLOCK",
+          "data_type": "string",
+          "contains": [
+            "ip"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.URL",
+          "data_type": "string",
+          "contains": [
+            "url"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.SOFTWARE",
+          "data_type": "string",
+          "contains": [
+            "file name"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.MD5",
+          "data_type": "string",
+          "contains": [
+            "md5"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.SHA256",
+          "data_type": "string",
+          "contains": [
+            "sha256"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.EMAIL_ADDRESS",
+          "data_type": "string",
+          "contains": [
+            "email"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.MALWARE",
+          "data_type": "string",
+          "contains": [
+            "trustar malware"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.REGISTRY_KEY",
+          "data_type": "string",
+          "contains": [
+            "trustar registry key"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.CVE",
+          "data_type": "string",
+          "contains": [
+            "trustar cve number"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.SHA1",
+          "data_type": "string",
+          "contains": [
+            "sha1"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.DOMAIN",
+          "data_type": "string",
+          "contains": [
+            "domain"
+          ]
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.extracted_indicators_count",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "submit report",
+      "description": "Submit report to TruSTAR",
+      "verbose": "If <b>distribution_type</b> selected is <b>ENCLAVE</b>, <b>enclave_ids</b> should be provided. If <b>time_discovered</b> is not provided, the action will consider current system time. Parameter <b>external_tracking_id</b> will only be considered if the provided <b>api_version</b> is <b>1.2</b>.",
+      "type": "generic",
+      "identifier": "submit_report",
+      "read_only": false,
+      "parameters": {
+        "report_title": {
+          "description": "Report title",
+          "data_type": "string",
+          "required": true,
+          "order": 0
+        },
+        "report_body": {
+          "description": "Text content of report",
+          "data_type": "string",
+          "required": true,
+          "order": 1
+        },
+        "distribution_type": {
+          "description": "Distribution Type",
+          "data_type": "string",
+          "required": true,
+          "order": 2,
+          "value_list": [
+            "COMMUNITY",
+            "ENCLAVE"
+          ]
+        },
+        "enclave_ids": {
+          "description": "(,) separated TruSTAR-generated enclave IDs",
+          "data_type": "string",
+          "order": 3
+        },
+        "time_discovered": {
+          "description": "ISO-8601 formatted incident time with timezone (e.g. \"2016-09-22T11:38:35+00:00\")",
+          "data_type": "string",
+          "order": 4
+        },
+        "external_tracking_id": {
+          "description": "External tracking ID (possibly a JIRA ticket number)",
+          "data_type": "string",
+          "order": 5
+        },
+        "api_version": {
+          "description": "API version",
+          "data_type": "string",
+          "order": 6,
+          "value_list": [
+            "1.1",
+            "1.2"
+          ]
+        }
+      },
+      "render": {
+        "width": 12,
+        "height": 5,
+        "type": "custom",
+        "title": "Submit Report",
+        "view": "trustar_view.display_action_details"
+      },
+      "output": [
+        {
+          "data_path": "action_result.data.*.report_id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.IP",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.URL",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.DOMAIN",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.MD5",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.SHA1",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.SHA256",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.SOFTWARE",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.CVE",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.EMAIL_ADDRESS",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.MALWARE",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.REGISTRY_KEY",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.reportIndicators.CIDR_BLOCK",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.report_title",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.report_body",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.distribution_type",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.enclave_ids",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.time_discovered",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.external_tracking_id",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.api_version",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.summary.report_id",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.summary.total_extracted_indicators",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "versions": "EQ(*)"
+    }
+  ]
+}
