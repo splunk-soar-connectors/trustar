@@ -1,0 +1,3 @@
+trustar/__init__.py
+trustar_*.py
+.git*
