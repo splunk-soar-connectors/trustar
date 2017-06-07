@@ -157,7 +157,12 @@ of Phantom Cyber Corporation.
                 External Tracking ID
             </td>
             <td>
-                {{ result.param.external_tracking_id }}
+                <a href="javascript:;"
+                   onclick="context_menu(this, [{'contains': ['trustar tracking id'], 'value': '{{ result.param.external_tracking_id }}' }], 0, {{ container.id }}, null, false);">
+                    {{ result.param.external_tracking_id }}
+                    &nbsp;
+                    <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                </a>
             </td>
         </tr>
         {% endif %}
@@ -223,9 +228,9 @@ of Phantom Cyber Corporation.
                                                             <span class="fa fa-caret-down"
                                                                   style="font-size: smaller;"></span>
                                                         </a>
-                                                        {% elif key == "DOMAIN" %}
+                                                        {% elif key == "BITCOIN_ADDRESS" %}
                                                         <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['domain'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                                           onclick="context_menu(this, [{'contains': ['trustar bitcoin address'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
                                                             {{ curr_val }}
                                                             &nbsp;
                                                             <span class="fa fa-caret-down"
