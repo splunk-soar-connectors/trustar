@@ -137,7 +137,7 @@ of Phantom Cyber Corporation.
             <td>
                 <a href="javascript:;"
                    onclick="context_menu(this, [{'contains': ['trustar report id'], 'value': '{{ result.param.report_id }}' }], 0, {{ container.id }}, null, false);">
-                    {{ result.param.report_id }}
+                    {{ result.data.id }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                 </a>
@@ -157,7 +157,12 @@ of Phantom Cyber Corporation.
                 External Tracking ID
             </td>
             <td>
-                {{ result.data.externalTrackingId }}
+                <a href="javascript:;"
+                   onclick="context_menu(this, [{'contains': ['trustar tracking id'], 'value': '{{ result.data.externalTrackingId }}' }], 0, {{ container.id }}, null, false);">
+                    {{ result.data.externalTrackingId }}
+                    &nbsp;
+                    <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                </a>
             </td>
         </tr>
         {% endif %}
@@ -250,9 +255,9 @@ of Phantom Cyber Corporation.
                                                             <span class="fa fa-caret-down"
                                                                   style="font-size: smaller;"></span>
                                                         </a>
-                                                        {% elif key == "DOMAIN" %}
+                                                        {% elif key == "BITCOIN_ADDRESS" %}
                                                         <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['domain'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                                           onclick="context_menu(this, [{'contains': ['trustar bitcoin address'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
                                                             {{ curr_val }}
                                                             &nbsp;
                                                             <span class="fa fa-caret-down"

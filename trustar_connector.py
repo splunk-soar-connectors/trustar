@@ -16,6 +16,7 @@
 import datetime
 import json
 import os
+import time
 import math
 import hashlib
 import socket
@@ -90,6 +91,7 @@ class TrustarConnector(BaseConnector):
         # Calling the BaseConnector's init function
         super(TrustarConnector, self).__init__()
         self._url = None
+        self._config_enclave_ids = None
         self._client_id = None
         self._client_secret = None
         self._access_token = None
@@ -108,6 +110,7 @@ class TrustarConnector(BaseConnector):
         # Get configuration dictionary
         config = self.get_config()
         self._url = config[consts.TRUSTAR_CONFIG_URL].strip('/')
+        self._config_enclave_ids = config.get(consts.TRUSTAR_CONFIG_ENCLAVE_IDS)
         self._client_id = config[consts.TRUSTAR_CONFIG_CLIENT_ID]
         self._client_secret = config[consts.TRUSTAR_CONFIG_CLIENT_SECRET]
         # Load the state of app stored in JSON file
@@ -347,10 +350,11 @@ class TrustarConnector(BaseConnector):
         if phantom.is_fail(resp_status):
             return action_result.get_status()
 
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
         # Update summary data
         summary_data["total_correlated_reports"] = len(response)
-        if not summary_data["total_correlated_reports"]:
-            summary_data["possible_reason"] = consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY
 
         for report_id in response:
             action_result.add_data({"report_id": report_id})
@@ -377,43 +381,11 @@ class TrustarConnector(BaseConnector):
         if phantom.is_fail(resp_status):
             return action_result.get_status()
 
-        # Update summary data
-        summary_data["total_correlated_reports"] = len(response)
-        if not summary_data["total_correlated_reports"]:
-            summary_data["possible_reason"] = consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY
-
-        for report_id in response:
-            action_result.add_data({"report_id": report_id})
-
-        return action_result.set_status(phantom.APP_SUCCESS)
-
-    def _hunt_domain(self, param):
-        """ Get list of all TruSTAR incident report IDs that correlate with the provided domain.
-
-        :param param: dictionary on input parameters
-        :return: status success/failure
-        """
-
-        action_result = self.add_action_result(ActionResult(dict(param)))
-        summary_data = action_result.update_summary({})
-
-        # Get mandatory parameters
-        domain = param[consts.TRUSTAR_HUNT_DOMAIN_PARAM]
-        # Fetch domain from URL, if URL is provided
-        if phantom.is_url(domain):
-            domain = phantom.get_host_from_url(domain)
-
-        # Get correlated reports
-        resp_status, response = self._hunt_correlated_reports(action_result, domain)
-
-        # Something went wrong
-        if phantom.is_fail(resp_status):
-            return action_result.get_status()
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
 
         # Update summary data
         summary_data["total_correlated_reports"] = len(response)
-        if not summary_data["total_correlated_reports"]:
-            summary_data["possible_reason"] = consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY
 
         for report_id in response:
             action_result.add_data({"report_id": report_id})
@@ -440,10 +412,11 @@ class TrustarConnector(BaseConnector):
         if phantom.is_fail(resp_status):
             return action_result.get_status()
 
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
         # Update summary data
         summary_data["total_correlated_reports"] = len(response)
-        if not summary_data["total_correlated_reports"]:
-            summary_data["possible_reason"] = consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY
 
         for report_id in response:
             action_result.add_data({"report_id": report_id})
@@ -470,17 +443,18 @@ class TrustarConnector(BaseConnector):
         if phantom.is_fail(resp_status):
             return action_result.get_status()
 
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
         # Update summary data
         summary_data["total_correlated_reports"] = len(response)
-        if not summary_data["total_correlated_reports"]:
-            summary_data["possible_reason"] = consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY
 
         for report_id in response:
             action_result.add_data({"report_id": report_id})
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _hunt_cve_number(self, param):
+    def _hunt_cve(self, param):
         """ Get list of all TruSTAR incident report IDs that correlate with the provided
          CVE(Common Vulnerability and Exposure) number.
 
@@ -501,10 +475,11 @@ class TrustarConnector(BaseConnector):
         if phantom.is_fail(resp_status):
             return action_result.get_status()
 
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
         # Update summary data
         summary_data["total_correlated_reports"] = len(response)
-        if not summary_data["total_correlated_reports"]:
-            summary_data["possible_reason"] = consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY
 
         for report_id in response:
             action_result.add_data({"report_id": report_id})
@@ -532,10 +507,11 @@ class TrustarConnector(BaseConnector):
         if phantom.is_fail(resp_status):
             return action_result.get_status()
 
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
         # Update summary data
         summary_data["total_correlated_reports"] = len(response)
-        if not summary_data["total_correlated_reports"]:
-            summary_data["possible_reason"] = consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY
 
         for report_id in response:
             action_result.add_data({"report_id": report_id})
@@ -563,10 +539,43 @@ class TrustarConnector(BaseConnector):
         if phantom.is_fail(resp_status):
             return action_result.get_status()
 
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
         # Update summary data
         summary_data["total_correlated_reports"] = len(response)
-        if not summary_data["total_correlated_reports"]:
-            summary_data["possible_reason"] = consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY
+
+        for report_id in response:
+            action_result.add_data({"report_id": report_id})
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _hunt_bitcoin_address(self, param):
+        """ Get list of all TruSTAR incident report IDs that correlate with the provided
+         Bitcoin Address.
+
+        :param param: dictionary on input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Get mandatory parameters
+        bitcoin_address = param[consts.TRUSTAR_HUNT_BITCOIN_ADDRESS_PARAM]
+
+        # Get correlated reports
+        resp_status, response = self._hunt_correlated_reports(action_result, bitcoin_address)
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
+        # Update summary data
+        summary_data["total_correlated_reports"] = len(response)
 
         for report_id in response:
             action_result.add_data({"report_id": report_id})
@@ -587,8 +596,11 @@ class TrustarConnector(BaseConnector):
         # Mandatory parameters
         report_id = param[consts.TRUSTAR_JSON_REPORT_ID]
 
+        # Optional parameters
+        id_type = param.get(consts.TRUSTAR_JSON_REPORT_ID_TYPE, 'internal')
+
         # Request parameters
-        query_param = {'id': report_id}
+        query_param = {'idType': id_type}
 
         # Generate token
         token_generation_status = self._generate_api_token(action_result)
@@ -598,8 +610,8 @@ class TrustarConnector(BaseConnector):
             return action_result.get_status()
 
         # Make REST call
-        resp_status, response = self._make_rest_call(consts.TRUSTAR_GET_REPORT_ENDPOINT, action_result,
-                                                     params=query_param, method="get")
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_GET_REPORT_ENDPOINT.format(report_id=report_id),
+                                                     action_result, params=query_param, method="get")
 
         # Something went wrong
         if phantom.is_fail(resp_status):
@@ -678,7 +690,7 @@ class TrustarConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_FORMAT)
 
         # Enclave id(s) is/are mandatory if distribution type is 'ENCLAVE'
-        if distribution_type == 'ENCLAVE' and not enclave_ids:
+        if distribution_type == 'ENCLAVE' and (not enclave_ids or not self._config_enclave_ids):
             return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_ENCLAVE_ID)
 
         # Prepare request data
@@ -691,9 +703,23 @@ class TrustarConnector(BaseConnector):
             }
         }
 
+        # Strip out any commas
+        enclave_ids = enclave_ids.strip(',')
         # Update request data only if enclave_ids are provided
         if enclave_ids:
+            # Strip out white spaces from enclave_ids provided in action parameters
             enclave_id_list = enclave_ids.split(',')
+            enclave_id_list = filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list])
+            # Strip out any commas
+            self._config_enclave_ids = self._config_enclave_ids.strip(',')
+            # Strip out white spaces from enclave_ids provided in asset configuration
+            config_enclave_ids_list = self._config_enclave_ids.split(',')
+            config_enclave_ids_list = filter(
+                lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_ids_list])
+            # Return error if any of the enclave_id provided in action parameters is not configured in asset
+            if (set(enclave_id_list) - set(config_enclave_ids_list)):
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_UNKNOWN_ENCLAVE_ID)
+            # Update request data
             submit_report_payload["enclaveIds"] = enclave_id_list
 
         # Decide endpoint based on api version mentioned in asset configuration
@@ -794,11 +820,18 @@ class TrustarConnector(BaseConnector):
         :return: status success
         """
 
+        try:
+            request_time = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(iocs['queryDate'] / 1000))
+        except:
+            self.save_progress(consts.TRUSTAR_INGESTION_REQUEST_TIME_ERROR)
+            self.debug_print(consts.TRUSTAR_INGESTION_REQUEST_TIME_ERROR)
+            return
+
         # Prepare container dictionary
         container = dict(
-            name=iocs['source'] + '-' + str(iocs['intervalSize']) + '-' + str(iocs['queryDate']),
-            description=iocs['source'], data=iocs,
-            source_data_identifier=iocs['source'] + '-' + str(iocs['intervalSize']) + '-' + str(iocs['queryDate'])
+            name='TRUSTAR_IOCS' + '-' + str(request_time) + '-' + str(iocs['intervalSize']),
+            description='TRUSTAR_IOCS', data=iocs,
+            source_data_identifier='TRUSTAR_IOCS' + '-' + str(request_time) + '-' + str(iocs['intervalSize'])
         )
 
         # Save container
@@ -807,7 +840,7 @@ class TrustarConnector(BaseConnector):
         # Something went wrong while creating container
         if phantom.is_fail(container_return_value):
             self.save_progress("Error while creating container")
-            self.debug_print("Error while creating container", object=container)
+            self.debug_print("Error while creating container", dump_object=container)
             return
 
         # Counter to maintain the count of artifacts created
@@ -828,8 +861,8 @@ class TrustarConnector(BaseConnector):
             "CIDR_BLOCK": {"artifact_name": "IP Artifact", "cef_name": "destinationAddress", "cef_contains": ["ip"]},
 
             # Domain artifact
-            "DOMAIN": {"artifact_name": "Domain Artifact", "cef_name": "destinationDnsDomain",
-                       "cef_contains": ["domain"]},
+            "BITCOIN_ADDRESS": {"artifact_name": "Bitcoin Address Artifact", "cef_name": "bitcoinAddress",
+                                "cef_contains": ["trustar bitcoin address"]},
 
             # URL artifact
             "URL": {"artifact_name": "URL Artifact", "cef_name": "requestURL", "cef_contains": ["url"]},
@@ -959,12 +992,12 @@ class TrustarConnector(BaseConnector):
         action_mapping = {'test_asset_connectivity': self._test_asset_connectivity,
                           'hunt_ip': self._hunt_ip,
                           'hunt_url': self._hunt_url,
-                          'hunt_domain': self._hunt_domain,
                           'hunt_email': self._hunt_email,
                           'hunt_file': self._hunt_file,
-                          'hunt_cve_number': self._hunt_cve_number,
+                          'hunt_cve': self._hunt_cve,
                           'hunt_malware': self._hunt_malware,
                           'hunt_registry_key': self._hunt_registry_key,
+                          'hunt_bitcoin_address': self._hunt_bitcoin_address,
                           'get_report': self._get_report,
                           'submit_report': self._submit_report,
                           'on_poll': self._on_poll}
