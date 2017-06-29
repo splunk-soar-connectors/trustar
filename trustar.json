@@ -52,7 +52,7 @@
     },
     {
       "action": "hunt ip",
-      "description": "Get report IDs associated with an IP/CIDR. Input must be greater than 3 characters.",
+      "description": "Get report IDs associated with an IP/CIDR",
       "type": "investigate",
       "identifier": "hunt_ip",
       "read_only": true,
@@ -115,7 +115,7 @@
     },
     {
       "action": "hunt url",
-      "description": "Get report IDs associated with a URL. Input must be greater than 3 characters.",
+      "description": "Get report IDs associated with a URL",
       "type": "investigate",
       "identifier": "hunt_url",
       "read_only": true,
@@ -180,7 +180,7 @@
     },
     {
       "action": "hunt file",
-      "description": "Get report IDs associated with a file. Input must be greater than 3 characters.",
+      "description": "Get report IDs associated with a file",
       "type": "investigate",
       "identifier": "hunt_file",
       "read_only": true,
@@ -251,7 +251,7 @@
     },
     {
       "action": "hunt email",
-      "description": "Get report IDs associated with an email address. Input must be greater than 3 characters.",
+      "description": "Get report IDs associated with an email address",
       "type": "investigate",
       "identifier": "hunt_email",
       "read_only": true,
@@ -314,7 +314,7 @@
     },
     {
       "action": "hunt cve",
-      "description": "Get report IDs associated with a CVE (Common Vulnerability and Exposure) number. Input must be greater than 3 characters.",
+      "description": "Get report IDs associated with a CVE (Common Vulnerability and Exposure) number",
       "type": "investigate",
       "identifier": "hunt_cve",
       "read_only": true,
@@ -377,7 +377,7 @@
     },
     {
       "action": "hunt malware",
-      "description": "Get report IDs associated with a malware indicator. Input must be greater than 3 characters.",
+      "description": "Get report IDs associated with a malware indicator",
       "type": "investigate",
       "identifier": "hunt_malware",
       "read_only": true,
@@ -440,7 +440,7 @@
     },
     {
       "action": "hunt registry key",
-      "description": "Get report IDs associated with a registry key. Input must be greater than 3 characters.",
+      "description": "Get report IDs associated with a registry key",
       "type": "investigate",
       "identifier": "hunt_registry_key",
       "read_only": true,
@@ -503,7 +503,7 @@
     },
     {
       "action": "hunt bitcoin address",
-      "description": "Get report IDs associated with a bitcoin address. Input must be greater than 3 characters.",
+      "description": "Get report IDs associated with a bitcoin address",
       "type": "investigate",
       "identifier": "hunt_bitcoin_address",
       "read_only": true,
