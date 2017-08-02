@@ -176,6 +176,7 @@ of Phantom Cyber Corporation.
             <th>Began</th>
             <th>Sector</th>
             <th>Distribution Type</th>
+            <th>Correlation Count</th>
         </tr>
         </thead>
         <tbody>
@@ -191,6 +192,9 @@ of Phantom Cyber Corporation.
             </td>
             <td>
                 {{result.data.distributionType}}
+            </td>
+            <td>
+                {{result.data.correlationCount|default:'<div class="center">-</div>'}}
             </td>
         </tr>
         </tbody>

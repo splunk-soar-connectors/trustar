@@ -703,10 +703,10 @@ class TrustarConnector(BaseConnector):
             }
         }
 
-        # Strip out any commas
-        enclave_ids = enclave_ids.strip(',')
         # Update request data only if enclave_ids are provided
         if enclave_ids:
+            # Strip out any commas
+            enclave_ids = enclave_ids.strip(',')
             # Strip out white spaces from enclave_ids provided in action parameters
             enclave_id_list = enclave_ids.split(',')
             enclave_id_list = filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list])
