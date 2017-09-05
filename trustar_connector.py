@@ -704,7 +704,7 @@ class TrustarConnector(BaseConnector):
         }
 
         # Update request data only if enclave_ids are provided
-        if enclave_ids:
+        if distribution_type == 'ENCLAVE' and enclave_ids:
             # Strip out any commas
             enclave_ids = enclave_ids.strip(',')
             # Strip out white spaces from enclave_ids provided in action parameters

@@ -1,14 +1,14 @@
 {
   "appid": "536ae6e0-72b2-4ae1-9520-810acaddd2d1",
   "name": "TruSTAR",
-  "description": "This app integrates with <b>TruSTAR</b> to provide various <b>hunting</b> and <b>reporting</b> actions in addition to ingestion of latest indicators.",
+  "description": "This App integrates with <b>TruSTAR</b> to provide various <b>hunting</b> and <b>reporting</b> actions in addition to ingestion of latest indicators. Input to all the hunt actions must be greater than 3 characters.",
   "publisher": "Phantom",
   "package_name": "phantom_trustar",
   "license": "Copyright (c) Phantom Cyber Corporation 2017",
   "main_module": "trustar_connector.pyc",
   "type": "investigative",
-    "app_version": "1.0.5",
-    "utctime_updated": "2017-08-02T02:44:12.000000Z",
+  "app_version": "1.0.6",
+  "utctime_updated": "",
   "product_vendor": "TruSTAR Technology",
   "product_name": "TruSTAR",
   "product_version_regex": ".*",
@@ -314,7 +314,7 @@
     },
     {
       "action": "hunt cve",
-      "description": "Get report IDs associated with a CVE (Common Vulnerability and Exposure) number",
+      "description": "Get report IDs associated with a CVE(Common Vulnerability and Exposure) number",
       "type": "investigate",
       "identifier": "hunt_cve",
       "read_only": true,
@@ -324,7 +324,7 @@
           "contains": [
             "trustar cve number"
           ],
-          "description": "CVE (Common Vulnerability and Exposure) number to hunt",
+          "description": "CVE(Common Vulnerability and Exposure) number to hunt",
           "data_type": "string",
           "primary": true,
           "order": 0
@@ -567,7 +567,7 @@
     {
       "action": "on poll",
       "description": "Action to ingest latest indicators",
-      "verbose": "During on poll, the latest indicators from TruSTAR are queried. Containers are uniquely identified by the time and interval of query. The indicators are ingested as artifacts. TruSTAR can fetch the latest indicators encountered in last 24 hours only.</p><p>For the first scheduled and manual ingestion, indicators encountered in last 24 hours are ingested. For the subsequent polls, indicators encountered during the interval configured in the asset are ingested. Due to a behavior in the API, the polling interval should be in hours. Therefore, set the polling interval to a multiple of 60 minutes, ranging from 60 (1 hour) to 1440 (24 hours).<br></p><table><tbody><tr class='plain'><th>IOC</th><th>Artifact Name</th><th>CEF Field</th></tr><tr><td>File</td><td>File Artifact</td><td>fileHashMd5, fileHashSha1, fileHashSha256, filePath</td></tr><tr><td>IP</td><td>IP Artifact</td><td>destinationAddress</td></tr><tr><td>URL</td><td>URL Artifact</td><td>requestURL</td></tr><tr><td>Bitcoin Address</td><td>Bitcoin Address Artifact</td><td>bitcoinAddress</td></tr><tr><td>Email</td><td>Email Artifact</td><td>email</td></tr><tr><td>Malware</td><td>Malware Artifact</td><td>malware</td></tr><tr><td>Registry Key</td><td>Registry Key Artifact</td><td>registryKey</td></tr><tr><td>CVE</td><td>CVE Artifact</td><td>cs3</td></tr></tbody></table>",
+      "verbose": "During on poll, the latest indicators from TruSTAR are queried. Containers are uniquely identified by the time and interval of query. The indicators are ingested as artifacts. TruSTAR can fetch the latest indicators encountered in last 24 hours only.</p><p>For the first scheduled and manual ingestion, indicators encountered in last 24 hours are ingested. For the subsequent polls, indicators encountered during the interval configured in the asset are ingested. The polling interval should be in hours, ranging from 1(60 minutes) to 24(1440 minutes).<br></p><table><tbody><tr class='plain'><th>IOC</th><th>Artifact Name</th><th>CEF Field</th></tr><tr><td>File</td><td>File Artifact</td><td>fileHashMd5, fileHashSha1, fileHashSha256, filePath</td></tr><tr><td>IP</td><td>IP Artifact</td><td>destinationAddress</td></tr><tr><td>URL</td><td>URL Artifact</td><td>requestURL</td></tr><tr><td>Bitcoin Address</td><td>Bitcoin Address Artifact</td><td>bitcoinAddress</td></tr><tr><td>Email</td><td>Email Artifact</td><td>email</td></tr><tr><td>Malware</td><td>Malware Artifact</td><td>malware</td></tr><tr><td>Registry Key</td><td>Registry Key Artifact</td><td>registryKey</td></tr><tr><td>CVE</td><td>CVE Artifact</td><td>cs3</td></tr></tbody></table>",
       "type": "ingest",
       "identifier": "on_poll",
       "read_only": true,
@@ -611,7 +611,7 @@
     {
       "action": "get report",
       "description": "Get report details",
-      "verbose": "If <b>id_type</b> is not provided, default will be <b>internal</b>.",
+      "verbose": "The <b>id_type</b> parameter can be one of the following values:<ul><li>internal</li><li>external</li></ul>",
       "type": "investigate",
       "identifier": "get_report",
       "read_only": true,
@@ -628,7 +628,7 @@
           "order": 0
         },
         "id_type": {
-          "description": "ID type",
+          "description": "ID type (Default: internal)",
           "data_type": "string",
           "value_list": [
             "internal",
@@ -647,42 +647,11 @@
       },
       "output": [
         {
-          "data_path": "action_result.data.*.id",
-          "data_type": "string",
-          "contains": [
-            "trustar report id"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.title",
+          "data_path": "action_result.data.*.sector.name",
           "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.created",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.updated",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.correlationCount",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.timeBegan",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.reportBody",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.indicatorsCount",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.distributionType",
+          "data_path": "action_result.data.*.sector.label",
           "data_type": "string"
         },
         {
@@ -693,15 +662,27 @@
           ]
         },
         {
-          "data_path": "action_result.data.*.sector.id",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.sector.name",
+          "data_path": "action_result.data.*.reportBody",
           "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.sector.label",
+          "data_path": "action_result.data.*.updated",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.created",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.correlationCount",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.title",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.distributionType",
           "data_type": "string"
         },
         {
@@ -713,12 +694,22 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.indicators.*.created",
+          "data_path": "action_result.data.*.timeBegan",
           "data_type": "numeric"
         },
         {
-          "data_path": "action_result.data.*.indicators.*.updated",
-          "data_type": "numeric"
+          "data_path": "action_result.data.*.id",
+          "data_type": "string",
+          "contains": [
+            "trustar report id"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.indicators.*.IP",
+          "data_type": "string",
+          "contains": [
+            "ip"
+          ]
         },
         {
           "data_path": "action_result.data.*.indicators.*.CIDR_BLOCK",
@@ -728,17 +719,6 @@
           ]
         },
         {
-          "data_path": "action_result.data.*.indicators.*.SOFTWARE",
-          "data_type": "string",
-          "contains": [
-            "file name"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.indicators.*.incidentReportId",
-          "data_type": "numeric"
-        },
-        {
           "data_path": "action_result.data.*.indicators.*.URL",
           "data_type": "string",
           "contains": [
@@ -746,10 +726,10 @@
           ]
         },
         {
-          "data_path": "action_result.data.*.indicators.*.IP",
+          "data_path": "action_result.data.*.indicators.*.SOFTWARE",
           "data_type": "string",
           "contains": [
-            "ip"
+            "file name"
           ]
         },
         {
@@ -915,13 +895,6 @@
           "data_type": "string",
           "contains": [
             "trustar report id"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.externalTrackingId",
-          "data_type": "string",
-          "contains": [
-            "trustar tracking id"
           ]
         },
         {
