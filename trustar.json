@@ -1,7 +1,7 @@
 {
   "appid": "536ae6e0-72b2-4ae1-9520-810acaddd2d1",
   "name": "TruSTAR",
-  "description": "This App integrates with <b>TruSTAR</b> to provide various <b>hunting</b> and <b>reporting</b> actions in addition to ingestion of latest indicators. Input to all the hunt actions must be greater than 3 characters.",
+  "description": "This App integrates with <b>TruSTAR</b> to provide various <b>hunting</b> and <b>reporting</b> actions in addition to ingestion of latest indicators.",
   "publisher": "Phantom",
   "package_name": "phantom_trustar",
   "license": "Copyright (c) Phantom Cyber Corporation 2017",
@@ -53,6 +53,7 @@
     {
       "action": "hunt ip",
       "description": "Get report IDs associated with an IP/CIDR",
+      "verbose": "Input to <b>ip</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_ip",
       "read_only": true,
@@ -116,6 +117,7 @@
     {
       "action": "hunt url",
       "description": "Get report IDs associated with a URL",
+      "verbose": "Input to <b>url</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_url",
       "read_only": true,
@@ -181,6 +183,7 @@
     {
       "action": "hunt file",
       "description": "Get report IDs associated with a file",
+      "verbose": "Input to <b>file</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_file",
       "read_only": true,
@@ -252,6 +255,7 @@
     {
       "action": "hunt email",
       "description": "Get report IDs associated with an email address",
+      "verbose": "Input to <b>email</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_email",
       "read_only": true,
@@ -315,6 +319,7 @@
     {
       "action": "hunt cve",
       "description": "Get report IDs associated with a CVE(Common Vulnerability and Exposure) number",
+      "verbose": "Input to <b>cve_number</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_cve",
       "read_only": true,
@@ -378,6 +383,7 @@
     {
       "action": "hunt malware",
       "description": "Get report IDs associated with a malware indicator",
+      "verbose": "Input to <b>malware</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_malware",
       "read_only": true,
@@ -441,6 +447,7 @@
     {
       "action": "hunt registry key",
       "description": "Get report IDs associated with a registry key",
+      "verbose": "Input to <b>registry_key</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_registry_key",
       "read_only": true,
@@ -504,6 +511,7 @@
     {
       "action": "hunt bitcoin address",
       "description": "Get report IDs associated with a bitcoin address",
+      "verbose": "Input to <b>bitcoin_address</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_bitcoin_address",
       "read_only": true,
