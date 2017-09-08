@@ -318,7 +318,7 @@
     },
     {
       "action": "hunt cve",
-      "description": "Get report IDs associated with a CVE(Common Vulnerability and Exposure) number",
+      "description": "Get report IDs associated with a CVE (Common Vulnerability and Exposure) number",
       "verbose": "Input to <b>cve_number</b> parameter must be greater than 3 characters",
       "type": "investigate",
       "identifier": "hunt_cve",
@@ -329,7 +329,7 @@
           "contains": [
             "trustar cve number"
           ],
-          "description": "CVE(Common Vulnerability and Exposure) number to hunt",
+          "description": "CVE (Common Vulnerability and Exposure) number to hunt",
           "data_type": "string",
           "primary": true,
           "order": 0
