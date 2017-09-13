@@ -1,7 +1,7 @@
 {
   "appid": "536ae6e0-72b2-4ae1-9520-810acaddd2d1",
   "name": "TruSTAR",
-  "description": "This App integrates with <b>TruSTAR</b> to provide various <b>hunting</b> and <b>reporting</b> actions in addition to ingestion of latest indicators.",
+  "description": "This app integrates with TruSTAR to provide various hunting and reporting actions in addition to ingestion of latest indicators.",
   "publisher": "Phantom",
   "package_name": "phantom_trustar",
   "license": "Copyright (c) Phantom Cyber Corporation 2017",
