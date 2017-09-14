@@ -7,7 +7,7 @@
     "license": "Copyright (c) Phantom Cyber Corporation 2017",
     "main_module": "trustar_connector.pyc",
     "type": "investigative",
-    "app_version": "1.0.9",
+    "app_version": "1.0.10",
     "utctime_updated": "2017-09-08T21:40:54.000000Z",
     "product_vendor": "TruSTAR Technology",
     "product_name": "TruSTAR",
