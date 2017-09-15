@@ -14,6 +14,14 @@
     "product_version_regex": ".*",
     "min_phantom_version": "3.0.247",
     "logo": "trustar-logo.png",
+    "pip_dependencies": {
+        "wheel": [
+            {
+                "module": "tzlocal",
+                "input_file": "wheels/tzlocal-1.4-py2-none-any.whl"
+            }
+        ]
+    },
     "configuration": {
         "url": {
             "required": true,
