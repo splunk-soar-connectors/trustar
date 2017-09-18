@@ -27,16 +27,12 @@ def _parse_data(data):
     ioc_details = dict()
     if indicators:
         for indicator in indicators:
-            for key in indicator:
-                if key not in ['IP', 'CIDR_BLOCK', 'URL', 'SOFTWARE', 'MD5', 'SHA256', 'EMAIL_ADDRESS', 'MALWARE',
-                               'REGISTRY_KEY', 'CVE', 'SHA1', 'BITCOIN_ADDRESS']:
-                    continue
-                indicator_type = str(key)
-                if indicator_type not in ioc_details.keys():
-                    ioc_details[indicator_type] = list()
-                    ioc_details[indicator_type].append(indicator[indicator_type])
-                else:
-                    ioc_details[indicator_type].append(indicator[indicator_type])
+            indicator_type = str(indicator.keys()[0])
+            if indicator_type not in ioc_details.keys():
+                ioc_details[indicator_type] = list()
+                ioc_details[indicator_type].append(indicator[indicator_type])
+            else:
+                ioc_details[indicator_type].append(indicator[indicator_type])
 
     # Overriding "indicators" key in response
     data["indicators"] = ioc_details
