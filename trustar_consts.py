@@ -1,5 +1,5 @@
 # --
-# File: trustar/trustar_consts.py
+# File: trustar_consts.py
 #
 # Copyright (c) Phantom Cyber Corporation, 2017
 #
@@ -55,9 +55,8 @@ TRUSTAR_JSON_TRACKING_ID = "external_tracking_id"
 TRUSTAR_JSON_API_VERSION = "api_version"
 TRUSTAR_LATEST_IOC_ENDPOINT = "/api/1.2/indicators/latest"
 TRUSTAR_GET_REPORT_ENDPOINT = "/api/1.2/report/{report_id}"
-TRUSTAR_SUBMIT_REPORT_ENDPOINT = "/api/1.1/reports/submit"
-TRUSTAR_SUBMIT_REPORT_ENDPOINT_1_2 = "/api/1.2/report"
-TRUSTAR_HUNT_ACTIONS_ENDPOINT = "/api/1.1/reports/correlate"
+TRUSTAR_SUBMIT_REPORT_ENDPOINT = "/api/1.2/report"
+TRUSTAR_HUNT_ACTIONS_ENDPOINT = "/api/1.2/reports/correlate"
 TRUSTAR_HUNT_IP_PARAM = "ip"
 TRUSTAR_HUNT_URL_PARAM = "url"
 TRUSTAR_HUNT_FILE_PARAM = "file"
