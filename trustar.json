@@ -1,18 +1,18 @@
 {
     "appid": "536ae6e0-72b2-4ae1-9520-810acaddd2d1",
     "name": "TruSTAR",
-    "description": "This app integrates with TruSTAR to provide various hunting and reporting actions in addition to ingestion of latest indicators",
+    "description": "This App integrates with TruSTAR to provide various hunting and reporting actions",
     "publisher": "Phantom",
     "package_name": "phantom_trustar",
     "license": "Copyright (c) Phantom Cyber Corporation 2017",
     "main_module": "trustar_connector.pyc",
     "type": "investigative",
-    "app_version": "1.0.12",
-    "utctime_updated": "2017-09-15T15:16:39.000000Z",
+    "app_version": "1.0.16",
+    "utctime_updated": "2017-10-13T22:54:27.000000Z",
     "product_vendor": "TruSTAR Technology",
     "product_name": "TruSTAR",
     "product_version_regex": ".*",
-    "min_phantom_version": "3.0.247",
+    "min_phantom_version": "3.0.251",
     "logo": "trustar-logo.png",
     "pip_dependencies": {
         "wheel": [
@@ -581,50 +581,6 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "on poll",
-            "description": "Action to ingest latest indicators",
-            "verbose": "During on poll, the latest indicators from TruSTAR are queried. Containers are uniquely identified by the time and interval of query. The indicators are ingested as artifacts. TruSTAR can fetch the latest indicators encountered in last 24 hours only.</p><p>For the first scheduled and manual ingestion, indicators encountered in last 24 hours are ingested. For the subsequent polls, indicators encountered during the interval configured in the asset are ingested. The polling interval is in minutes, though TruSTAR recommends polling in hourly intervals ranging from 60 minutes (1 hour) to 1440 minutes (24 hours).<br></p><table><tbody><tr class='plain'><th>IOC</th><th>Artifact Name</th><th>CEF Field</th></tr><tr><td>File</td><td>File Artifact</td><td>fileHashMd5, fileHashSha1, fileHashSha256, filePath</td></tr><tr><td>IP</td><td>IP Artifact</td><td>destinationAddress</td></tr><tr><td>URL</td><td>URL Artifact</td><td>requestURL</td></tr><tr><td>Bitcoin Address</td><td>Bitcoin Address Artifact</td><td>bitcoinAddress</td></tr><tr><td>Email</td><td>Email Artifact</td><td>email</td></tr><tr><td>Malware</td><td>Malware Artifact</td><td>malware</td></tr><tr><td>Registry Key</td><td>Registry Key Artifact</td><td>registryKey</td></tr><tr><td>CVE</td><td>CVE Artifact</td><td>cs3</td></tr></tbody></table>",
-            "type": "ingest",
-            "identifier": "on_poll",
-            "read_only": true,
-            "parameters": {
-                "container_id": {
-                    "description": "Parameter ignored in this app",
-                    "data_type": "string",
-                    "order": 0,
-                    "allow_list": true
-                },
-                "container_count": {
-                    "description": "Parameter ignored in this app",
-                    "data_type": "numeric",
-                    "order": 1
-                },
-                "start_time": {
-                    "description": "Start of time range, in epoch time (milliseconds)",
-                    "data_type": "numeric",
-                    "order": 2
-                },
-                "artifact_count": {
-                    "description": "Parameter ignored in this app",
-                    "data_type": "numeric",
-                    "order": 3
-                },
-                "end_time": {
-                    "description": "End of time range, in epoch time (milliseconds)",
-                    "data_type": "numeric",
-                    "order": 4
-                }
-            },
-            "render": {
-                "width": 12,
-                "height": 5,
-                "type": "table",
-                "title": "On Poll"
-            },
-            "output": [],
-            "versions": "EQ(*)"
-        },
-        {
             "action": "get report",
             "description": "Get report details",
             "verbose": "The <b>id_type</b> parameter can be one of the following values:<ul><li>internal</li><li>external</li></ul>",
@@ -686,7 +642,7 @@
                     "data_path": "action_result.data.*.reportBody",
                     "data_type": "string",
                     "example_values": [
-                        "Earlier today ransomware was detected that encrypted the data with the extension \u201c.WCRY\u201d added to the filenames. Securelist has released an analysis of the attack with indicators listed.\n\nMD5 of Samples observed in the attack:\n4fef5e34143e646dbf9907c4374276f5\n5bef35496fcbdbe841c82f4d1ab8b7c2\n775a0631fb8229b2aa3d7621427085ad\n7bf2b57f2a205768755c07f238fb32cc\n7f7ccaa16fb15eb1c7399d422f8363e8\n8495400f199ac77853c53b5a3f278f3e\n84c82835a5d21bbcf75a61706d8ab549\n86721e64ffbd69aa6944b9672bcabb6d\n8dd63adb68ef053e044a5a2f46e0d2cd\nb0ad5902366f860f85b892867e5b1e87\nd6114ba5f10ad67a4131ab72531f02da\ndb349b97c37d22f5ea1d1841e3c89eb4\ne372d07207b4da75b3434584cd9f3450\nf529f4556a5126bba499c26d67892240\n\nAssociated CVE's:\nCVE-2017-0147\nCVE-2017-0148\n\nBitcoin Address\n13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94\n115p7UMMngoj1pMvkpHijcRdfJNXj6LrLn\n12t9YDPgwueZ9NyMgw519p7AA8isjr6SMw\n1QAc9S5EmycqjzzWDc1yiWzr9jJLC8sLiY\n\nThe malware uses .onion domain TOR hidden services for command and control:\ngx7ekbenv2riucmf.onion\n57g7spgrzlojinas.onion\nXxlvbrloxvriy2c5.onion\n76jdd2ir2embyv47.onion\ncwwnhwhlz52maqm7.onion\nsqjolphimrr7jqw6.onion\n"
+                        ""
                     ]
                 },
                 {
@@ -922,7 +878,7 @@
         {
             "action": "submit report",
             "description": "Submit report to TruSTAR",
-            "verbose": "If <b>distribution_type</b> selected is <b>ENCLAVE</b>, <b>enclave_ids</b> must be provided from the ones configured in the asset. If <b>time_discovered</b> is not provided, the action will consider current system time. If <b>api_version</b> is not provided, default will be <b>1.1</b>. Parameter <b>external_tracking_id</b> will only be considered if the provided <b>api_version</b> is <b>1.2</b>.",
+            "verbose": "If <b>distribution_type</b> selected is <b>ENCLAVE</b>, <b>enclave_ids</b> must be provided from the ones configured in the asset. If <b>time_discovered</b> is not provided, the action will consider current system time.",
             "type": "generic",
             "identifier": "submit_report",
             "read_only": false,
@@ -967,15 +923,6 @@
                         "trustar tracking id"
                     ],
                     "primary": true
-                },
-                "api_version": {
-                    "description": "API version",
-                    "data_type": "string",
-                    "order": 6,
-                    "value_list": [
-                        "1.1",
-                        "1.2"
-                    ]
                 }
             },
             "render": {
@@ -995,51 +942,87 @@
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.IP",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.URL",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.BITCOIN_ADDRESS",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "trustar bitcoin address"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.MD5",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "md5"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.SHA1",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "sha1"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.SHA256",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "sha256"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.SOFTWARE",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "file name"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.CVE",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "trustar cve number"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.EMAIL_ADDRESS",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.MALWARE",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "trustar malware"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.REGISTRY_KEY",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "trustar registry key"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.CIDR_BLOCK",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -1075,10 +1058,6 @@
                     "contains": [
                         "trustar tracking id"
                     ]
-                },
-                {
-                    "data_path": "action_result.parameter.api_version",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary.report_id",
