@@ -7,14 +7,13 @@
     "license": "Copyright (c) Phantom Cyber Corporation 2017",
     "main_module": "trustar_connector.pyc",
     "type": "investigative",
-    "app_version": "1.0.18",
-    "utctime_updated": "2017-12-21T03:25:30.000000Z",
+    "app_version": "1.0.16",
+    "utctime_updated": "2017-10-13T22:54:27.000000Z",
     "product_vendor": "TruSTAR Technology",
     "product_name": "TruSTAR",
     "product_version_regex": ".*",
     "min_phantom_version": "3.0.251",
-    "logo": "logo_trustar.svg",
-    "logo_dark": "logo_trustar_dark.svg",
+    "logo": "trustar-logo.png",
     "pip_dependencies": {
         "wheel": [
             {
@@ -87,7 +86,18 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -98,19 +108,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.report_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar report id"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.total_correlated_reports",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -152,7 +151,18 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -164,19 +174,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.report_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar report id"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.total_correlated_reports",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -221,7 +220,18 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -236,19 +246,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.report_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar report id"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.total_correlated_reports",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -289,7 +288,18 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -300,19 +310,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.report_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar report id"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.total_correlated_reports",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -353,7 +352,18 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -364,19 +374,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.report_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar report id"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.total_correlated_reports",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -417,7 +416,18 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -428,19 +438,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.report_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar report id"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.total_correlated_reports",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -481,7 +480,18 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -492,19 +502,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.report_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar report id"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.total_correlated_reports",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -545,7 +544,18 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id"
+                    ]
+                },
+                {
                     "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -556,19 +566,8 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.report_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar report id"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.total_correlated_reports",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -619,25 +618,45 @@
             },
             "output": [
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.data.*.sector.name",
                     "data_type": "string",
                     "example_values": [
-                        "success"
+                        "information-technology"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.id_type",
-                    "data_type": "string"
+                    "data_path": "action_result.data.*.sector.label",
+                    "data_type": "string",
+                    "example_values": [
+                        "Information Technology"
+                    ]
                 },
                 {
-                    "data_path": "action_result.parameter.report_id",
+                    "data_path": "action_result.data.*.externalTrackingId",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id",
                         "trustar tracking id"
-                    ],
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.reportBody",
+                    "data_type": "string",
                     "example_values": [
-                        "74e38d07-aec4-4dc5-8a07-c71a6c2b1046"
+                        ""
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.updated",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1494777610386
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.created",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1494777610386
                     ]
                 },
                 {
@@ -648,10 +667,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.created",
-                    "data_type": "numeric",
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
                     "example_values": [
-                        1494777610386
+                        "WannaCry ransomware used in widespread attacks "
                     ]
                 },
                 {
@@ -670,10 +689,10 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.externalTrackingId",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar tracking id"
+                    "data_path": "action_result.data.*.timeBegan",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1494763210352
                     ]
                 },
                 {
@@ -687,40 +706,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.indicators.*.BITCOIN_ADDRESS",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar bitcoin address"
-                    ],
-                    "example_values": [
-                        "13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.indicators.*.CIDR_BLOCK",
-                    "data_type": "string",
-                    "contains": [
-                        "ip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.indicators.*.CVE",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar cve number"
-                    ],
-                    "example_values": [
-                        "cve-2017-0147"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.indicators.*.EMAIL_ADDRESS",
-                    "data_type": "string",
-                    "contains": [
-                        "email"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.indicators.*.IP",
                     "data_type": "string",
                     "contains": [
@@ -728,48 +713,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.indicators.*.MALWARE",
+                    "data_path": "action_result.data.*.indicators.*.CIDR_BLOCK",
                     "data_type": "string",
                     "contains": [
-                        "trustar malware"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.indicators.*.MD5",
-                    "data_type": "string",
-                    "contains": [
-                        "md5"
-                    ],
-                    "example_values": [
-                        "8dd63adb68ef053e044a5a2f46e0d2cd"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.indicators.*.REGISTRY_KEY",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar registry key"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.indicators.*.SHA1",
-                    "data_type": "string",
-                    "contains": [
-                        "sha1"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.indicators.*.SHA256",
-                    "data_type": "string",
-                    "contains": [
-                        "sha256"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.indicators.*.SOFTWARE",
-                    "data_type": "string",
-                    "contains": [
-                        "file name"
+                        "ip"
                     ]
                 },
                 {
@@ -783,73 +730,82 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.indicatorsCount",
-                    "data_type": "numeric",
-                    "example_values": [
-                        26
+                    "data_path": "action_result.data.*.indicators.*.SOFTWARE",
+                    "data_type": "string",
+                    "contains": [
+                        "file name"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.mimeType",
+                    "data_path": "action_result.data.*.indicators.*.MD5",
+                    "data_type": "string",
+                    "contains": [
+                        "md5"
+                    ],
+                    "example_values": [
+                        "8dd63adb68ef053e044a5a2f46e0d2cd"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.SHA256",
+                    "data_type": "string",
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.EMAIL_ADDRESS",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.MALWARE",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar malware"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.REGISTRY_KEY",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar registry key"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.CVE",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar cve number"
+                    ],
+                    "example_values": [
+                        "cve-2017-0147"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.SHA1",
+                    "data_type": "string",
+                    "contains": [
+                        "sha1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.BITCOIN_ADDRESS",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar bitcoin address"
+                    ],
+                    "example_values": [
+                        "13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94"
+                    ]
+                },
+                {
+                    "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
-                        "application/text"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.reportBody",
-                    "data_type": "string",
-                    "example_values": [
-                        ""
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.sector.label",
-                    "data_type": "string",
-                    "example_values": [
-                        "Information Technology"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.sector.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "information-technology"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.submitSource",
-                    "data_type": "string",
-                    "example_values": [
-                        "STATION"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.timeBegan",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1494763210352
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.title",
-                    "data_type": "string",
-                    "example_values": [
-                        "WannaCry ransomware used in widespread attacks "
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.updated",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1494777610386
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.extracted_indicators_count",
-                    "data_type": "numeric",
-                    "example_values": [
-                        26
+                        "success"
                     ]
                 },
                 {
@@ -857,6 +813,28 @@
                     "data_type": "string",
                     "example_values": [
                         "Extracted indicators count: 26"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "example_values": [
+                        "74e38d07-aec4-4dc5-8a07-c71a6c2b1046"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.extracted_indicators_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        26
                     ]
                 },
                 {
@@ -871,6 +849,27 @@
                     "data_type": "numeric",
                     "example_values": [
                         1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.mimeType",
+                    "data_type": "string",
+                    "example_values": [
+                        "application/text"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.submitSource",
+                    "data_type": "string",
+                    "example_values": [
+                        "STATION"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicatorsCount",
+                    "data_type": "numeric",
+                    "example_values": [
+                        26
                     ]
                 }
             ],
@@ -935,69 +934,10 @@
             },
             "output": [
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.distribution_type",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.enclave_ids",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.external_tracking_id",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar tracking id"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.report_body",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.report_title",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.time_discovered",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.reportId",
                     "data_type": "string",
                     "contains": [
                         "trustar report id"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.reportIndicators.BITCOIN_ADDRESS",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar bitcoin address"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.reportIndicators.CIDR_BLOCK",
-                    "data_type": "string",
-                    "contains": [
-                        "ip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.reportIndicators.CVE",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar cve number"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.reportIndicators.EMAIL_ADDRESS",
-                    "data_type": "string",
-                    "contains": [
-                        "email"
                     ]
                 },
                 {
@@ -1008,10 +948,17 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.reportIndicators.MALWARE",
+                    "data_path": "action_result.data.*.reportIndicators.URL",
                     "data_type": "string",
                     "contains": [
-                        "trustar malware"
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.reportIndicators.BITCOIN_ADDRESS",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar bitcoin address"
                     ]
                 },
                 {
@@ -1019,13 +966,6 @@
                     "data_type": "string",
                     "contains": [
                         "md5"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.reportIndicators.REGISTRY_KEY",
-                    "data_type": "string",
-                    "contains": [
-                        "trustar registry key"
                     ]
                 },
                 {
@@ -1050,10 +990,73 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.reportIndicators.URL",
+                    "data_path": "action_result.data.*.reportIndicators.CVE",
                     "data_type": "string",
                     "contains": [
-                        "url"
+                        "trustar cve number"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.reportIndicators.EMAIL_ADDRESS",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.reportIndicators.MALWARE",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar malware"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.reportIndicators.REGISTRY_KEY",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar registry key"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.reportIndicators.CIDR_BLOCK",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.report_title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.report_body",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.distribution_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.enclave_ids",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.time_discovered",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.external_tracking_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar tracking id"
                     ]
                 },
                 {
@@ -1063,10 +1066,6 @@
                 {
                     "data_path": "action_result.summary.total_extracted_indicators",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",
