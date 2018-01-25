@@ -4,7 +4,7 @@
     "description": "This App integrates with TruSTAR to provide various hunting and reporting actions",
     "publisher": "Phantom",
     "package_name": "phantom_trustar",
-    "license": "Copyright (c) Phantom Cyber Corporation 2017",
+    "license": "Copyright (c) Phantom Cyber Corporation, 2017-2018",
     "main_module": "trustar_connector.pyc",
     "type": "investigative",
     "app_version": "1.0.19",
