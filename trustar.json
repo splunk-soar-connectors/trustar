@@ -2,9 +2,9 @@
     "appid": "536ae6e0-72b2-4ae1-9520-810acaddd2d1",
     "name": "TruSTAR",
     "description": "This App integrates with TruSTAR to provide various hunting and reporting actions",
-    "publisher": "Phantom",
+    "publisher": "Splunk",
     "package_name": "phantom_trustar",
-    "license": "Copyright (c) Phantom Cyber Corporation 2017",
+    "license": "Copyright (c) 2017-2019 Splunk Inc.",
     "main_module": "trustar_connector.pyc",
     "type": "investigative",
     "app_version": "1.0.23",
@@ -12,8 +12,9 @@
     "product_vendor": "TruSTAR Technology",
     "product_name": "TruSTAR",
     "product_version_regex": ".*",
-    "min_phantom_version": "3.0.251",
-    "logo": "trustar-logo.png",
+    "min_phantom_version": "4.0.1068",
+    "logo": "logo_trustar.svg",
+    "logo_dark": "logo_trustar_dark.svg",
     "pip_dependencies": {
         "wheel": [
             {
