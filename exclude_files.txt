@@ -2,6 +2,7 @@ docker-compose.yml
 trustar_*.py
 Makefile
 trustar/__init__.py
-*.py
 .git*
 .gitlab-ci.yml
+*.py
+whitesource-results
