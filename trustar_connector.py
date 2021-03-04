@@ -5,13 +5,12 @@
 # without a valid written license from Splunk Inc. is PROHIBITED.
 
 # Standard library imports
+from dateutil import parser, tz
+import requests
 import datetime
+import socket
 import json
 import os
-import socket
-import requests
-import pytz
-import dateutil.parser
 
 # Phantom imports
 import phantom.app as phantom
@@ -20,12 +19,6 @@ from phantom.action_result import ActionResult
 
 # Local imports
 import trustar_consts as consts
-
-app_dir = os.path.dirname(os.path.abspath(__file__))  # noqa
-if os.path.exists('{}/tzlocal'.format(app_dir)):  # noqa
-    os.sys.path.insert(0, '{}/dependencies/tzlocal'.format(app_dir))  # noqa
-    os.sys.path.insert(0, '{}/dependencies'.format(app_dir))  # noqa
-from tzlocal import get_localzone  # pylint: disable=E0401
 
 # Dictionary containing details of possible HTTP error codes in API Response
 ERROR_RESPONSE_DICT = {
@@ -631,7 +624,7 @@ class TrustarConnector(BaseConnector):
 
         try:
             if isinstance(date_time, str):
-                datetime_dt = dateutil.parser.parse(date_time)
+                datetime_dt = parser.parse(date_time)
             elif isinstance(date_time, datetime.datetime):
                 datetime_dt = date_time
 
@@ -641,11 +634,11 @@ class TrustarConnector(BaseConnector):
 
         # If timestamp is timezone naive, add timezone
         if not datetime_dt.tzinfo:
-            timezone = get_localzone()
             # Add system timezone
-            datetime_dt = timezone.localize(datetime_dt)
+            timezone = tz.tzlocal()
+            datetime_dt.replace(tzinfo=timezone)
             # Convert to UTC
-            datetime_dt = datetime_dt.astimezone(pytz.utc)
+            datetime_dt = datetime_dt.astimezone(tz.tzutc())
 
         # Converts datetime to ISO8601
         return datetime_dt.isoformat()
@@ -696,13 +689,13 @@ class TrustarConnector(BaseConnector):
             enclave_ids = enclave_ids.strip(',')
             # Strip out white spaces from enclave_ids provided in action parameters
             enclave_id_list = enclave_ids.split(',')
-            enclave_id_list = filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list])
+            enclave_id_list = list(filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list]))
             # Strip out any commas
             self._config_enclave_ids = self._config_enclave_ids.strip(',')
             # Strip out white spaces from enclave_ids provided in asset configuration
             config_enclave_ids_list = self._config_enclave_ids.split(',')
-            config_enclave_ids_list = filter(
-                lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_ids_list])
+            config_enclave_ids_list = list(filter(
+                lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_ids_list]))
             # Return error if any of the enclave_id provided in action parameters is not configured in asset
             if set(enclave_id_list) - set(config_enclave_ids_list):
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_UNKNOWN_ENCLAVE_ID)
@@ -791,14 +784,14 @@ if __name__ == '__main__':
 
     pudb.set_trace()
     if len(sys.argv) < 2:
-        print 'No test json specified as input'
+        print('No test json specified as input')
         exit(0)
     with open(sys.argv[1]) as f:
         in_json = f.read()
         in_json = json.loads(in_json)
-        print json.dumps(in_json, indent=4)
+        print(json.dumps(in_json, indent=4))
         connector = TrustarConnector()
         connector.print_progress_message = True
         return_value = connector._handle_action(json.dumps(in_json), None)
-        print json.dumps(json.loads(return_value), indent=4)
+        print(json.dumps(json.loads(return_value), indent=4))
     exit(0)
