@@ -1,10 +1,6 @@
 {% extends 'widgets/widget_template.html' %}
 {% load custom_template %}
 
-{% block title_color %}{{ title_color|default:'white' }}{% endblock %}
-{% block title_text_color %}{{ title_text_color|default:'rgb(101, 71, 150)' }}{% endblock %}
-{% block body_color %}{{ body_color|default:'white' }}{% endblock %}
-{% block body_text_color %}{{ body_text_color|default:'black' }}{% endblock %}
 {% block custom_title_prop %}{% if title_logo %}style="background-size: auto 60%; background-position: 50%; background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"{% endif %}{% endblock %}
 {% block title1 %}{{ title1 }}{% endblock %}
 {% block title2 %}{{ title2 }}{% endblock %}
@@ -14,7 +10,7 @@
 {% block widget_content %} <!-- Main Start Block -->
 
 <!-- File: trustar_display_report_ids.html
-  Copyright (c) 2017-2019 Splunk Inc.
+  Copyright (c) 2017-2021 Splunk Inc.
 
   SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
   without a valid written license from Splunk Inc. is PROHIBITED.
@@ -23,7 +19,6 @@
 <style>
 
     .trustar a:link {
-    color: black;
     }
 
     .trustar a:hover {
@@ -31,25 +26,23 @@
     }
 
     .trustar a:visited {
-    color: black;
     }
 
     .trustar .wf-table-horizontal {
-    border: 1px solid rgb(234, 234, 234);
+    border: 1px solid;
     font-size: 12px;
     }
 
     .trustar .wf-table-horizontal th {
     text-align: center;
-    border: 1px solid rgb(234, 234, 234);
+    border: 1px solid;
     text-transform: uppercase;
     font-weight: normal;
-    color: rgb(108, 129, 139);
     padding: 5px;
     }
 
     .trustar .wf-table-horizontal td {
-    border: 1px solid rgb(234, 234, 234);
+    border: 1px solid;
     padding: 5px;
     padding-left: 4px;
     }
@@ -69,7 +62,7 @@
 
     .trustar .wf-table-vertical td{
     padding: 5px;
-    border: 1px solid rgb(234, 234, 234);
+    border: 1px solid;
     }
 
     .trustar .wf-table-vertical tr td:first-child {
