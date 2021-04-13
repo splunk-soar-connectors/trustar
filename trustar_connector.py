@@ -10,7 +10,6 @@ import requests
 import datetime
 import socket
 import json
-import os
 
 # Phantom imports
 import phantom.app as phantom
@@ -121,8 +120,7 @@ class TrustarConnector(BaseConnector):
             return False
 
         # Check if net mask is out of range
-        if (":" in ip_address and net_mask not in range(0, 129)) or ("." in ip_address and
-                                                                     net_mask not in range(0, 33)):
+        if (":" in ip_address and net_mask not in range(0, 129)) or ("." in ip_address and net_mask not in range(0, 33)):
             self.debug_print(consts.TRUSTAR_IP_VALIDATION_FAILED)
             return False
 
@@ -669,10 +667,6 @@ class TrustarConnector(BaseConnector):
         if not report_time_began:
             return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_FORMAT)
 
-        # Enclave id(s) is/are mandatory if distribution type is 'ENCLAVE'
-        if distribution_type == 'ENCLAVE' and (not enclave_ids or not self._config_enclave_ids):
-            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_ENCLAVE_ID)
-
         # Prepare request data
         submit_report_payload = {
             "incidentReport": {
@@ -684,21 +678,37 @@ class TrustarConnector(BaseConnector):
         }
 
         # Update request data only if enclave_ids are provided
-        if distribution_type == 'ENCLAVE' and enclave_ids:
-            # Strip out any commas
-            enclave_ids = enclave_ids.strip(',')
-            # Strip out white spaces from enclave_ids provided in action parameters
-            enclave_id_list = enclave_ids.split(',')
-            enclave_id_list = list(filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list]))
-            # Strip out any commas
-            self._config_enclave_ids = self._config_enclave_ids.strip(',')
-            # Strip out white spaces from enclave_ids provided in asset configuration
-            config_enclave_ids_list = self._config_enclave_ids.split(',')
-            config_enclave_ids_list = list(filter(
-                lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_ids_list]))
+        if distribution_type == 'ENCLAVE':
+
+            # If there are no given enclave IDs
+            if not (enclave_ids or self._config_enclave_ids):
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_ENCLAVE_ID)
+
+            enclave_id_list = []
+
+            if enclave_ids:
+                # Strip out any commas
+                enclave_ids = enclave_ids.strip(',')
+                # Strip out white spaces from enclave_ids provided in action parameters
+                enclave_id_list = enclave_ids.split(',')
+                enclave_id_list = list(filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list]))
+
+            config_enclave_id_list = []
+
+            if self._config_enclave_ids:
+                # Strip out any commas
+                self._config_enclave_ids = self._config_enclave_ids.strip(',')
+                # Strip out white spaces from enclave_ids provided in asset configuration
+                config_enclave_id_list = self._config_enclave_ids.split(',')
+                config_enclave_id_list = list(filter(lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
+
             # Return error if any of the enclave_id provided in action parameters is not configured in asset
-            if set(enclave_id_list) - set(config_enclave_ids_list):
+            if set(enclave_id_list) - set(config_enclave_id_list):
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_UNKNOWN_ENCLAVE_ID)
+
+            if not enclave_id_list:
+                enclave_id_list = config_enclave_id_list
+
             # Update request data
             submit_report_payload["enclaveIds"] = enclave_id_list
 
