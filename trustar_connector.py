@@ -1,25 +1,15 @@
-# --
 # File: trustar_connector.py
+# Copyright (c) 2017-2021 Splunk Inc.
 #
-# Copyright (c) Phantom Cyber Corporation, 2017-2018
-#
-# This unpublished material is proprietary to Phantom Cyber.
-# All rights reserved. The methods and
-# techniques described herein are considered trade secrets
-# and/or confidential. Reproduction or distribution, in whole
-# or in part, is forbidden except by express written permission
-# of Phantom Cyber Corporation.
-#
-# --
+# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
+# without a valid written license from Splunk Inc. is PROHIBITED.
 
 # Standard library imports
-import datetime
-import json
-import os
-import socket
+from dateutil import parser, tz
 import requests
-import pytz
-import dateutil.parser
+import datetime
+import socket
+import json
 
 # Phantom imports
 import phantom.app as phantom
@@ -28,12 +18,6 @@ from phantom.action_result import ActionResult
 
 # Local imports
 import trustar_consts as consts
-
-app_dir = os.path.dirname(os.path.abspath(__file__))  # noqa
-if os.path.exists('{}/tzlocal'.format(app_dir)):  # noqa
-    os.sys.path.insert(0, '{}/dependencies/tzlocal'.format(app_dir))  # noqa
-    os.sys.path.insert(0, '{}/dependencies'.format(app_dir))  # noqa
-from tzlocal import get_localzone  # pylint: disable=E0401
 
 # Dictionary containing details of possible HTTP error codes in API Response
 ERROR_RESPONSE_DICT = {
@@ -136,8 +120,7 @@ class TrustarConnector(BaseConnector):
             return False
 
         # Check if net mask is out of range
-        if (":" in ip_address and net_mask not in range(0, 129)) or ("." in ip_address and
-                                                                     net_mask not in range(0, 33)):
+        if (":" in ip_address and net_mask not in range(0, 129)) or ("." in ip_address and net_mask not in range(0, 33)):
             self.debug_print(consts.TRUSTAR_IP_VALIDATION_FAILED)
             return False
 
@@ -639,7 +622,7 @@ class TrustarConnector(BaseConnector):
 
         try:
             if isinstance(date_time, str):
-                datetime_dt = dateutil.parser.parse(date_time)
+                datetime_dt = parser.parse(date_time)
             elif isinstance(date_time, datetime.datetime):
                 datetime_dt = date_time
 
@@ -649,11 +632,11 @@ class TrustarConnector(BaseConnector):
 
         # If timestamp is timezone naive, add timezone
         if not datetime_dt.tzinfo:
-            timezone = get_localzone()
             # Add system timezone
-            datetime_dt = timezone.localize(datetime_dt)
+            timezone = tz.tzlocal()
+            datetime_dt.replace(tzinfo=timezone)
             # Convert to UTC
-            datetime_dt = datetime_dt.astimezone(pytz.utc)
+            datetime_dt = datetime_dt.astimezone(tz.tzutc())
 
         # Converts datetime to ISO8601
         return datetime_dt.isoformat()
@@ -684,10 +667,6 @@ class TrustarConnector(BaseConnector):
         if not report_time_began:
             return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_FORMAT)
 
-        # Enclave id(s) is/are mandatory if distribution type is 'ENCLAVE'
-        if distribution_type == 'ENCLAVE' and (not enclave_ids or not self._config_enclave_ids):
-            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_ENCLAVE_ID)
-
         # Prepare request data
         submit_report_payload = {
             "incidentReport": {
@@ -699,21 +678,37 @@ class TrustarConnector(BaseConnector):
         }
 
         # Update request data only if enclave_ids are provided
-        if distribution_type == 'ENCLAVE' and enclave_ids:
-            # Strip out any commas
-            enclave_ids = enclave_ids.strip(',')
-            # Strip out white spaces from enclave_ids provided in action parameters
-            enclave_id_list = enclave_ids.split(',')
-            enclave_id_list = filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list])
-            # Strip out any commas
-            self._config_enclave_ids = self._config_enclave_ids.strip(',')
-            # Strip out white spaces from enclave_ids provided in asset configuration
-            config_enclave_ids_list = self._config_enclave_ids.split(',')
-            config_enclave_ids_list = filter(
-                lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_ids_list])
+        if distribution_type == 'ENCLAVE':
+
+            # If there are no given enclave IDs
+            if not (enclave_ids or self._config_enclave_ids):
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_ENCLAVE_ID)
+
+            enclave_id_list = []
+
+            if enclave_ids:
+                # Strip out any commas
+                enclave_ids = enclave_ids.strip(',')
+                # Strip out white spaces from enclave_ids provided in action parameters
+                enclave_id_list = enclave_ids.split(',')
+                enclave_id_list = list(filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list]))
+
+            config_enclave_id_list = []
+
+            if self._config_enclave_ids:
+                # Strip out any commas
+                self._config_enclave_ids = self._config_enclave_ids.strip(',')
+                # Strip out white spaces from enclave_ids provided in asset configuration
+                config_enclave_id_list = self._config_enclave_ids.split(',')
+                config_enclave_id_list = list(filter(lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
+
             # Return error if any of the enclave_id provided in action parameters is not configured in asset
-            if set(enclave_id_list) - set(config_enclave_ids_list):
+            if set(enclave_id_list) - set(config_enclave_id_list):
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_UNKNOWN_ENCLAVE_ID)
+
+            if not enclave_id_list:
+                enclave_id_list = config_enclave_id_list
+
             # Update request data
             submit_report_payload["enclaveIds"] = enclave_id_list
 
@@ -799,14 +794,14 @@ if __name__ == '__main__':
 
     pudb.set_trace()
     if len(sys.argv) < 2:
-        print 'No test json specified as input'
+        print('No test json specified as input')
         exit(0)
     with open(sys.argv[1]) as f:
         in_json = f.read()
         in_json = json.loads(in_json)
-        print json.dumps(in_json, indent=4)
+        print(json.dumps(in_json, indent=4))
         connector = TrustarConnector()
         connector.print_progress_message = True
         return_value = connector._handle_action(json.dumps(in_json), None)
-        print json.dumps(json.loads(return_value), indent=4)
+        print(json.dumps(json.loads(return_value), indent=4))
     exit(0)
