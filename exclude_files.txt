@@ -1,8 +1,5 @@
 docker-compose.yml
-trustar_*.py
 Makefile
-trustar/__init__.py
 .git*
 .gitlab-ci.yml
-*.py
 whitesource-results
