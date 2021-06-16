@@ -1389,19 +1389,52 @@ class TrustarConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import sys
     import pudb
-
+    import argparse
     pudb.set_trace()
-    if len(sys.argv) < 2:
-        print('No test json specified as input')
+
+    argparser = argparse.ArgumentParser()
+
+    argparser.add_argument('input_test_json', help='Input Test JSON file')
+    argparser.add_argument('-u', '--username', help='username', required=False)
+    argparser.add_argument('-p', '--password', help='password', required=False)
+
+    args = argparser.parse_args()
+    session_id = None
+
+    if (args.username and args.password):
+        login_url = BaseConnector._get_phantom_base_url() + "login"
+        try:
+            print("Accessing the Login page")
+            r = requests.get(login_url, verify=False)
+            csrftoken = r.cookies['csrftoken']
+            data = {'username': args.username, 'password': args.password, 'csrfmiddlewaretoken': csrftoken}
+            headers = {'Cookie': 'csrftoken={0}'.format(csrftoken), 'Referer': login_url}
+
+            print("Logging into Platform to get the session id")
+            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            session_id = r2.cookies['sessionid']
+
+        except Exception as e:
+            print(("Unable to get session id from the platform. Error: {0}".format(str(e))))
+            exit(1)
+
+    if (len(sys.argv) < 2):
+        print("No test json specified as input")
         exit(0)
-    with open(sys.argv[1]) as f:
+
+    with open(args.input_test_json) as f:
         in_json = f.read()
         in_json = json.loads(in_json)
         print(json.dumps(in_json, indent=4))
-        connector = TrustarConnector()
+
+        connector = ZscalerConnector()
         connector.print_progress_message = True
-        return_value = connector._handle_action(json.dumps(in_json), None)
-        print(json.dumps(json.loads(return_value), indent=4))
+
+        if (session_id is not None):
+            in_json['user_session_token'] = session_id
+
+        ret_val = connector._handle_action(json.dumps(in_json), None)
+        print(json.dumps(json.loads(ret_val), indent=4))
+
     exit(0)
