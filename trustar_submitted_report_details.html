@@ -90,7 +90,7 @@
     margin-bottom: 0px;
     }
 
-    .trustar .metadata_div .panel-default>.panel-heading {
+    .trustar .metadata_div>.panel-heading {
     background-image: none
     }
 
@@ -157,7 +157,7 @@
     <h4 class="wf-h4-style">Report Details</h4>
     <div class="metadata_div">
         <div class="panel-group" id="report_description">
-            <div class="panel panel-default">
+            <div class="panel">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#report_description" href="#report_description_detail">Report
@@ -175,7 +175,7 @@
 
     <div class="metadata_div">
         <div class="panel-group" id="report_ioc">
-            <div class="panel panel-default">
+            <div class="panel">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#report_ioc" href="#extracted_iocs">Report
@@ -187,7 +187,7 @@
                         {% for key, val in result.data.reportIndicators.items %}
                         <div class="metadata_div indicators-div">
                             <div class="panel-group" id="{{key}}">
-                                <div class="panel panel-default">
+                                <div class="panel">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#{{key}}" href="#{{key}}_data">{{key}} ({{val|length}})</a>
