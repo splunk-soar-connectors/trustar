@@ -7,8 +7,8 @@
     "license": "Copyright (c) 2017-2021 Splunk Inc.",
     "main_module": "trustar_connector.py",
     "type": "investigative",
-    "app_version": "2.0.4",
-    "utctime_updated": "2021-04-16T00:13:39.000000Z",
+    "app_version": "3.0.3",
+    "utctime_updated": "2021-06-18T18:05:00.000000Z",
     "product_vendor": "TruSTAR Technology",
     "product_name": "TruSTAR",
     "product_version_regex": ".*",
@@ -50,6 +50,112 @@
             "read_only": true,
             "parameters": {},
             "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "hunt ioc",
+            "description": "Get report IDs associated with an IOC",
+            "verbose": "Input to <b>ioc</b> parameter must be greater than 3 characters",
+            "type": "investigate",
+            "identifier": "hunt_ioc",
+            "read_only": true,
+            "parameters": {
+                "ioc": {
+                    "required": true,
+                    "contains": [
+                        "ip",
+                        "url",
+                        "md5",
+                        "hash",
+                        "sha1",
+                        "email",
+                        "domain",
+                        "sha256",
+                        "file name",
+                        "trustar malware",
+                        "trustar cve number",
+                        "trustar registry key",
+                        "trustar bitcoin address"
+                    ],
+                    "description": "IOC to hunt",
+                    "data_type": "string",
+                    "primary": true,
+                    "order": 0
+                }
+            },
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "custom",
+                "view": "trustar_view.display_action_details",
+                "title": "Hunt IOC"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.ioc",
+                    "data_type": "string",
+                    "example_values": [
+                        "2.3.5.1"
+                    ],
+                    "contains": [
+                        "ip",
+                        "url",
+                        "md5",
+                        "hash",
+                        "sha1",
+                        "email",
+                        "domain",
+                        "sha256",
+                        "file name",
+                        "trustar malware",
+                        "trustar cve number",
+                        "trustar registry key",
+                        "trustar bitcoin address"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total correlated reports: 100"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.report_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "a9cd779a-75fc-4118-91d4-a428a63ffa23"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_correlated_reports",
+                    "data_type": "numeric",
+                    "example_values": [
+                        100
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
             "versions": "EQ(*)"
         },
         {
@@ -870,6 +976,331 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "copy report",
+            "description": "Copy a report to another enclave",
+            "type": "generic",
+            "identifier": "copy_report",
+            "read_only": false,
+            "parameters": {
+                "report_id": {
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "description": "Report ID",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "destination_enclave": {
+                    "description": "ID of destination enclave",
+                    "contains": [
+                        "trustar enclave id"
+                    ],
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 1
+                }
+            },
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "table",
+                "title": "Copy Report"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.destination_enclave",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar enclave id"
+                    ],
+                    "example_values": [
+                        "e8369a18-3e93-49b7-a485-847c8f38b577"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "example_values": [
+                        "3b312275-e32a-41a2-886c-28966a726274"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "New report id: c272142e-9824-4ea7-afcf-8824a6dfe3a3"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.submissionVersion",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "c272142e-9824-4ea7-afcf-8824a6dfe3a3"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.new_report_id",
+                    "data_type": "string",
+                    "column_name": "New Report ID",
+                    "column_order": 0,
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "example_values": [
+                        "c272142e-9824-4ea7-afcf-8824a6dfe3a3"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "move report",
+            "description": "Move a report to another enclave",
+            "type": "generic",
+            "identifier": "move_report",
+            "read_only": false,
+            "parameters": {
+                "report_id": {
+                    "description": "Report ID",
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "destination_enclave": {
+                    "description": "ID of destination enclave",
+                    "contains": [
+                        "trustar enclave id"
+                    ],
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 1
+                }
+            },
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "table",
+                "title": "Move Report"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.destination_enclave",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar enclave id"
+                    ],
+                    "example_values": [
+                        "a8764f8c-7a0a-456b-8d08-dbc614b56ae3"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "example_values": [
+                        "3b312275-e32a-41a2-886c-28966a726274"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "New report id: 3b312275-e32a-41a2-886c-28966a726274"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.submissionVersion",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "3b312275-e32a-41a2-886c-28966a726274"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.new_report_id",
+                    "data_type": "string",
+                    "column_name": "New Report ID",
+                    "column_order": 0,
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "example_values": [
+                        "3b312275-e32a-41a2-886c-28966a726274"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "delete report",
+            "description": "Delete a report",
+            "verbose": "The <b>id_type</b> parameter can be one of the following values:<ul><li>internal</li><li>external</li></ul>",
+            "type": "correct",
+            "identifier": "delete_report",
+            "read_only": true,
+            "parameters": {
+                "report_id": {
+                    "required": true,
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "description": "Report ID",
+                    "data_type": "string",
+                    "primary": true,
+                    "order": 0
+                },
+                "id_type": {
+                    "description": "ID type (Default: internal)",
+                    "data_type": "string",
+                    "value_list": [
+                        "internal",
+                        "external"
+                    ],
+                    "order": 1
+                }
+            },
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "table",
+                "title": "Delete Report"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id_type",
+                    "data_type": "string",
+                    "example_values": [
+                        "internal"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.report_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "example_values": [
+                        "f2a976e9-0e1a-4657-8de0-c8ad6b1fefd9"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Message",
+                    "column_order": 0,
+                    "example_values": [
+                        "Successfully deleted report"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
             "action": "submit report",
             "description": "Submit report to TruSTAR",
             "verbose": "If <b>distribution_type</b> selected is <b>ENCLAVE</b>, <b>enclave_ids</b> must be provided from the ones configured in the asset. If <b>time_discovered</b> is not provided, the action will consider current system time.",
@@ -915,6 +1346,15 @@
                     "order": 5,
                     "contains": [
                         "trustar tracking id"
+                    ],
+                    "primary": true
+                },
+                "external_url": {
+                    "description": "External URL (possibly a link to a JIRA ticket)",
+                    "data_type": "string",
+                    "order": 7,
+                    "contains": [
+                        "url"
                     ],
                     "primary": true
                 }
@@ -1054,6 +1494,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.parameter.external_url",
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
                     "data_path": "action_result.summary.report_id",
                     "data_type": "string"
                 },
@@ -1068,6 +1515,970 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "update report",
+            "description": "Update a TruSTAR report ",
+            "verbose": "",
+            "type": "generic",
+            "identifier": "update_report",
+            "read_only": false,
+            "parameters": {
+                "report_id": {
+                    "required": true,
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ],
+                    "description": "Report ID",
+                    "data_type": "string",
+                    "primary": true,
+                    "order": 0
+                },
+                "id_type": {
+                    "description": "ID type (Default: internal)",
+                    "data_type": "string",
+                    "value_list": [
+                        "internal",
+                        "external"
+                    ],
+                    "order": 1
+                },
+                "report_title": {
+                    "description": "Report title",
+                    "data_type": "string",
+                    "order": 2
+                },
+                "report_body": {
+                    "description": "Text content of report",
+                    "data_type": "string",
+                    "order": 3
+                },
+                "enclave_ids": {
+                    "description": "(,) separated TruSTAR-generated enclave IDs",
+                    "data_type": "string",
+                    "order": 4
+                },
+                "time_discovered": {
+                    "description": "ISO-8601 formatted incident time with timezone (e.g. \"2016-09-22T11:38:35+00:00\")",
+                    "data_type": "string",
+                    "order": 5
+                },
+                "external_tracking_id": {
+                    "description": "External tracking ID (possibly a JIRA ticket number)",
+                    "data_type": "string",
+                    "order": 6,
+                    "contains": [
+                        "trustar tracking id"
+                    ],
+                    "primary": true
+                },
+                "external_url": {
+                    "description": "External URL (possibly a link to a JIRA ticket)",
+                    "data_type": "string",
+                    "order": 7,
+                    "contains": [
+                        "url"
+                    ],
+                    "primary": true
+                }
+            },
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "custom",
+                "title": "Submit Report",
+                "view": "trustar_view.display_action_details"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.report_title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Updated Title"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id_type",
+                    "data_type": "string",
+                    "example_values": [
+                        "internal"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.report_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "cd6dcce9-8d72-4288-a139-ffb1d0795317"
+                    ],
+                    "contains": [
+                        "trustar report id",
+                        "trustar tracking id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.report_title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.report_body",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.enclave_ids",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.time_discovered",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.external_tracking_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar tracking id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.external_url",
+                    "data_type": "string",
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully updated report"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "safelist ioc",
+            "description": "Add IOCs to the whitelist",
+            "verbose": "Input to <b>ioc</b> parameter must be greater than 3 characters. The type of the IOC will be determined by TruSTAR.",
+            "type": "correct",
+            "identifier": "safelist_ioc",
+            "read_only": true,
+            "parameters": {
+                "ioc": {
+                    "required": true,
+                    "contains": [
+                        "ip",
+                        "url",
+                        "md5",
+                        "hash",
+                        "sha1",
+                        "email",
+                        "domain",
+                        "sha256",
+                        "file name",
+                        "trustar malware",
+                        "trustar cve number",
+                        "trustar registry key",
+                        "trustar bitcoin address"
+                    ],
+                    "description": "A comma-separated list of IOCs to add to the whitelist",
+                    "data_type": "string",
+                    "primary": true,
+                    "order": 0
+                }
+            },
+            "render": {
+                "type": "table",
+                "title": "Safelist IOC"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.ioc",
+                    "data_type": "string",
+                    "example_values": [
+                        "2.3.5.1"
+                    ],
+                    "contains": [
+                        "ip",
+                        "url",
+                        "md5",
+                        "hash",
+                        "sha1",
+                        "email",
+                        "domain",
+                        "sha256",
+                        "file name",
+                        "trustar malware",
+                        "trustar cve number",
+                        "trustar registry key",
+                        "trustar bitcoin address"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Num whitelisted iocs: 1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.guid",
+                    "data_type": "string",
+                    "column_name": "GUID",
+                    "column_order": 2,
+                    "example_values": [
+                        "IP|2.3.5.1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicatorType",
+                    "data_type": "string",
+                    "column_name": "IOC Type",
+                    "column_order": 1,
+                    "example_values": [
+                        "IP"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string",
+                    "column_name": "IOC",
+                    "column_order": 0,
+                    "example_values": [
+                        "2.3.5.1"
+                    ],
+                    "contains": [
+                        "ip",
+                        "url",
+                        "md5",
+                        "hash",
+                        "sha1",
+                        "email",
+                        "domain",
+                        "sha256",
+                        "file name",
+                        "trustar malware",
+                        "trustar cve number",
+                        "trustar registry key",
+                        "trustar bitcoin address"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.num_whitelisted_iocs",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "unsafelist ioc",
+            "description": "Remove IOC from the whitelist",
+            "verbose": "Input to <b>ioc</b> parameter must be greater than 3 characters. The type of the IOC will be determined by TruSTAR.",
+            "type": "contain",
+            "identifier": "unsafelist_ioc",
+            "read_only": true,
+            "parameters": {
+                "ioc": {
+                    "required": true,
+                    "contains": [
+                        "ip",
+                        "url",
+                        "md5",
+                        "hash",
+                        "sha1",
+                        "email",
+                        "domain",
+                        "sha256",
+                        "file name",
+                        "trustar malware",
+                        "trustar cve number",
+                        "trustar registry key",
+                        "trustar bitcoin address"
+                    ],
+                    "description": "IOC to remove from the whitelist",
+                    "data_type": "string",
+                    "primary": true,
+                    "order": 0
+                },
+                "ioc_type": {
+                    "required": true,
+                    "value_list": [
+                        "IP",
+                        "URL",
+                        "CVE",
+                        "MD5",
+                        "SHA1",
+                        "SHA256",
+                        "MALWARE",
+                        "SOFTWARE",
+                        "CIDR_BLOC",
+                        "REGISTRY_KEY",
+                        "EMAIL_ADDRESS",
+                        "BITCOIN_ADDRESS"
+                    ],
+                    "description": "The type of the given IOC",
+                    "data_type": "string",
+                    "primary": true,
+                    "order": 1
+                }
+            },
+            "render": {
+                "type": "table",
+                "title": "Unsafelist IOC"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 0,
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.ioc_type",
+                    "data_type": "string",
+                    "example_values": [
+                        "IP"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.ioc",
+                    "data_type": "string",
+                    "example_values": [
+                        "2.3.5.1"
+                    ],
+                    "contains": [
+                        "ip",
+                        "url",
+                        "md5",
+                        "hash",
+                        "sha1",
+                        "email",
+                        "domain",
+                        "sha256",
+                        "file name",
+                        "trustar malware",
+                        "trustar cve number",
+                        "trustar registry key",
+                        "trustar bitcoin address"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Message",
+                    "column_order": 0,
+                    "example_values": [
+                        "IOC successfully remove from whitelist"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list enclaves",
+            "description": "List all the accessible enclaves in TruSTAR",
+            "verbose": "This action will only list the enclaves that the user has access to.",
+            "type": "investigate",
+            "identifier": "list_enclaves",
+            "read_only": true,
+            "parameters": {},
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Num enclaves: 16"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "EU-CERT"
+                    ],
+                    "column_name": "Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.templateName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Open Source"
+                    ],
+                    "column_name": "Template",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.read",
+                    "data_type": "numeric",
+                    "example_values": [
+                        true
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.create",
+                    "data_type": "numeric",
+                    "example_values": [
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.update",
+                    "data_type": "numeric",
+                    "example_values": [
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.workflowSupported",
+                    "data_type": "numeric",
+                    "example_values": [
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "OPEN"
+                    ],
+                    "column_name": "Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "e7f4907a-2909-48e8-9c2d-74ffc4b22e8c"
+                    ],
+                    "contains": [
+                        "trustar enclave id"
+                    ],
+                    "column_name": "ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.summary.num_enclaves",
+                    "data_type": "numeric",
+                    "example_values": [
+                        16
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)",
+            "render": {
+                "width": 12,
+                "title": "List Enclaves",
+                "type": "table",
+                "height": 5
+            }
+        },
+        {
+            "action": "list emails",
+            "description": "Get a list of emails submitted to Phishing Triage",
+            "verbose": "",
+            "type": "investigate",
+            "identifier": "list_emails",
+            "read_only": true,
+            "parameters": {
+                "start_time": {
+                    "description": "ISO-8601 formatted start time with timezone (e.g. \"2021-06-01T11:38:35+00:00\") within the last month.",
+                    "data_type": "string",
+                    "order": 0
+                },
+                "end_time": {
+                    "description": "ISO-8601 formatted end time with timezone (e.g. \"2021-06-23T17:24:42+00:00\").",
+                    "data_type": "string",
+                    "order": 1
+                },
+                "priority_event_score": {
+                    "description": "A comma-separated list of priority scores to filter submissions by. Valid options: -1, 0, 1, 2, 3.",
+                    "data_type": "string",
+                    "order": 2
+                },
+                "status": {
+                    "description": "A comma-separated list of statuses to filter submissions by. Valid options: CONFIRMED, IGNORED, UNRESOLVED.",
+                    "data_type": "string",
+                    "order": 3
+                },
+                "enclave_ids": {
+                    "description": "A comma-separated list of enclave IDs to filter submissions by.",
+                    "data_type": "string",
+                    "order": 4
+                }
+            },
+            "render": {
+                "type": "custom",
+                "view": "trustar_view.display_action_details",
+                "title": "List Emails"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "CONFIRMED,IGNORED"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.start_time",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-10T08:35:17+01:00"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.priority_event_score",
+                    "data_type": "string",
+                    "example_values": [
+                        "-1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.end_time",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-06-09T08:35:17+01:00"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.enclave_ids",
+                    "data_type": "string",
+                    "example_values": [
+                        "3e9d0a3c-c8cc-47ef-af92-a4c6908b3c9c"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Emails found: 3"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "phishing/confirmed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.submissionId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1a491fb4-1565-4a81-821d-1c6bfad3710c"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.priorityEventScore",
+                    "data_type": "numeric",
+                    "example_values": [
+                        -1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "[SPAM] Testing Phishing Triage"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.emails_found",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list indicators",
+            "description": "Get a list of indictors found in phishing submissions",
+            "verbose": "",
+            "type": "investigate",
+            "identifier": "list_indicators",
+            "read_only": true,
+            "parameters": {
+                "start_time": {
+                    "description": "Start time in UTC (YYYY-MM-DD HH:MM:SS)",
+                    "data_type": "string",
+                    "order": 0
+                },
+                "end_time": {
+                    "description": "End time in UTC (YYYY-MM-DD HH:MM:SS)",
+                    "data_type": "string",
+                    "order": 1
+                },
+                "indicator_score": {
+                    "description": "A comma-separated list of indicator scores to filter indicators by",
+                    "data_type": "string",
+                    "order": 2
+                },
+                "priority_event_score": {
+                    "description": "A comma-separated list of priority scores to filter indicators by",
+                    "data_type": "string",
+                    "order": 3
+                },
+                "status": {
+                    "description": "A comma-separated list of statuses to filter indicators by",
+                    "data_type": "string",
+                    "order": 4
+                },
+                "enclave_ids": {
+                    "description": "A comma-separated list of enclave IDs to filter indicators by",
+                    "data_type": "string",
+                    "order": 5
+                }
+            },
+            "render": {
+                "type": "custom",
+                "view": "trustar_view.display_action_details",
+                "title": "List Indicators"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.start_time",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-09T08:35:17+01:00"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_score",
+                    "data_type": "string",
+                    "example_values": [
+                        "2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "CONFIRMED,IGNORED"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.start_time",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-05-10T08:35:17+01:00"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.priority_event_score",
+                    "data_type": "string",
+                    "example_values": [
+                        "-1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.end_time",
+                    "data_type": "string",
+                    "example_values": [
+                        "2021-06-09T08:35:17+01:00"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.enclave_ids",
+                    "data_type": "string",
+                    "example_values": [
+                        "3e9d0a3c-c8cc-47ef-af92-a4c6908b3c9c"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Indicators found: 1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.originalIndicatorScore.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "VirusTotal AV Percent"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.originalIndicatorScore.value",
+                    "data_type": "string",
+                    "example_values": [
+                        "55.74"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicatorType",
+                    "data_type": "string",
+                    "example_values": [
+                        "URL"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sourceKey",
+                    "data_type": "string",
+                    "example_values": [
+                        "url_haus"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string",
+                    "example_values": [
+                        "http://115.49.30.239:39787/i"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.normalizedIndicatorScore",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.indicators_found",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "triage email",
+            "description": "Change the status of an email submission",
+            "verbose": "",
+            "type": "generic",
+            "identifier": "triage_email",
+            "read_only": false,
+            "parameters": {
+                "submission_id": {
+                    "description": "ID of email submission to triage",
+                    "data_type": "string",
+                    "required": true,
+                    "contains": [
+                        "trustar email submission id"
+                    ],
+                    "order": 0
+                },
+                "status": {
+                    "description": "Status to set the email submission to",
+                    "data_type": "string",
+                    "required": true,
+                    "value_list": [
+                        "CONFIRMED",
+                        "IGNORED",
+                        "UNRESOLVED"
+                    ],
+                    "order": 1
+                }
+            },
+            "render": {
+                "type": "table",
+                "title": "Triage Email"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "CONFIRMED"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.submission_id",
+                    "data_type": "string",
+                    "contains": [
+                        "trustar email submission id"
+                    ],
+                    "example_values": [
+                        "1a491fb4-1565-4a81-821d-1c6bfad3710c"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Email successfully triaged"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "versions": "EQ(*)"

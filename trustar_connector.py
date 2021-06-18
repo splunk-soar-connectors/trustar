@@ -10,6 +10,7 @@ import requests
 import datetime
 import socket
 import json
+import re
 
 # Phantom imports
 import phantom.app as phantom
@@ -126,8 +127,7 @@ class TrustarConnector(BaseConnector):
 
         return True
 
-    def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, method="get",
-                        timeout=None, auth=None):
+    def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, json=None, method="get", timeout=None, auth=None):
         """ Function that makes the REST call to the device. It is a generic function that can be called from various
         action handlers.
 
@@ -165,12 +165,12 @@ class TrustarConnector(BaseConnector):
                 if headers:
                     auth_headers.update(headers)
                 response = request_func("{base_url}{endpoint}".format(base_url=self._url, endpoint=endpoint),
-                                        params=params, headers=auth_headers, data=data, verify=False,
-                                        timeout=timeout)
+                                        params=params, headers=auth_headers, data=data, json=json,
+                                        verify=False, timeout=timeout)
             # For generating API token
             else:
                 response = request_func("{base_url}{endpoint}".format(base_url=self._url, endpoint=endpoint),
-                                        auth=auth, data=data, verify=False, timeout=timeout)
+                                        auth=auth, data=data, json=json, verify=False, timeout=timeout)
         except Exception as e:
             self.debug_print(consts.TRUSTAR_ERR_SERVER_CONNECTION, e)
             # Set the action_result status to error, the handler function will most probably return as is
@@ -188,10 +188,12 @@ class TrustarConnector(BaseConnector):
         # Try parsing the json
         try:
             content_type = response.headers.get("content-type")
-            if content_type and content_type.find("json") != -1:
+            response_data = response.text
+            if self.get_action_identifier() == 'submit_report':
+                if endpoint == consts.TRUSTAR_GENERATE_TOKEN_ENDPOINT:
+                    response_data = response.json()
+            elif content_type and 'json' in content_type:
                 response_data = response.json()
-            else:
-                response_data = response.text
 
         except Exception as e:
             # r.text is guaranteed to be NON None, it will be empty, but not None
@@ -216,7 +218,10 @@ class TrustarConnector(BaseConnector):
         if response.status_code == consts.TRUSTAR_REST_RESP_SUCCESS:
             if isinstance(response_data, dict) or isinstance(response_data, list):
                 return phantom.APP_SUCCESS, response_data
-
+            if self.get_action_identifier() in ['unsafelist_ioc', 'delete_report', 'update_report', 'triage_email'] and not response_data:
+                return phantom.APP_SUCCESS, None
+            if self.get_action_identifier() == 'submit_report':
+                return phantom.APP_SUCCESS, response_data
             # If response obtained is not in the desired format
             self.debug_print(consts.TRUSTAR_UNEXPECTED_RESPONSE.format(response=response_data))
             return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_UNEXPECTED_RESPONSE.format(
@@ -236,6 +241,56 @@ class TrustarConnector(BaseConnector):
         return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_FROM_SERVER,
                                         status=response.status_code,
                                         detail=message), response_data
+
+    def _paginate(self, action_result, endpoint, body, summary_key):
+        """ Use the REST APIs pagination process to accrue all results
+
+        :param action_result: object of ActionResult class
+        :param body: The body of the REST request
+        :return: status success/failure
+        """
+
+        cursor = None
+        results = []
+
+        # Loop until the length of results is the same as the number of expected results
+        while True:
+
+            # Make REST call
+            resp_status, response = self._make_rest_call(endpoint, action_result, json=body, method="post")
+
+            # Something went wrong
+            if phantom.is_fail(resp_status):
+                return action_result.get_status()
+
+            # Parse out each submission
+            for submission in response.get('items', []):
+                action_result.add_data(submission)
+
+            # If the cursor is None, then we know this is the first loop
+            if cursor is None:
+
+                # Get expected number of total results
+                total_results = response.get('responseMetadata', {}).get('totalItems', None)
+
+                if total_results is None:
+                    return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_FIELD.format(field='totalItems'))
+
+            # If we have enough results, break from the loop
+            if len(action_result.get_data()) == total_results:
+                break
+
+            # Get the next page cursor from the REST response
+            cursor = response.get('responseMetadata', {}).get('nextCursor', None)
+
+            if cursor is None:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_FIELD.format(field='nextCursor'))
+
+            body['cursor'] = cursor
+
+        action_result.set_summary({summary_key: len(action_result.get_data())})
+
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def _generate_api_token(self, action_result):
         """ This function is used to generate token.
@@ -305,10 +360,41 @@ class TrustarConnector(BaseConnector):
             return action_result.get_status(), None
 
         # Prepare request params
-        params = {'q': ioc_to_hunt}
+        params = {'indicators': ioc_to_hunt}
 
         # Make REST call
         return self._make_rest_call(consts.TRUSTAR_HUNT_ACTIONS_ENDPOINT, action_result, params=params)
+
+    def _hunt_ioc(self, param):
+        """ Get list of all TruSTAR incident report IDs that correlate with the provided IOC.
+
+        :param param: dictionary on input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Get mandatory parameters
+        ioc = param[consts.TRUSTAR_HUNT_IOC_PARAM]
+
+        # Get correlated reports
+        resp_status, response = self._hunt_correlated_reports(action_result, ioc)
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
+        # Update summary data
+        summary_data["total_correlated_reports"] = len(response)
+
+        for report_id in response:
+            action_result.add_data({"report_id": report_id})
+
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def _hunt_ip(self, param):
         """ Get list of all TruSTAR incident report IDs that correlate with the provided IP.
@@ -562,6 +648,169 @@ class TrustarConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _list_emails(self, param):
+        """ Return a list of emails submitted to TruSTAR's phishing triage
+
+        :param param: dictionary of input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Optional parameters
+        start_time = param.get("start_time")
+        end_time = param.get("end_time")
+        pes = param.get("priority_event_score")
+        status = param.get("status")
+        enclave_ids = param.get("enclave_ids")
+
+        # Build request body
+        body = {}
+
+        if start_time:
+            try:
+                body['from'] = int(parser.parse(start_time).timestamp()) * 1000
+            except ValueError as e:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_PARSE.format(value_error=e))
+
+        if end_time:
+            try:
+                body['to'] = int(parser.parse(end_time).timestamp()) * 1000
+            except ValueError as e:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_PARSE.format(value_error=e))
+
+        if pes:
+            try:
+                pes_list = [int(x) for x in pes.split(',')]
+                if not all(x in consts.TRUSTAR_PRIROITY_EVENT_SCORES for x in pes_list):
+                    raise ValueError
+            except ValueError as e:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIROITY_EVENT_SCORES)
+            body['priorityEventScore'] = pes_list
+
+        if status:
+            try:
+                status_list = [x.strip() for x in status.split(',')]
+                if not all(x in consts.TRUSTAR_STATUSES for x in status_list):
+                    raise ValueError
+            except ValueError as e:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_STATUSES)
+            body['status'] = status_list
+
+        if enclave_ids:
+            body['enclaveIds'] = [x.strip() for x in enclave_ids.split(',')]
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status()
+
+        return self._paginate(action_result, consts.TRUSTAR_PHISHING_SUBMISSIONS_ENDPOINT, body, 'emails_found')
+
+    def _list_indicators(self, param):
+        """ Return a list of indicators extracted from TruSTAR's phishing triage submissions
+
+        :param param: dictionary of input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Optional parameters
+        start_time = param.get("start_time")
+        end_time = param.get("end_time")
+        pes = param.get("priority_event_score")
+        nis = param.get("indicator_score")
+        status = param.get("status")
+        enclave_ids = param.get("enclave_ids")
+
+        # Build request body
+        body = {}
+
+        if start_time:
+            try:
+                body['from'] = int(parser.parse(start_time).timestamp()) * 1000
+            except ValueError as e:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_PARSE.format(value_error=e))
+
+        if end_time:
+            try:
+                body['to'] = int(parser.parse(end_time).timestamp()) * 1000
+            except ValueError as e:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_PARSE.format(value_error=e))
+
+        if pes:
+            try:
+                pes_list = [int(x) for x in pes.split(',')]
+                if not all(x in consts.TRUSTAR_PRIROITY_EVENT_SCORES for x in pes_list):
+                    raise ValueError
+            except ValueError as e:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIROITY_EVENT_SCORES)
+            body['priorityEventScore'] = pes_list
+
+        if nis:
+            try:
+                nis_list = [int(x) for x in nis.split(',')]
+            except ValueError as e:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIROITY_EVENT_SCORES)
+            body['normalizedIndicatorScore'] = nis_list
+
+        if status:
+            status_list = [x.strip() for x in status.split(',')]
+            if not all(x in consts.TRUSTAR_STATUSES for x in status_list):
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_STATUSES)
+            body['status'] = status_list
+
+        if enclave_ids:
+            body['enclaveIds'] = [x.strip() for x in enclave_ids.split(',')]
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status()
+
+        return self._paginate(action_result, consts.TRUSTAR_PHISHING_INDICATORS_ENDPOINT, body, 'indicators_found')
+
+    def _triage_email(self, param):
+        """ Change the status of a TruSTAR phishing triage submission
+
+        :param param: dictionary of input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Required parameters
+        email = param["submission_id"]
+        status = param["status"]
+
+        # Set up request body
+        params = {"status": status}
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status()
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_TRIAGE_SUBMISSION_ENDPOINT.format(submission_id=email),
+                action_result, params=params, method="post")
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Email successfully triaged")
+
     def _get_report(self, param):
         """ Return the raw report data, extracted indicators and other metadata for a TruSTAR report
          given its report id.
@@ -610,6 +859,84 @@ class TrustarConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _copy_report(self, param):
+        """ Copy a report to a different enclave
+
+        :param param: dictionary of input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Mandatory parameters
+        report_id = param[consts.TRUSTAR_JSON_REPORT_ID]
+        dest_enclave_id = param[consts.TRUSTAR_JSON_DEST_ENCLAVE]
+
+        # Request parameters
+        query_param = {'destEnclaveId': dest_enclave_id}
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status()
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_COPY_REPORT_ENDPOINT.format(report_id=report_id),
+                                                     action_result, params=query_param, method="post")
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        # Adding REST response to action_result.data
+        action_result.add_data(response)
+
+        summary_data['new_report_id'] = response['id']
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _move_report(self, param):
+        """ Move a report to a different enclave
+
+        :param param: dictionary of input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Mandatory parameters
+        report_id = param[consts.TRUSTAR_JSON_REPORT_ID]
+        dest_enclave_id = param[consts.TRUSTAR_JSON_DEST_ENCLAVE]
+
+        # Request parameters
+        query_param = {'destEnclaveId': dest_enclave_id}
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status()
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_MOVE_REPORT_ENDPOINT.format(report_id=report_id),
+                                                     action_result, params=query_param, method="post")
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        # Adding REST response to action_result.data
+        action_result.add_data(response)
+
+        summary_data['new_report_id'] = response['id']
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _normalize_timestamp(self, date_time):
         """ Attempt to convert a string timestamp in to a TruSTAR compatible format for submission.
 
@@ -641,6 +968,41 @@ class TrustarConnector(BaseConnector):
         # Converts datetime to ISO8601
         return datetime_dt.isoformat()
 
+    def _delete_report(self, param):
+        """ Delete a TruSTAR report
+
+        :param param: dictionary of input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        # Mandatory parameters
+        report_id = param[consts.TRUSTAR_JSON_REPORT_ID]
+
+        # Optional parameters
+        id_type = param.get(consts.TRUSTAR_JSON_REPORT_ID_TYPE, 'internal')
+
+        # Request parameters
+        query_param = {'idType': id_type}
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status()
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_GET_REPORT_ENDPOINT.format(report_id=report_id),
+                                                     action_result, params=query_param, method="delete")
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully deleted report")
+
     def _submit_report(self, param):
         """ Submit a report to community or enclaves and returns its TruSTAR report ID and
          extracted indicators from the report.
@@ -661,6 +1023,7 @@ class TrustarConnector(BaseConnector):
         enclave_ids = param.get(consts.TRUSTAR_JSON_ENCLAVE_IDS)
         time_discovered = param.get(consts.TRUSTAR_JSON_TIME_DISCOVERED)
         external_tracking_id = param.get(consts.TRUSTAR_JSON_TRACKING_ID)
+        external_url = param.get(consts.TRUSTAR_JSON_EXTERNAL_URL)
 
         # Normalize timestamp
         report_time_began = self._normalize_timestamp(time_discovered)
@@ -669,12 +1032,10 @@ class TrustarConnector(BaseConnector):
 
         # Prepare request data
         submit_report_payload = {
-            "incidentReport": {
-                "title": report_title,
-                "reportBody": report_body,
-                "distributionType": distribution_type,
-                "timeDiscovered": report_time_began
-            }
+            "title": report_title,
+            "reportBody": report_body,
+            "distributionType": distribution_type,
+            "timeBegan": report_time_began
         }
 
         # Update request data only if enclave_ids are provided
@@ -713,7 +1074,9 @@ class TrustarConnector(BaseConnector):
             submit_report_payload["enclaveIds"] = enclave_id_list
 
         if external_tracking_id:
-            submit_report_payload["incidentReport"]["externalTrackingId"] = external_tracking_id
+            submit_report_payload["externalTrackingId"] = external_tracking_id
+        if external_url:
+            submit_report_payload["externalUrl"] = external_url
 
         # Generate token
         token_generation_status = self._generate_api_token(action_result)
@@ -723,23 +1086,248 @@ class TrustarConnector(BaseConnector):
             return action_result.get_status()
 
         # Make REST call
-        resp_status, response = self._make_rest_call(consts.TRUSTAR_SUBMIT_REPORT_ENDPOINT, action_result, data=json.dumps(submit_report_payload),
-                                                     method="post", headers={'Content-Type': 'application/json'})
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_SUBMIT_REPORT_ENDPOINT, action_result, json=submit_report_payload, method="post")
 
         # Something went wrong
         if phantom.is_fail(resp_status):
             return action_result.get_status()
 
-        action_result.add_data(response)
+        if not re.findall('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', response):
+            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_BAD_REPORT_ID.format(response=response))
 
-        # Calculate indicators from response
-        indicators_count = 0
-        for indicator in response.get('reportIndicators', {}):
-            indicators_count += len(response['reportIndicators'][indicator])
+        action_result.add_data({'reportId': response})
+        summary_data['new_report_id'] = response
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _update_report(self, param):
+        """ Grab a report from TruSTAR and update the fields with the
+            parameters sent to the action.
+
+        :param param: dictionary of input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Mandatory parameters
+        report_id = param[consts.TRUSTAR_JSON_REPORT_ID]
+
+        # Optional parameters
+        id_type = param.get(consts.TRUSTAR_JSON_REPORT_ID_TYPE, 'internal')
+        report_title = param.get(consts.TRUSTAR_JSON_REPORT_TITLE)
+        report_body = param.get(consts.TRUSTAR_JSON_REPORT_BODY)
+        enclave_ids = param.get(consts.TRUSTAR_JSON_ENCLAVE_IDS)
+        time_discovered = param.get(consts.TRUSTAR_JSON_TIME_DISCOVERED)
+        external_tracking_id = param.get(consts.TRUSTAR_JSON_TRACKING_ID)
+        external_url = param.get(consts.TRUSTAR_JSON_EXTERNAL_URL)
+
+        # Request parameters
+        query_param = {'idType': id_type}
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status()
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_GET_REPORT_ENDPOINT.format(report_id=report_id),
+                                                     action_result, params=query_param, method="get")
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        payload = {}
+
+        # If title needs to be updated
+        if report_title:
+            payload['title'] = report_title
+        else:
+            payload['title'] = response['title']
+
+        # If body needs to be updated
+        if report_body:
+            payload['reportBody'] = report_body
+        else:
+            payload['reportBody'] = response['reportBody']
+
+        # If external URL needs to be updated
+        if external_url:
+            payload['externalUrl'] = external_url
+        elif 'externalUrl' in response:
+            payload['externalUrl'] = response['externalUrl']
+
+        # If external tracking ID needs to be updated
+        if external_tracking_id:
+            payload['externalTrackingId'] = external_tracking_id
+        elif 'externalTrackingId' in response:
+            payload['externalTrackingId'] = response['externalTrackingId']
+
+        # If time began needs to be updated
+        if time_discovered:
+            # Normalize timestamp
+            report_time_began = self._normalize_timestamp(time_discovered)
+            if not report_time_began:
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_FORMAT)
+            payload['timeBegan'] = time_discovered
+        else:
+            payload['timeBegan'] = response['timeBegan']
+
+        # Update request data only if enclave_ids are provided
+        if enclave_ids:
+
+            # If there are no given enclave IDs
+            if not (enclave_ids or self._config_enclave_ids):
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_ENCLAVE_ID)
+
+            enclave_id_list = []
+
+            if enclave_ids:
+                # Strip out any commas
+                enclave_ids = enclave_ids.strip(',')
+                # Strip out white spaces from enclave_ids provided in action parameters
+                enclave_id_list = enclave_ids.split(',')
+                enclave_id_list = list(filter(lambda x: x.strip(), [enclave_id.strip() for enclave_id in enclave_id_list]))
+
+            config_enclave_id_list = []
+
+            if self._config_enclave_ids:
+                # Strip out any commas
+                self._config_enclave_ids = self._config_enclave_ids.strip(',')
+                # Strip out white spaces from enclave_ids provided in asset configuration
+                config_enclave_id_list = self._config_enclave_ids.split(',')
+                config_enclave_id_list = list(filter(lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
+
+            # Return error if any of the enclave_id provided in action parameters is not configured in asset
+            if set(enclave_id_list) - set(config_enclave_id_list):
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_UNKNOWN_ENCLAVE_ID)
+
+            if not enclave_id_list:
+                enclave_id_list = config_enclave_id_list
+
+            # Update request data
+            payload["enclaveIds"] = enclave_id_list
+
+        else:
+            payload["enclaveIds"] = response["enclaveIds"]
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_UPDATE_REPORT_ENDPOINT.format(report_id=report_id), action_result, json=payload, method="put")
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully updated report")
+
+    def _safelist_ioc(self, param):
+        """ Add the provided IOC to the TruSTAR whitelist.
+
+        :param param: dictionary on input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status(), None
+
+        # Get mandatory parameters
+        ioc = param[consts.TRUSTAR_HUNT_IOC_PARAM]
+
+        body = ioc.split(',')
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_WHITELIST_ENDPOINT, action_result, json=body, method="post")
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
 
         # Update summary data
-        summary_data['report_id'] = response['reportId']
-        summary_data['total_extracted_indicators'] = indicators_count
+        summary_data["num_whitelisted_iocs"] = len(response)
+
+        for ioc in response:
+            action_result.add_data(ioc)
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _unsafelist_ioc(self, param):
+        """ Remove the provided IOC from the TruSTAR whitelist.
+
+        :param param: dictionary on input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status(), None
+
+        # Get mandatory parameters
+        ioc = param[consts.TRUSTAR_HUNT_IOC_PARAM]
+        ioc_type = param[consts.TRUSTAR_IOC_TYPE_PARAM]
+
+        params = {"indicatorType": ioc_type, "value": ioc}
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_WHITELIST_ENDPOINT, action_result, params=params, method="delete")
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        return action_result.set_status(phantom.APP_SUCCESS, "IOC successfully remove from whitelist")
+
+    def _list_enclaves(self, param):
+        """ List all the enclaves in TruSTAR
+
+        :param param: dictionary on input parameters
+        :return: status success/failure
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary_data = action_result.update_summary({})
+
+        # Generate token
+        token_generation_status = self._generate_api_token(action_result)
+
+        # Something went wrong while generating token
+        if phantom.is_fail(token_generation_status):
+            return action_result.get_status(), None
+
+        # Make REST call
+        resp_status, response = self._make_rest_call(consts.TRUSTAR_ENCLAVES_ENDPOINT, action_result)
+
+        # Something went wrong
+        if phantom.is_fail(resp_status):
+            return action_result.get_status()
+
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, consts.TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY)
+
+        # Update summary data
+        summary_data["num_enclaves"] = len(response)
+
+        for enclave in response:
+            action_result.add_data(enclave)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -765,6 +1353,7 @@ class TrustarConnector(BaseConnector):
         # Dictionary mapping each action with its corresponding actions
         action_mapping = {
             'test_asset_connectivity': self._test_asset_connectivity,
+            'hunt_ioc': self._hunt_ioc,
             'hunt_ip': self._hunt_ip,
             'hunt_url': self._hunt_url,
             'hunt_email': self._hunt_email,
@@ -774,7 +1363,18 @@ class TrustarConnector(BaseConnector):
             'hunt_registry_key': self._hunt_registry_key,
             'hunt_bitcoin_address': self._hunt_bitcoin_address,
             'get_report': self._get_report,
-            'submit_report': self._submit_report
+            'copy_report': self._copy_report,
+            'move_report': self._move_report,
+            'delete_report': self._delete_report,
+            'submit_report': self._submit_report,
+            'update_report': self._update_report,
+            'safelist_ioc': self._safelist_ioc,
+            'unsafelist_ioc': self._unsafelist_ioc,
+            'list_enclaves': self._list_enclaves,
+            'list_emails': self._list_emails,
+            'list_indicators': self._list_indicators,
+            'triage_email': self._triage_email,
+
         }
 
         action = self.get_action_identifier()
@@ -789,19 +1389,52 @@ class TrustarConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import sys
     import pudb
-
+    import argparse
     pudb.set_trace()
-    if len(sys.argv) < 2:
-        print('No test json specified as input')
+
+    argparser = argparse.ArgumentParser()
+
+    argparser.add_argument('input_test_json', help='Input Test JSON file')
+    argparser.add_argument('-u', '--username', help='username', required=False)
+    argparser.add_argument('-p', '--password', help='password', required=False)
+
+    args = argparser.parse_args()
+    session_id = None
+
+    if (args.username and args.password):
+        login_url = BaseConnector._get_phantom_base_url() + "login"
+        try:
+            print("Accessing the Login page")
+            r = requests.get(login_url, verify=False)
+            csrftoken = r.cookies['csrftoken']
+            data = {'username': args.username, 'password': args.password, 'csrfmiddlewaretoken': csrftoken}
+            headers = {'Cookie': 'csrftoken={0}'.format(csrftoken), 'Referer': login_url}
+
+            print("Logging into Platform to get the session id")
+            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            session_id = r2.cookies['sessionid']
+
+        except Exception as e:
+            print(("Unable to get session id from the platform. Error: {0}".format(str(e))))
+            exit(1)
+
+    if (len(sys.argv) < 2):
+        print("No test json specified as input")
         exit(0)
-    with open(sys.argv[1]) as f:
+
+    with open(args.input_test_json) as f:
         in_json = f.read()
         in_json = json.loads(in_json)
         print(json.dumps(in_json, indent=4))
-        connector = TrustarConnector()
+
+        connector = ZscalerConnector()
         connector.print_progress_message = True
-        return_value = connector._handle_action(json.dumps(in_json), None)
-        print(json.dumps(json.loads(return_value), indent=4))
+
+        if (session_id is not None):
+            in_json['user_session_token'] = session_id
+
+        ret_val = connector._handle_action(json.dumps(in_json), None)
+        print(json.dumps(json.loads(ret_val), indent=4))
+
     exit(0)

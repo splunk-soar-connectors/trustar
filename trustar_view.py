@@ -80,6 +80,12 @@ def display_action_details(provides, all_app_runs, context):
     # If action is submit report
     elif provides == "submit report":
         return_page = "trustar_submitted_report_details.html"
+    # If action is list emails
+    elif provides == "list emails":
+        return_page = "trustar_display_email_details.html"
+    # If action is list indicators
+    elif provides == "list indicators":
+        return_page = "trustar_display_indicator_details.html"
     # If action is any of the hunt actions
     else:
         return_page = "trustar_display_report_ids.html"
