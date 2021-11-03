@@ -86,6 +86,15 @@ def display_action_details(provides, all_app_runs, context):
     # If action is list indicators
     elif provides == "list indicators":
         return_page = "trustar_display_indicator_details.html"
+    # If action is get indicator summary
+    elif provides == "get indicator summary":
+        return_page = "trustar_display_indicator_summary.html"
+    # If action is get indicator metadata
+    elif provides == "get indicator metadata":
+        return_page = "trustar_display_indicator_metadata.html"
+    # If action is indicator reputation
+    elif provides == "indicator reputation":
+        return_page = "trustar_display_enrich_indicator.html"
     # If action is any of the hunt actions
     else:
         return_page = "trustar_display_report_ids.html"

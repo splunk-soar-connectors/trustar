@@ -104,6 +104,20 @@
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                 </a>
+                {% elif result.param.ioc %}
+                <a href="javascript:;"
+                   onclick="context_menu(this, [{'contains': ['ip', 'url', 'md5', 'hash', 'sha1', 'email', 'domain', 'sha256', 'file name', 'trustar malware', 'trustar cve number', 'trustar registry key', 'trustar bitcoin address'], 'value': '{{ result.param.ioc }}' }], 0, {{ container.id }}, null, false);">
+                    {{ result.param.ioc }}
+                    &nbsp;
+                    <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                </a>
+                {% elif result.param.bitcoin_address %}
+                <a href="javascript:;"
+                   onclick="context_menu(this, [{'contains': ['trustar bitcoin address'], 'value': '{{ result.param.bitcoin_address }}' }], 0, {{ container.id }}, null, false);">
+                    {{ result.param.bitcoin_address }}
+                    &nbsp;
+                    <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                </a>
                 {% elif result.param.url %}
                 <a href="javascript:;"
                    onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ result.param.url }}' }], 0, {{ container.id }}, null, false);">
@@ -113,7 +127,7 @@
                 </a>
                 {% elif result.param.file %}
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['file name', 'hash'], 'value': '{{ result.param.file }}' }], 0, {{ container.id }}, null, false);">
+                   onclick="context_menu(this, [{'contains': ['file name', 'hash', 'md5', 'sha1', 'sha256'], 'value': '{{ result.param.file }}' }], 0, {{ container.id }}, null, false);">
                     {{ result.param.file }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
