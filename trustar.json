@@ -17,7 +17,7 @@
     "logo_dark": "logo_trustar_dark.svg",
     "python_version": "3",
     "latest_tested_versions": [
-        "Cloud, API station.trustar.co, November 02 2021, API version: v1.3, v2.0"
+        "Cloud, API station.trustar.co, November 09 2021, API version: v1.3, v2.0"
     ],
     "configuration": {
         "url": {
@@ -2326,6 +2326,7 @@
         {
             "action": "list emails",
             "description": "Get a list of emails submitted to Phishing Triage",
+            "verbose": "If the parameters <b>start_time</b> and <b>end_time</b> are not provided, then last 24 hours data will be fetched. The <b>start_time</b> of the time window must be within 1 month from the current time.",
             "type": "investigate",
             "identifier": "list_emails",
             "read_only": true,
@@ -2531,6 +2532,7 @@
         {
             "action": "list indicators",
             "description": "Get a list of indictors found in phishing submissions",
+            "verbose": "If the parameters <b>start_time</b> and <b>end_time</b> are not provided, then last 24 hours data will be fetched. The <b>start_time</b> of the time window must be within 1 month from the current time.",
             "type": "investigate",
             "identifier": "list_indicators",
             "read_only": true,
@@ -2715,7 +2717,7 @@
         {
             "action": "indicator reputation",
             "description": "Get enriched information of the indictor",
-            "verbose": "If the value of the action parameter <b>enclave ids</b> is kept empty, then the value will be considered the same as a configuration parameter's value. If the configuration parameter is also kept empty, nothing will be passed in <b>enclave ids</b> parameter, and data from all the enclaves for which the user has READ access will be fetched.",
+            "verbose": "If the value of the action parameter <b>enclave ids</b> is kept empty, then the value will be considered the same as a configuration parameter's value. If the configuration parameter is also kept empty, nothing will be passed in <b>enclave ids</b> parameter, and data from all the enclaves for which the user has READ access will be fetched.<br/>This action will fetch the data for the past one year.",
             "type": "investigate",
             "identifier": "indicator_reputation",
             "read_only": true,

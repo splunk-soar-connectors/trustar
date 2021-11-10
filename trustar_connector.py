@@ -107,6 +107,12 @@ class TrustarConnector(BaseConnector):
 
         # Load the state of app stored in JSON file
         self._app_state = self.load_state()
+        if not isinstance(self._app_state, dict):
+            self.debug_print("Resetting the state file with the default format")
+            self._app_state = {
+                "app_version": self.get_app_json().get('app_version')
+            }
+
         self._access_token = self._app_state.get(consts.TRUSTAR_OAUTH_TOKEN_STRING, {}).get(consts.TRUSTAR_OAUTH_ACCESS_TOKEN_STRING)
         # Custom validation for IP address
         self.set_validator(consts.TRUSTAR_HUNT_IP_PARAM, self._is_ip)
@@ -878,8 +884,17 @@ class TrustarConnector(BaseConnector):
         indicator_types = param.get("indicator_types")
         query_term = param["indicator_value"]
 
+        # for the time range, use the epoch times from one year ago to now
+        current_time = datetime.datetime.now()
+        to_time = int(current_time.timestamp() * 1000)
+        delta = datetime.timedelta(days=365)
+        from_time = current_time - delta
+        from_time = int(from_time.timestamp() * 1000)
+
         body = {
-            "queryTerm": query_term
+            "queryTerm": query_term,
+            "from": from_time,
+            "to": to_time
         }
 
         if indicator_types:
