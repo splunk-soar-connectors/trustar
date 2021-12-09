@@ -177,7 +177,7 @@ class TrustarConnector(BaseConnector):
 
         return phantom.APP_SUCCESS, parameter
 
-    def _make_rest_call_helper(self, endpoint, action_result, headers={}, params=None, data=None, json=None,
+    def _make_rest_call_helper(self, endpoint, action_result, headers=None, params=None, data=None, json=None,
             method="get", timeout=None, auth=None):
         """
         Help setting a REST call to the app.
