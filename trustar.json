@@ -16,7 +16,7 @@
     "logo": "logo_trustar.svg",
     "logo_dark": "logo_trustar_dark.svg",
     "python_version": "3",
-    "fips_compliant":true,
+    "fips_compliant": true,
     "latest_tested_versions": [
         "Cloud, API station.trustar.co, November 09 2021, API version: v1.3, v2.0"
     ],
