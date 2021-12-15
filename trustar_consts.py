@@ -115,3 +115,4 @@ TRUSTAR_INVALID_TOKEN_MESSAGES = (
         "Expired oauth2 access token",
         "Invalid oauth2 access token"
 )
+TRUSTAR_DEFAULT_TIMEOUT = 30

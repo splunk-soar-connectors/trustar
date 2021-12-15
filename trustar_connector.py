@@ -177,7 +177,7 @@ class TrustarConnector(BaseConnector):
 
         return phantom.APP_SUCCESS, parameter
 
-    def _make_rest_call_helper(self, endpoint, action_result, headers={}, params=None, data=None, json=None, method="get",
+    def _make_rest_call_helper(self, endpoint, action_result, headers=None, params=None, data=None, json=None, method="get",
             timeout=None, auth=None):
         """
         Help setting a REST call to the app.
@@ -194,6 +194,10 @@ class TrustarConnector(BaseConnector):
         """
 
         retry_failure_flag = False
+
+        if headers is None:
+            headers = {}
+
         headers.update({
                 'Authorization': consts.TRUSTAR_AUTHORIZATION_HEADER.format(token=self._access_token)
             })
@@ -364,7 +368,7 @@ class TrustarConnector(BaseConnector):
                                         status=response.status_code,
                                         detail=message), response_data
 
-    def _paginate_without_cursor(self, action_result, endpoint, body, params={}):
+    def _paginate_without_cursor(self, action_result, endpoint, body, params=None):
         """ Pagination using page size and page number to accrue all results
 
         :param action_result: object of ActionResult class
@@ -378,6 +382,8 @@ class TrustarConnector(BaseConnector):
             "pageSize": consts.TRUSTAR_PAGE_SIZE,
             "pageNumber": consts.TRUSTAR_PAGE_NUMBER
         }
+        if params is None:
+            params = {}
         params.update(page_details)
         results = []
 
@@ -1705,22 +1711,22 @@ if __name__ == '__main__':
         login_url = "{}login".format(BaseConnector._get_phantom_base_url())
         try:
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False)
+            r = requests.get(login_url, verify=False, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
             csrftoken = r.cookies['csrftoken']
             data = {'username': args.username, 'password': args.password, 'csrfmiddlewaretoken': csrftoken}
             headers = {'Cookie': 'csrftoken={0}'.format(csrftoken), 'Referer': login_url}
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            r2 = requests.post(login_url, verify=False, data=data, headers=headers, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
             session_id = r2.cookies['sessionid']
 
         except Exception as e:
             print(("Unable to get session id from the platform. Error: {0}".format(str(e))))
-            exit(1)
+            sys.exit(1)
 
     if len(sys.argv) < 2:
         print("No test json specified as input")
-        exit(0)
+        sys.exit(0)
 
     with open(args.input_test_json) as f:
         in_json = f.read()
@@ -1736,4 +1742,4 @@ if __name__ == '__main__':
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)
