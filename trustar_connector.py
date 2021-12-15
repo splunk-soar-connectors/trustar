@@ -14,23 +14,20 @@
 # and limitations under the License.
 #
 #
-# Standard library imports
-from dateutil import parser, tz
-import requests
 import datetime
-import socket
 import json
 import re
-import time
+import socket
 import sys
-from bs4 import UnicodeDammit
+import time
 
-# Phantom imports
 import phantom.app as phantom
-from phantom.base_connector import BaseConnector
+import requests
+from bs4 import UnicodeDammit
+from dateutil import parser, tz
 from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
-# Local imports
 import trustar_consts as consts
 
 # Dictionary containing details of possible HTTP error codes in API Response
@@ -111,7 +108,8 @@ class TrustarConnector(BaseConnector):
         self._client_id = config[consts.TRUSTAR_CONFIG_CLIENT_ID]
         self._client_secret = config[consts.TRUSTAR_CONFIG_CLIENT_SECRET]
 
-        ret_val, self._max_wait_time = self._validate_integer(self, config.get(consts.TRUSTAR_CONFIG_WAIT_TIME, consts.TRUSTAR_DEFAULT_MAX_WAIT_TIME), 'max wait time')
+        ret_val, self._max_wait_time = self._validate_integer(self, config.get(consts.TRUSTAR_CONFIG_WAIT_TIME,
+            consts.TRUSTAR_DEFAULT_MAX_WAIT_TIME), 'max wait time')
         if phantom.is_fail(ret_val):
             return self.get_status()
 
@@ -179,7 +177,8 @@ class TrustarConnector(BaseConnector):
 
         return phantom.APP_SUCCESS, parameter
 
-    def _make_rest_call_helper(self, endpoint, action_result, headers={}, params=None, data=None, json=None, method="get", timeout=None, auth=None):
+    def _make_rest_call_helper(self, endpoint, action_result, headers={}, params=None, data=None, json=None, method="get",
+            timeout=None, auth=None):
         """
         Help setting a REST call to the app.
 
@@ -227,8 +226,10 @@ class TrustarConnector(BaseConnector):
                 retry_failure_flag = True
 
             # If token is expired, generate a new token
-            if error_message and (consts.TRUSTAR_INVALID_TOKEN_MESSAGES[0] in error_message or consts.TRUSTAR_INVALID_TOKEN_MESSAGES[1] in error_message):
-                self.debug_print("Refreshing TRUSTAR API and re-trying request to [{}] because API token was expired or invalid with error [{}]".format(endpoint, error_message))
+            if error_message and (consts.TRUSTAR_INVALID_TOKEN_MESSAGES[0]
+                    in error_message or consts.TRUSTAR_INVALID_TOKEN_MESSAGES[1] in error_message):
+                self.debug_print("Refreshing TRUSTAR API and re-trying request to [{}] because API token was expired or "
+                    "invalid with error [{}]".format(endpoint, error_message))
                 ret_val = self._generate_api_token(action_result)
                 if phantom.is_fail(ret_val):
                     return action_result.get_status(), None
@@ -917,7 +918,8 @@ class TrustarConnector(BaseConnector):
             enclave_ids = list(filter(None, enclave_ids))
             body["enclaveGuids"] = enclave_ids
 
-        ret_val, response = self._paginate(action_result, consts.TRUSTAR_ENRICH_INDICATOR_ENDPOINT, body, 'indicators_found', page_size=consts.TRUSTAR_PAGE_SIZE_API_2)
+        ret_val, response = self._paginate(action_result, consts.TRUSTAR_ENRICH_INDICATOR_ENDPOINT, body,
+            'indicators_found', page_size=consts.TRUSTAR_PAGE_SIZE_API_2)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -952,7 +954,8 @@ class TrustarConnector(BaseConnector):
 
             if len(indicator_type) != len(values):
                 return action_result.set_status(phantom.APP_ERROR, "Length of 'indicator type' and 'indicator value' parameter should be same. \
-                                                    {}".format(consts.TRUSTAR_LESS_INDICATOR_TYPE if len(indicator_type) < len(values) else consts.TRUSTAR_LESS_VALUE))
+                                                    {}".format(consts.TRUSTAR_LESS_INDICATOR_TYPE if len(indicator_type) < len(values)
+                                                    else consts.TRUSTAR_LESS_VALUE))
 
             for index, _ in enumerate(values):
                 indicator_dict = dict()
@@ -1009,7 +1012,8 @@ class TrustarConnector(BaseConnector):
             enclave_ids = ",".join(enclave_ids)
             params = {"enclaveIds": enclave_ids}
 
-        ret_val, indicator_summaries = self._paginate_without_cursor(action_result, consts.TRUSTAR_INDICATORS_SUMMARY_ENDPOINT, body=values, params=params)
+        ret_val, indicator_summaries = self._paginate_without_cursor(action_result, consts.TRUSTAR_INDICATORS_SUMMARY_ENDPOINT,
+            body=values, params=params)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -1383,7 +1387,8 @@ class TrustarConnector(BaseConnector):
                 self._config_enclave_ids = self._config_enclave_ids.strip(',')
                 # Strip out white spaces from enclave_ids provided in asset configuration
                 config_enclave_id_list = self._config_enclave_ids.split(',')
-                config_enclave_id_list = list(filter(lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
+                config_enclave_id_list = list(filter(lambda x: x.strip(),
+                    [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
 
             # Return error if any of the enclave_id provided in action parameters is not configured in asset
             if set(enclave_id_list) - set(config_enclave_id_list):
@@ -1401,7 +1406,8 @@ class TrustarConnector(BaseConnector):
             submit_report_payload["externalUrl"] = external_url
 
         # Make REST call
-        resp_status, response = self._make_rest_call_helper(consts.TRUSTAR_SUBMIT_REPORT_ENDPOINT, action_result, json=submit_report_payload, method="post")
+        resp_status, response = self._make_rest_call_helper(consts.TRUSTAR_SUBMIT_REPORT_ENDPOINT,
+            action_result, json=submit_report_payload, method="post")
 
         # Something went wrong
         if phantom.is_fail(resp_status):
@@ -1507,7 +1513,8 @@ class TrustarConnector(BaseConnector):
                 self._config_enclave_ids = self._config_enclave_ids.strip(',')
                 # Strip out white spaces from enclave_ids provided in asset configuration
                 config_enclave_id_list = self._config_enclave_ids.split(',')
-                config_enclave_id_list = list(filter(lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
+                config_enclave_id_list = list(filter(lambda x: x.strip(),
+                    [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
 
             # Return error if any of the enclave_id provided in action parameters is not configured in asset
             if set(enclave_id_list) - set(config_enclave_id_list):
@@ -1523,7 +1530,8 @@ class TrustarConnector(BaseConnector):
             payload["enclaveIds"] = response["enclaveIds"]
 
         # Make REST call
-        resp_status, response = self._make_rest_call_helper(consts.TRUSTAR_UPDATE_REPORT_ENDPOINT.format(report_id=report_id), action_result, json=payload, method="put")
+        resp_status, response = self._make_rest_call_helper(consts.TRUSTAR_UPDATE_REPORT_ENDPOINT.format(
+            report_id=report_id), action_result, json=payload, method="put")
 
         # Something went wrong
         if phantom.is_fail(resp_status):
@@ -1679,8 +1687,9 @@ class TrustarConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
+
+    import pudb
     pudb.set_trace()
 
     argparser = argparse.ArgumentParser()
