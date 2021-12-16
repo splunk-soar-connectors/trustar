@@ -195,7 +195,7 @@ class TrustarConnector(BaseConnector):
 
         retry_failure_flag = False
 
-        if headers:
+        if not headers:
             headers = {}
 
         headers.update({
