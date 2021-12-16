@@ -286,11 +286,11 @@ class TrustarConnector(BaseConnector):
             if auth is None:
                 response = request_func("{base_url}{endpoint}".format(base_url=self._url, endpoint=endpoint),
                                         params=params, headers=headers, data=data, json=json,
-                                        verify=False, timeout=timeout)
+                                        verify=True, timeout=timeout)
             # For generating API token
             else:
                 response = request_func("{base_url}{endpoint}".format(base_url=self._url, endpoint=endpoint),
-                                        auth=auth, data=data, json=json, verify=False, timeout=timeout)
+                                        auth=auth, data=data, json=json, verify=True, timeout=timeout)
         except Exception as e:
             self.debug_print(consts.TRUSTAR_ERR_SERVER_CONNECTION, e)
             # Set the action_result status to error, the handler function will most probably return as is
@@ -1711,13 +1711,13 @@ if __name__ == '__main__':
         login_url = "{}login".format(BaseConnector._get_phantom_base_url())
         try:
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
+            r = requests.get(login_url, verify=True, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
             csrftoken = r.cookies['csrftoken']
             data = {'username': args.username, 'password': args.password, 'csrfmiddlewaretoken': csrftoken}
             headers = {'Cookie': 'csrftoken={0}'.format(csrftoken), 'Referer': login_url}
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
+            r2 = requests.post(login_url, verify=True, data=data, headers=headers, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
             session_id = r2.cookies['sessionid']
 
         except Exception as e:
