@@ -230,7 +230,7 @@ class TrustarConnector(BaseConnector):
                 retry_failure_flag = True
 
             # If token is expired, generate a new token
-            if (error_message and (consts.TRUSTAR_INVALID_TOKEN_MESSAGES[0] in error_message) or (
+            if error_message and ((consts.TRUSTAR_INVALID_TOKEN_MESSAGES[0] in error_message) or (
                     consts.TRUSTAR_INVALID_TOKEN_MESSAGES[1] in error_message)):
                 self.debug_print("Refreshing TRUSTAR API and re-trying request to [{}] because API token was expired or "
                     "invalid with error [{}]".format(endpoint, error_message))
