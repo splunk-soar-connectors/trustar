@@ -250,7 +250,8 @@ class TrustarConnector(BaseConnector):
 
         return phantom.APP_SUCCESS, resp_json
 
-    def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, json=None, method="get", timeout=None, auth=None):
+    def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, json=None, method="get", timeout=None, auth=None,
+            verify=False):
         """ Function that makes the REST call to the device. It is a generic function that can be called from various
         action handlers.
 
@@ -286,11 +287,11 @@ class TrustarConnector(BaseConnector):
             if auth is None:
                 response = request_func("{base_url}{endpoint}".format(base_url=self._url, endpoint=endpoint),
                                         params=params, headers=headers, data=data, json=json,
-                                        verify=True, timeout=timeout)
+                                        verify=verify, timeout=timeout)
             # For generating API token
             else:
                 response = request_func("{base_url}{endpoint}".format(base_url=self._url, endpoint=endpoint),
-                                        auth=auth, data=data, json=json, verify=True, timeout=timeout)
+                                        auth=auth, data=data, json=json, verify=verify, timeout=timeout)
         except Exception as e:
             self.debug_print(consts.TRUSTAR_ERR_SERVER_CONNECTION, e)
             # Set the action_result status to error, the handler function will most probably return as is
@@ -1703,21 +1704,23 @@ if __name__ == '__main__':
     argparser.add_argument('input_test_json', help='Input Test JSON file')
     argparser.add_argument('-u', '--username', help='username', required=False)
     argparser.add_argument('-p', '--password', help='password', required=False)
+    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
 
     args = argparser.parse_args()
     session_id = None
+    verify = args.verify
 
     if args.username and args.password:
         login_url = "{}login".format(BaseConnector._get_phantom_base_url())
         try:
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=True, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
+            r = requests.get(login_url, verify=verify, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
             csrftoken = r.cookies['csrftoken']
             data = {'username': args.username, 'password': args.password, 'csrfmiddlewaretoken': csrftoken}
             headers = {'Cookie': 'csrftoken={0}'.format(csrftoken), 'Referer': login_url}
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=True, data=data, headers=headers, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
+            r2 = requests.post(login_url, verify=verify, data=data, headers=headers, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
             session_id = r2.cookies['sessionid']
 
         except Exception as e:
