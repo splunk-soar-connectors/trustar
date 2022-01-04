@@ -4,7 +4,7 @@
     "description": "This App integrates with TruSTAR to provide various hunting and reporting actions",
     "publisher": "Splunk",
     "package_name": "phantom_trustar",
-    "license": "Copyright (c) 2017-2021 Splunk Inc.",
+    "license": "Copyright (c) 2017-2022 Splunk Inc.",
     "main_module": "trustar_connector.py",
     "type": "investigative",
     "app_version": "3.1.4",
