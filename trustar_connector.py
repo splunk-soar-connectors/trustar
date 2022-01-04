@@ -177,7 +177,7 @@ class TrustarConnector(BaseConnector):
 
         return phantom.APP_SUCCESS, parameter
 
-    def _make_rest_call_helper(self, endpoint, action_result, headers={}, params=None, data=None, json=None, method="get",
+    def _make_rest_call_helper(self, endpoint, action_result, headers=None, params=None, data=None, json=None, method="get",
             timeout=None, auth=None):
         """
         Help setting a REST call to the app.
@@ -194,6 +194,8 @@ class TrustarConnector(BaseConnector):
         """
 
         retry_failure_flag = False
+        if not headers:
+            headers = {}
         headers.update({
                 'Authorization': consts.TRUSTAR_AUTHORIZATION_HEADER.format(token=self._access_token)
             })
@@ -364,7 +366,7 @@ class TrustarConnector(BaseConnector):
                                         status=response.status_code,
                                         detail=message), response_data
 
-    def _paginate_without_cursor(self, action_result, endpoint, body, params={}):
+    def _paginate_without_cursor(self, action_result, endpoint, body, params=None):
         """ Pagination using page size and page number to accrue all results
 
         :param action_result: object of ActionResult class
@@ -378,6 +380,8 @@ class TrustarConnector(BaseConnector):
             "pageSize": consts.TRUSTAR_PAGE_SIZE,
             "pageNumber": consts.TRUSTAR_PAGE_NUMBER
         }
+        if not params:
+            params = {}
         params.update(page_details)
         results = []
 
