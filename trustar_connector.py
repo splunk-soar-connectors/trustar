@@ -859,7 +859,8 @@ class TrustarConnector(BaseConnector):
         if pes:
             try:
                 pes_list = [int(x) for x in pes.split(',')]
-                if not all(x in consts.TRUSTAR_PRIORITY_EVENT_SCORES for x in pes_list):
+                priority_event_scores = [-1, 0, 1, 2, 3]
+                if not all(x in priority_event_scores for x in pes_list):
                     raise ValueError
             except ValueError:
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIORITY_EVENT_SCORES)
@@ -1066,7 +1067,8 @@ class TrustarConnector(BaseConnector):
         if pes:
             try:
                 pes_list = [int(x) for x in pes.split(',')]
-                if not all(x in consts.TRUSTAR_PRIORITY_EVENT_SCORES for x in pes_list):
+                priority_event_scores = [-1, 0, 1, 2, 3]
+                if not all(x in priority_event_scores for x in pes_list):
                     raise ValueError
             except ValueError:
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIORITY_EVENT_SCORES)
