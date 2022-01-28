@@ -48,7 +48,6 @@ TRUSTAR_REST_RESP_OTHER_ERROR_MSG = "Error returned"
 TRUSTAR_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 TRUSTAR_ERR_TIME_FORMAT = "Timestamp format incorrect"
 TRUSTAR_ERR_TIME_PARSE = "Could not parse given time: {value_error}"
-TRUSTAR_PRIORITY_EVENT_SCORES = [-1, 0, 1, 2, 3]
 TRUSTAR_ERR_PRIORITY_EVENT_SCORES = "Not all given priority event scores are valid. Valid options are: -1, 0, 1, 2, 3"
 TRUSTAR_STATUSES = ['CONFIRMED', 'IGNORED', 'UNRESOLVED']
 TRUSTAR_ERR_STATUSES = "Not all given statuses are valid. Valid options are: 'CONFIRMED', 'IGNORED', 'UNRESOLVED'"
@@ -115,3 +114,4 @@ TRUSTAR_INVALID_TOKEN_MESSAGES = (
         "Expired oauth2 access token",
         "Invalid oauth2 access token"
 )
+TRUSTAR_DEFAULT_TIMEOUT = 30
