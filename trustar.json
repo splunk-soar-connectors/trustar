@@ -12,7 +12,7 @@
     "product_vendor": "TruSTAR Technology",
     "product_name": "TruSTAR",
     "product_version_regex": ".*",
-    "min_phantom_version": "5.0.0",
+    "min_phantom_version": "5.1.0",
     "logo": "logo_trustar.svg",
     "logo_dark": "logo_trustar_dark.svg",
     "python_version": "3",
@@ -2742,6 +2742,12 @@
                     ],
                     "primary": true,
                     "order": 2
+                },
+                "limit": {
+                    "description": "Specify the number of indicators to return (default value = 10000)",
+                    "data_type": "numeric",
+                    "default": 10000,
+                    "order": 3
                 }
             },
             "render": {

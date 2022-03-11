@@ -1138,12 +1138,14 @@ class TrustarConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         summary_data = action_result.update_summary({})
 
+        self.debug_print("Adding observable types to action_result")
         for observable_type in consts.TRUSTAR_OBSERVABLE_TYPES:
             type = dict()
             type["observable_type"] = observable_type
             action_result.add_data(type)
 
         summary_data["observable_type_count"] = len(consts.TRUSTAR_OBSERVABLE_TYPES)
+        self.debug_print("Found {} observable types".format(summary_data["observable_type_count"]))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
