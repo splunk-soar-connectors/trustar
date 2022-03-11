@@ -460,7 +460,7 @@ class TrustarConnector(BaseConnector):
             # Get the next page cursor from the REST response
             cursor = response.get('responseMetadata', {}).get('nextCursor', None)
 
-            if cursor is None:
+            if cursor is None or cursor == "":
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_FIELD.format(field='nextCursor')), None
 
             body['cursor'] = cursor
@@ -899,6 +899,9 @@ class TrustarConnector(BaseConnector):
         enclave_ids = param.get("enclave_ids", self._config_enclave_ids)
         indicator_types = param.get("indicator_types")
         query_term = param["indicator_value"]
+        limit = param.get("limit")
+        if limit is None:
+            limit = 10000
 
         # for the time range, use the epoch times from one year ago to now
         current_time = datetime.datetime.now()
@@ -924,7 +927,7 @@ class TrustarConnector(BaseConnector):
             body["enclaveGuids"] = enclave_ids
 
         ret_val, response = self._paginate(action_result, consts.TRUSTAR_ENRICH_INDICATOR_ENDPOINT, body,
-            'indicators_found', page_size=consts.TRUSTAR_PAGE_SIZE_API_2)
+            'indicators_found', limit, page_size=consts.TRUSTAR_PAGE_SIZE_API_2)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
