@@ -2786,21 +2786,24 @@
                     "data_path": "action_result.data.*.attributes.*.type",
                     "data_type": "string",
                     "example_values": [
-                        "THREAT_ACTOR"
+                        "THREAT_ACTOR",
+                        "MALWARE"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.attributes.*.value",
                     "data_type": "string",
                     "example_values": [
-                        "SOMENAME_2"
+                        "SOMENAME_2",
+                        "MYDOOM"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.created",
                     "data_type": "numeric",
                     "example_values": [
-                        1634119674000
+                        1634119674000,
+                        1639175447562
                     ]
                 },
                 {
@@ -2810,21 +2813,24 @@
                         "trustar enclave id"
                     ],
                     "example_values": [
-                        "5285b7ec-3582-4d4a-a967-82d3d4f98bb4"
+                        "5285b7ec-3582-4d4a-a967-82d3d4f98bb4",
+                        "ebf45cf7-b029-45cb-a21a-661aa3a8e501"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.guid",
                     "data_type": "string",
                     "example_values": [
-                        "d9d0b3df-b15e-307e-b8f1-9780b79c505f"
+                        "d9d0b3df-b15e-307e-b8f1-9780b79c505f",
+                        "009aeb62-73b6-33ba-8c10-2dda659e1c74"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.observable.type",
                     "data_type": "string",
                     "example_values": [
-                        "IP4"
+                        "IP4",
+                        "URL"
                     ]
                 },
                 {
@@ -2834,21 +2840,24 @@
                         "5.39.39.39"
                     ],
                     "contains": [
-                        "ip"
+                        "ip",
+                        "url"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.priorityScore",
                     "data_type": "string",
                     "example_values": [
-                        "BENIGN"
+                        "BENIGN",
+                        "HIGH"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.processedAt",
                     "data_type": "numeric",
                     "example_values": [
-                        1634195463512
+                        1634195463512,
+                        1646951151171
                     ]
                 },
                 {
@@ -2865,28 +2874,32 @@
                         "trustar enclave id"
                     ],
                     "example_values": [
-                        "d1b45847-28c0-4426-98eb-dcabde9c044f"
+                        "d1b45847-28c0-4426-98eb-dcabde9c044f",
+                        "ca97e725-7e0e-4866-950c-7dbaf0bea6aa"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.scoreContexts.*.enclaveName",
                     "data_type": "string",
                     "example_values": [
-                        "BOTS 2021 Intel Feed (Stxd Indicators)"
+                        "BOTS 2021 Intel Feed (Stxd Indicators)",
+                        "Netlab 360 DGA"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.scoreContexts.*.normalizedScore",
                     "data_type": "numeric",
                     "example_values": [
-                        0
+                        0,
+                        3
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.scoreContexts.*.sourceName",
                     "data_type": "string",
                     "example_values": [
-                        "BOTS 2021 Intel Feed (Stxd Indicators)"
+                        "BOTS 2021 Intel Feed (Stxd Indicators)",
+                        "Netlab 360 DGA"
                     ]
                 },
                 {
@@ -2907,7 +2920,8 @@
                     "data_path": "action_result.data.*.updated",
                     "data_type": "numeric",
                     "example_values": [
-                        1634119674000
+                        1634119674000,
+                        1646950945820
                     ]
                 },
                 {
@@ -2918,35 +2932,40 @@
                     "data_path": "action_result.data.*.validFrom",
                     "data_type": "numeric",
                     "example_values": [
-                        1635724800000
+                        1635724800000,
+                        0
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.validUntil",
                     "data_type": "numeric",
                     "example_values": [
-                        1635811199000
+                        1635811199000,
+                        1893456000000
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.workflowGuid",
                     "data_type": "string",
                     "example_values": [
-                        "a9cbe8c6-85fb-4a57-b78f-77a29f3d4fe3"
+                        "a9cbe8c6-85fb-4a57-b78f-77a29f3d4fe3",
+                        "1dd26bf5-ecb7-4c8d-8961-7c75c5f866ad"
                     ]
                 },
                 {
                     "data_path": "action_result.summary.indicators_found",
                     "data_type": "numeric",
                     "example_values": [
-                        3
+                        3,
+                        222
                     ]
                 },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Indicators found: 3"
+                        "Indicators found: 3",
+                        "Indicators found: 222"
                     ]
                 },
                 {
@@ -2961,6 +2980,13 @@
                     "data_type": "numeric",
                     "example_values": [
                         1
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        222
                     ]
                 }
             ],
