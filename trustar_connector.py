@@ -460,7 +460,7 @@ class TrustarConnector(BaseConnector):
             # Get the next page cursor from the REST response
             cursor = response.get('responseMetadata', {}).get('nextCursor', None)
 
-            if cursor is None or cursor == "":
+            if not cursor:
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_FIELD.format(field='nextCursor')), None
 
             body['cursor'] = cursor
