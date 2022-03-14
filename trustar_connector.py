@@ -204,6 +204,7 @@ class TrustarConnector(BaseConnector):
             ret_val = self._generate_api_token(action_result)
 
             if phantom.is_fail(ret_val):
+                self.debug_prin("Something went wrong while generating the token")
                 return action_result.get_status(), None
 
             headers.update({
