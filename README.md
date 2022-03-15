@@ -688,6 +688,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **indicator\_value** |  required  | The indicator value to search for | string | 
 **indicator\_types** |  optional  | A comma\-separated list of indicator types to filter indicators by | string | 
 **enclave\_ids** |  optional  | A comma\-separated list of enclave IDs to filter indicators by | string |  `trustar enclave id` 
+**limit** |  optional  | Specify the number of indicators to return \(default value = 10000\) | numeric | 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
@@ -702,7 +703,7 @@ action\_result\.data\.\*\.created | numeric |
 action\_result\.data\.\*\.enclaveGuid | string |  `trustar enclave id` 
 action\_result\.data\.\*\.guid | string | 
 action\_result\.data\.\*\.observable\.type | string | 
-action\_result\.data\.\*\.observable\.value | string |  `ip` 
+action\_result\.data\.\*\.observable\.value | string |  `ip`  `url` 
 action\_result\.data\.\*\.priorityScore | string | 
 action\_result\.data\.\*\.processedAt | numeric | 
 action\_result\.data\.\*\.safelisted | boolean | 
@@ -720,7 +721,8 @@ action\_result\.data\.\*\.workflowGuid | string |
 action\_result\.summary\.indicators\_found | numeric | 
 action\_result\.message | string | 
 summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+summary\.total\_objects\_successful | numeric | 
+action\_result\.parameter\.limit | numeric |   
 
 ## action: 'get indicator summary'
 Get the structured summaries about indicators
