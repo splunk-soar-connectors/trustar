@@ -204,6 +204,7 @@ class TrustarConnector(BaseConnector):
             ret_val = self._generate_api_token(action_result)
 
             if phantom.is_fail(ret_val):
+                self.debug_print("Something went wrong while generating the token")
                 return action_result.get_status(), None
 
             headers.update({
@@ -1135,6 +1136,7 @@ class TrustarConnector(BaseConnector):
         :param param: dictionary of input parameters
         :return: status success/failure
         """
+        self.debug_print("_list_observable_types function started")
         action_result = self.add_action_result(ActionResult(dict(param)))
         summary_data = action_result.update_summary({})
 
@@ -1145,7 +1147,7 @@ class TrustarConnector(BaseConnector):
             action_result.add_data(type)
 
         summary_data["observable_type_count"] = len(consts.TRUSTAR_OBSERVABLE_TYPES)
-        self.debug_print("Found {} observable types".format(summary_data["observable_type_count"]))
+        self.debug_print("Observable type count is {}".format(summary_data["observable_type_count"]))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
