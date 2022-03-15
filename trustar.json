@@ -4,18 +4,19 @@
     "description": "This App integrates with TruSTAR to provide various hunting and reporting actions",
     "publisher": "Splunk",
     "package_name": "phantom_trustar",
-    "license": "Copyright (c) 2017-2021 Splunk Inc.",
+    "license": "Copyright (c) 2017-2022 Splunk Inc.",
     "main_module": "trustar_connector.py",
     "type": "investigative",
-    "app_version": "3.1.5",
-    "utctime_updated": "2021-11-12T06:54:01.000000Z",
+    "app_version": "3.1.7",
+    "utctime_updated": "2022-01-28T17:50:25.000000Z",
     "product_vendor": "TruSTAR Technology",
     "product_name": "TruSTAR",
     "product_version_regex": ".*",
-    "min_phantom_version": "4.10.0.40961",
+    "min_phantom_version": "5.1.0",
     "logo": "logo_trustar.svg",
     "logo_dark": "logo_trustar_dark.svg",
     "python_version": "3",
+    "fips_compliant": true,
     "latest_tested_versions": [
         "Cloud, API station.trustar.co, November 09 2021, API version: v1.3, v2.0"
     ],
@@ -2741,6 +2742,12 @@
                     ],
                     "primary": true,
                     "order": 2
+                },
+                "limit": {
+                    "description": "Specify the number of indicators to return (default value = 10000)",
+                    "data_type": "numeric",
+                    "default": 10000,
+                    "order": 3
                 }
             },
             "render": {
@@ -2785,21 +2792,24 @@
                     "data_path": "action_result.data.*.attributes.*.type",
                     "data_type": "string",
                     "example_values": [
-                        "THREAT_ACTOR"
+                        "THREAT_ACTOR",
+                        "MALWARE"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.attributes.*.value",
                     "data_type": "string",
                     "example_values": [
-                        "SOMENAME_2"
+                        "SOMENAME_2",
+                        "MYDOOM"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.created",
                     "data_type": "numeric",
                     "example_values": [
-                        1634119674000
+                        1634119674000,
+                        1639175447562
                     ]
                 },
                 {
@@ -2809,21 +2819,24 @@
                         "trustar enclave id"
                     ],
                     "example_values": [
-                        "5285b7ec-3582-4d4a-a967-82d3d4f98bb4"
+                        "5285b7ec-3582-4d4a-a967-82d3d4f98bb4",
+                        "ebf45cf7-b029-45cb-a21a-661aa3a8e501"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.guid",
                     "data_type": "string",
                     "example_values": [
-                        "d9d0b3df-b15e-307e-b8f1-9780b79c505f"
+                        "d9d0b3df-b15e-307e-b8f1-9780b79c505f",
+                        "009aeb62-73b6-33ba-8c10-2dda659e1c74"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.observable.type",
                     "data_type": "string",
                     "example_values": [
-                        "IP4"
+                        "IP4",
+                        "URL"
                     ]
                 },
                 {
@@ -2833,21 +2846,24 @@
                         "5.39.39.39"
                     ],
                     "contains": [
-                        "ip"
+                        "ip",
+                        "url"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.priorityScore",
                     "data_type": "string",
                     "example_values": [
-                        "BENIGN"
+                        "BENIGN",
+                        "HIGH"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.processedAt",
                     "data_type": "numeric",
                     "example_values": [
-                        1634195463512
+                        1634195463512,
+                        1646951151171
                     ]
                 },
                 {
@@ -2864,28 +2880,32 @@
                         "trustar enclave id"
                     ],
                     "example_values": [
-                        "d1b45847-28c0-4426-98eb-dcabde9c044f"
+                        "d1b45847-28c0-4426-98eb-dcabde9c044f",
+                        "ca97e725-7e0e-4866-950c-7dbaf0bea6aa"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.scoreContexts.*.enclaveName",
                     "data_type": "string",
                     "example_values": [
-                        "BOTS 2021 Intel Feed (Stxd Indicators)"
+                        "BOTS 2021 Intel Feed (Stxd Indicators)",
+                        "Netlab 360 DGA"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.scoreContexts.*.normalizedScore",
                     "data_type": "numeric",
                     "example_values": [
-                        0
+                        0,
+                        3
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.scoreContexts.*.sourceName",
                     "data_type": "string",
                     "example_values": [
-                        "BOTS 2021 Intel Feed (Stxd Indicators)"
+                        "BOTS 2021 Intel Feed (Stxd Indicators)",
+                        "Netlab 360 DGA"
                     ]
                 },
                 {
@@ -2906,7 +2926,8 @@
                     "data_path": "action_result.data.*.updated",
                     "data_type": "numeric",
                     "example_values": [
-                        1634119674000
+                        1634119674000,
+                        1646950945820
                     ]
                 },
                 {
@@ -2917,35 +2938,40 @@
                     "data_path": "action_result.data.*.validFrom",
                     "data_type": "numeric",
                     "example_values": [
-                        1635724800000
+                        1635724800000,
+                        0
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.validUntil",
                     "data_type": "numeric",
                     "example_values": [
-                        1635811199000
+                        1635811199000,
+                        1893456000000
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.workflowGuid",
                     "data_type": "string",
                     "example_values": [
-                        "a9cbe8c6-85fb-4a57-b78f-77a29f3d4fe3"
+                        "a9cbe8c6-85fb-4a57-b78f-77a29f3d4fe3",
+                        "1dd26bf5-ecb7-4c8d-8961-7c75c5f866ad"
                     ]
                 },
                 {
                     "data_path": "action_result.summary.indicators_found",
                     "data_type": "numeric",
                     "example_values": [
-                        3
+                        3,
+                        222
                     ]
                 },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Indicators found: 3"
+                        "Indicators found: 3",
+                        "Indicators found: 222"
                     ]
                 },
                 {
@@ -2960,6 +2986,13 @@
                     "data_type": "numeric",
                     "example_values": [
                         1
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        222
                     ]
                 }
             ],
@@ -3628,5 +3661,45 @@
             },
             "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip_dependencies": {
+        "wheel": [
+            {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/beautifulsoup4-4.9.1-py3-none-any.whl"
+            },
+            {
+                "module": "certifi",
+                "input_file": "wheels/certifi-2021.10.8-py2.py3-none-any.whl"
+            },
+            {
+                "module": "chardet",
+                "input_file": "wheels/chardet-3.0.4-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/idna-2.10-py2.py3-none-any.whl"
+            },
+            {
+                "module": "python_dateutil",
+                "input_file": "wheels/python_dateutil-2.8.1-py2.py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/requests-2.25.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "six",
+                "input_file": "wheels/six-1.16.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "soupsieve",
+                "input_file": "wheels/soupsieve-2.3.1-py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/urllib3-1.26.8-py2.py3-none-any.whl"
+            }
+        ]
+    }
 }

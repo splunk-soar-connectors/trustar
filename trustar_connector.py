@@ -1,26 +1,33 @@
 # File: trustar_connector.py
-# Copyright (c) 2017-2021 Splunk Inc.
 #
-# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
-# without a valid written license from Splunk Inc. is PROHIBITED.
-
-# Standard library imports
-from dateutil import parser, tz
-import requests
+# Copyright (c) 2017-2022 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
+#
+#
 import datetime
-import socket
 import json
 import re
-import time
+import socket
 import sys
-from bs4 import UnicodeDammit
+import time
 
-# Phantom imports
 import phantom.app as phantom
-from phantom.base_connector import BaseConnector
+import requests
+from bs4 import UnicodeDammit
+from dateutil import parser, tz
 from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
-# Local imports
 import trustar_consts as consts
 
 # Dictionary containing details of possible HTTP error codes in API Response
@@ -101,7 +108,8 @@ class TrustarConnector(BaseConnector):
         self._client_id = config[consts.TRUSTAR_CONFIG_CLIENT_ID]
         self._client_secret = config[consts.TRUSTAR_CONFIG_CLIENT_SECRET]
 
-        ret_val, self._max_wait_time = self._validate_integer(self, config.get(consts.TRUSTAR_CONFIG_WAIT_TIME, consts.TRUSTAR_DEFAULT_MAX_WAIT_TIME), 'max wait time')
+        ret_val, self._max_wait_time = self._validate_integer(self, config.get(
+            consts.TRUSTAR_CONFIG_WAIT_TIME, consts.TRUSTAR_DEFAULT_MAX_WAIT_TIME), 'max wait time')
         if phantom.is_fail(ret_val):
             return self.get_status()
 
@@ -169,7 +177,8 @@ class TrustarConnector(BaseConnector):
 
         return phantom.APP_SUCCESS, parameter
 
-    def _make_rest_call_helper(self, endpoint, action_result, headers={}, params=None, data=None, json=None, method="get", timeout=None, auth=None):
+    def _make_rest_call_helper(self, endpoint, action_result, headers=None, params=None, data=None, json=None, method="get",
+            timeout=None, auth=None):
         """
         Help setting a REST call to the app.
 
@@ -185,6 +194,8 @@ class TrustarConnector(BaseConnector):
         """
 
         retry_failure_flag = False
+        if not headers:
+            headers = {}
         headers.update({
                 'Authorization': consts.TRUSTAR_AUTHORIZATION_HEADER.format(token=self._access_token)
             })
@@ -193,6 +204,7 @@ class TrustarConnector(BaseConnector):
             ret_val = self._generate_api_token(action_result)
 
             if phantom.is_fail(ret_val):
+                self.debug_print("Something went wrong while generating the token")
                 return action_result.get_status(), None
 
             headers.update({
@@ -217,8 +229,10 @@ class TrustarConnector(BaseConnector):
                 retry_failure_flag = True
 
             # If token is expired, generate a new token
-            if error_message and (consts.TRUSTAR_INVALID_TOKEN_MESSAGES[0] in error_message or consts.TRUSTAR_INVALID_TOKEN_MESSAGES[1] in error_message):
-                self.debug_print("Refreshing TRUSTAR API and re-trying request to [{}] because API token was expired or invalid with error [{}]".format(endpoint, error_message))
+            if error_message and ((consts.TRUSTAR_INVALID_TOKEN_MESSAGES[0] in
+                    error_message) or (consts.TRUSTAR_INVALID_TOKEN_MESSAGES[1] in error_message)):
+                self.debug_print("Refreshing TRUSTAR API and re-trying request to [{}] "
+                    "because API token was expired or invalid with error [{}]".format(endpoint, error_message))
                 ret_val = self._generate_api_token(action_result)
                 if phantom.is_fail(ret_val):
                     return action_result.get_status(), None
@@ -353,7 +367,7 @@ class TrustarConnector(BaseConnector):
                                         status=response.status_code,
                                         detail=message), response_data
 
-    def _paginate_without_cursor(self, action_result, endpoint, body, params={}):
+    def _paginate_without_cursor(self, action_result, endpoint, body, params=None):
         """ Pagination using page size and page number to accrue all results
 
         :param action_result: object of ActionResult class
@@ -367,6 +381,8 @@ class TrustarConnector(BaseConnector):
             "pageSize": consts.TRUSTAR_PAGE_SIZE,
             "pageNumber": consts.TRUSTAR_PAGE_NUMBER
         }
+        if not params:
+            params = {}
         params.update(page_details)
         results = []
 
@@ -445,7 +461,7 @@ class TrustarConnector(BaseConnector):
             # Get the next page cursor from the REST response
             cursor = response.get('responseMetadata', {}).get('nextCursor', None)
 
-            if cursor is None:
+            if not cursor:
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_FIELD.format(field='nextCursor')), None
 
             body['cursor'] = cursor
@@ -844,7 +860,8 @@ class TrustarConnector(BaseConnector):
         if pes:
             try:
                 pes_list = [int(x) for x in pes.split(',')]
-                if not all(x in consts.TRUSTAR_PRIORITY_EVENT_SCORES for x in pes_list):
+                priority_event_scores = [-1, 0, 1, 2, 3]
+                if not all(x in priority_event_scores for x in pes_list):
                     raise ValueError
             except ValueError:
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIORITY_EVENT_SCORES)
@@ -883,6 +900,9 @@ class TrustarConnector(BaseConnector):
         enclave_ids = param.get("enclave_ids", self._config_enclave_ids)
         indicator_types = param.get("indicator_types")
         query_term = param["indicator_value"]
+        limit = param.get("limit")
+        if limit is None:
+            limit = 10000
 
         # for the time range, use the epoch times from one year ago to now
         current_time = datetime.datetime.now()
@@ -907,7 +927,8 @@ class TrustarConnector(BaseConnector):
             enclave_ids = list(filter(None, enclave_ids))
             body["enclaveGuids"] = enclave_ids
 
-        ret_val, response = self._paginate(action_result, consts.TRUSTAR_ENRICH_INDICATOR_ENDPOINT, body, 'indicators_found', page_size=consts.TRUSTAR_PAGE_SIZE_API_2)
+        ret_val, response = self._paginate(action_result, consts.TRUSTAR_ENRICH_INDICATOR_ENDPOINT, body,
+            'indicators_found', limit, page_size=consts.TRUSTAR_PAGE_SIZE_API_2)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -942,7 +963,7 @@ class TrustarConnector(BaseConnector):
 
             if len(indicator_type) != len(values):
                 return action_result.set_status(phantom.APP_ERROR, "Length of 'indicator type' and 'indicator value' parameter should be same. \
-                                                    {}".format(consts.TRUSTAR_LESS_INDICATOR_TYPE if len(indicator_type) < len(values) else consts.TRUSTAR_LESS_VALUE))
+                    {}".format(consts.TRUSTAR_LESS_INDICATOR_TYPE if len(indicator_type) < len(values) else consts.TRUSTAR_LESS_VALUE))
 
             for index, _ in enumerate(values):
                 indicator_dict = dict()
@@ -999,7 +1020,8 @@ class TrustarConnector(BaseConnector):
             enclave_ids = ",".join(enclave_ids)
             params = {"enclaveIds": enclave_ids}
 
-        ret_val, indicator_summaries = self._paginate_without_cursor(action_result, consts.TRUSTAR_INDICATORS_SUMMARY_ENDPOINT, body=values, params=params)
+        ret_val, indicator_summaries = self._paginate_without_cursor(action_result, consts.TRUSTAR_INDICATORS_SUMMARY_ENDPOINT,
+            body=values, params=params)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -1049,7 +1071,8 @@ class TrustarConnector(BaseConnector):
         if pes:
             try:
                 pes_list = [int(x) for x in pes.split(',')]
-                if not all(x in consts.TRUSTAR_PRIORITY_EVENT_SCORES for x in pes_list):
+                priority_event_scores = [-1, 0, 1, 2, 3]
+                if not all(x in priority_event_scores for x in pes_list):
                     raise ValueError
             except ValueError:
                 return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIORITY_EVENT_SCORES)
@@ -1113,15 +1136,18 @@ class TrustarConnector(BaseConnector):
         :param param: dictionary of input parameters
         :return: status success/failure
         """
+        self.debug_print("_list_observable_types function started")
         action_result = self.add_action_result(ActionResult(dict(param)))
         summary_data = action_result.update_summary({})
 
+        self.debug_print("Adding observable types to action_result")
         for observable_type in consts.TRUSTAR_OBSERVABLE_TYPES:
             type = dict()
             type["observable_type"] = observable_type
             action_result.add_data(type)
 
         summary_data["observable_type_count"] = len(consts.TRUSTAR_OBSERVABLE_TYPES)
+        self.debug_print("Observable type count is {}".format(summary_data["observable_type_count"]))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -1373,7 +1399,8 @@ class TrustarConnector(BaseConnector):
                 self._config_enclave_ids = self._config_enclave_ids.strip(',')
                 # Strip out white spaces from enclave_ids provided in asset configuration
                 config_enclave_id_list = self._config_enclave_ids.split(',')
-                config_enclave_id_list = list(filter(lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
+                config_enclave_id_list = list(filter(lambda x: x.strip(),
+                    [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
 
             # Return error if any of the enclave_id provided in action parameters is not configured in asset
             if set(enclave_id_list) - set(config_enclave_id_list):
@@ -1391,7 +1418,8 @@ class TrustarConnector(BaseConnector):
             submit_report_payload["externalUrl"] = external_url
 
         # Make REST call
-        resp_status, response = self._make_rest_call_helper(consts.TRUSTAR_SUBMIT_REPORT_ENDPOINT, action_result, json=submit_report_payload, method="post")
+        resp_status, response = self._make_rest_call_helper(consts.TRUSTAR_SUBMIT_REPORT_ENDPOINT, action_result,
+            json=submit_report_payload, method="post")
 
         # Something went wrong
         if phantom.is_fail(resp_status):
@@ -1497,7 +1525,8 @@ class TrustarConnector(BaseConnector):
                 self._config_enclave_ids = self._config_enclave_ids.strip(',')
                 # Strip out white spaces from enclave_ids provided in asset configuration
                 config_enclave_id_list = self._config_enclave_ids.split(',')
-                config_enclave_id_list = list(filter(lambda x: x.strip(), [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
+                config_enclave_id_list = list(filter(lambda x: x.strip(),
+                    [config_enclave_id.strip() for config_enclave_id in config_enclave_id_list]))
 
             # Return error if any of the enclave_id provided in action parameters is not configured in asset
             if set(enclave_id_list) - set(config_enclave_id_list):
@@ -1513,7 +1542,8 @@ class TrustarConnector(BaseConnector):
             payload["enclaveIds"] = response["enclaveIds"]
 
         # Make REST call
-        resp_status, response = self._make_rest_call_helper(consts.TRUSTAR_UPDATE_REPORT_ENDPOINT.format(report_id=report_id), action_result, json=payload, method="put")
+        resp_status, response = self._make_rest_call_helper(consts.TRUSTAR_UPDATE_REPORT_ENDPOINT.format(
+            report_id=report_id), action_result, json=payload, method="put")
 
         # Something went wrong
         if phantom.is_fail(resp_status):
@@ -1669,8 +1699,9 @@ class TrustarConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
+
+    import pudb
     pudb.set_trace()
 
     argparser = argparse.ArgumentParser()
@@ -1678,30 +1709,32 @@ if __name__ == '__main__':
     argparser.add_argument('input_test_json', help='Input Test JSON file')
     argparser.add_argument('-u', '--username', help='username', required=False)
     argparser.add_argument('-p', '--password', help='password', required=False)
+    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
 
     args = argparser.parse_args()
+    verify = args.verify
     session_id = None
 
     if args.username and args.password:
         login_url = "{}login".format(BaseConnector._get_phantom_base_url())
         try:
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False)
+            r = requests.get(login_url, verify=verify, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
             csrftoken = r.cookies['csrftoken']
             data = {'username': args.username, 'password': args.password, 'csrfmiddlewaretoken': csrftoken}
             headers = {'Cookie': 'csrftoken={0}'.format(csrftoken), 'Referer': login_url}
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            r2 = requests.post(login_url, verify=verify, data=data, headers=headers, timeout=consts.TRUSTAR_DEFAULT_TIMEOUT)
             session_id = r2.cookies['sessionid']
 
         except Exception as e:
             print(("Unable to get session id from the platform. Error: {0}".format(str(e))))
-            exit(1)
+            sys.exit(1)
 
     if len(sys.argv) < 2:
         print("No test json specified as input")
-        exit(0)
+        sys.exit(0)
 
     with open(args.input_test_json) as f:
         in_json = f.read()
@@ -1717,4 +1750,4 @@ if __name__ == '__main__':
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)

@@ -1,9 +1,17 @@
 # File: trustar_consts.py
-# Copyright (c) 2017-2021 Splunk Inc.
 #
-# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
-# without a valid written license from Splunk Inc. is PROHIBITED.
-
+# Copyright (c) 2017-2022 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
 TRUSTAR_CONFIG_URL = "url"
 TRUSTAR_CONFIG_ENCLAVE_IDS = "config_enclave_ids"
 TRUSTAR_CONFIG_CLIENT_ID = "client_id"
@@ -40,7 +48,6 @@ TRUSTAR_REST_RESP_OTHER_ERROR_MSG = "Error returned"
 TRUSTAR_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 TRUSTAR_ERR_TIME_FORMAT = "Timestamp format incorrect"
 TRUSTAR_ERR_TIME_PARSE = "Could not parse given time: {value_error}"
-TRUSTAR_PRIORITY_EVENT_SCORES = [-1, 0, 1, 2, 3]
 TRUSTAR_ERR_PRIORITY_EVENT_SCORES = "Not all given priority event scores are valid. Valid options are: -1, 0, 1, 2, 3"
 TRUSTAR_STATUSES = ['CONFIRMED', 'IGNORED', 'UNRESOLVED']
 TRUSTAR_ERR_STATUSES = "Not all given statuses are valid. Valid options are: 'CONFIRMED', 'IGNORED', 'UNRESOLVED'"
@@ -107,3 +114,4 @@ TRUSTAR_INVALID_TOKEN_MESSAGES = (
         "Expired oauth2 access token",
         "Invalid oauth2 access token"
 )
+TRUSTAR_DEFAULT_TIMEOUT = 30
