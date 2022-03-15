@@ -2,15 +2,15 @@
 # TruSTAR
 
 Publisher: Splunk  
-Connector Version: 3\.1\.5  
+Connector Version: 3\.1\.7  
 Product Vendor: TruSTAR Technology  
 Product Name: TruSTAR  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.0\.0  
+Minimum Product Version: 5\.1\.0  
 
 This App integrates with TruSTAR to provide various hunting and reporting actions
 
-[comment]: # " File: readme.md"
+[comment]: # " File: README.md"
 [comment]: # "  Copyright (c) 2017-2022 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
