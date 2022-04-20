@@ -9,7 +9,7 @@
 
 {% block widget_content %} <!-- Main Start Block -->
 
-<!-- File: trustar_display_report_details.html
+<!-- File: sim_submitted_report_details.html
   Copyright (c) 2017-2022 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,22 +26,22 @@ and limitations under the License.
 
 <style>
 
-    .trustar a:link {
+    .sim a:link {
     }
 
-    .trustar a:hover {
-    text-decoration: underline;
+    .sim a:hover {
+    text-decoration:underline;
     }
 
-    .trustar a:visited {
+    .sim a:visited {
     }
 
-    .trustar .wf-table-horizontal {
+    .sim .wf-table-horizontal {
     border: 1px solid;
     font-size: 12px;
     }
 
-    .trustar .wf-table-horizontal th {
+    .sim .wf-table-horizontal th {
     text-align: center;
     border: 1px solid;
     text-transform: uppercase;
@@ -49,80 +49,73 @@ and limitations under the License.
     padding: 5px;
     }
 
-    .trustar .wf-table-horizontal td {
+    .sim .wf-table-horizontal td {
     border: 1px solid;
     padding: 5px;
     padding-left: 4px;
     }
 
-    .trustar .wf-h3-style {
-    font-size: 20px;
+    .sim .wf-h3-style {
+    font-size : 20px
     }
 
-    .trustar .wf-h4-style {
+    .sim .wf-h4-style {
     font-size : 16px
     }
 
-    .trustar .wf-table-vertical {
+    .sim .wf-table-vertical {
     width: initial;
     font-size: 12px;
     }
 
-    .trustar .wf-table-vertical td{
+    .sim .wf-table-vertical td{
     padding: 5px;
     border: 1px solid;
     }
 
-    .trustar .wf-table-vertical tr td:first-child {
+    .sim .wf-table-vertical tr td:first-child {
     font-weight: bold;
     }
 
-    .trustar .metadata_div .collapse.in {
+    .sim .metadata_div .collapse.in {
     display: block !important;
     }
 
-    .trustar .metadata_div .panel{
+    .sim .metadata_div .panel{
     padding: 0px;
     box-shadow: none;
     }
 
-    .trustar .metadata_div .panel-title{
+    .sim .metadata_div .panel-title{
     font-size: 14px;
     }
 
-    .trustar .metadata_div .panel-body{
+    .sim .metadata_div .panel-body{
     margin-top: 0px;
     }
 
-    .trustar .metadata_div .panel-group {
+    .sim .metadata_div .panel-group {
     margin-bottom: 0px;
     }
 
-    .trustar .metadata_div .panel-default>.panel-heading {
-    background-image: none;
+    .sim .metadata_div>.panel-heading {
+    background-image: none
     }
 
-    body.dark-theme .trustar #report_description_detail > div > pre {
-        color: white;
-    }
-    body.dark-theme .trustar #extracted_iocs > div > pre {
-        color: white;
+    .sim .indicators-div {
     }
 
-    .trustar .indicators-div {
-    }
-
-    .trustar .report_body {
+    .sim .report_body {
     font-family: inherit;
     }
 
-    .trustar .hide_header {
+    .sim .hide_header {
     display:none;
     height: 0px;
     }
 </style>
 
-<div class="trustar" style="overflow: auto; width: 100%; height: 100%; padding-left:10px; padding-right:10px">
+<div class="sim" style="overflow: auto; width: 100%; height: 100%; padding-left:10px; padding-right:10px">
     <!-- Main Div -->
 
     {% for result in results %} <!-- loop for each result -->
@@ -137,8 +130,8 @@ and limitations under the License.
             </td>
             <td>
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['trustar report id'], 'value': '{{ result.param.report_id }}' }], 0, {{ container.id }}, null, false);">
-                    {{ result.data.id }}
+                   onclick="context_menu(this, [{'contains': ['splunk intelligence machine report id'], 'value': '{{ result.data.reportId }}' }], 0, {{ container.id }}, null, false);">
+                    {{ result.data.reportId }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                 </a>
@@ -149,18 +142,18 @@ and limitations under the License.
                 Report Title
             </td>
             <td>
-                {{ result.data.title }}
+                {{ result.param.report_title }}
             </td>
         </tr>
-        {% if result.data.externalTrackingId %}
+        {% if result.param.external_tracking_id %}
         <tr>
             <td>
                 External Tracking ID
             </td>
             <td>
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['trustar tracking id'], 'value': '{{ result.data.externalTrackingId }}' }], 0, {{ container.id }}, null, false);">
-                    {{ result.data.externalTrackingId }}
+                   onclick="context_menu(this, [{'contains': ['splunk intelligence machine tracking id'], 'value': '{{ result.param.external_tracking_id }}' }], 0, {{ container.id }}, null, false);">
+                    {{ result.param.external_tracking_id }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                 </a>
@@ -170,38 +163,6 @@ and limitations under the License.
     </table>
     <br/>
     <h4 class="wf-h4-style">Report Details</h4>
-    <table id="watch-list-table" class="wf-table-horizontal datatable">
-        <thead>
-        <tr>
-            <th>Submitted</th>
-            <th>Began</th>
-            <th>Sector</th>
-            <th>Distribution Type</th>
-            <th>Correlation Count</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>
-                {{result.data.created}} UTC
-            </td>
-            <td>
-                {{result.data.timeBegan}} UTC
-            </td>
-            <td>
-                {{result.data.sector.label}}
-            </td>
-            <td>
-                {{result.data.distributionType}}
-            </td>
-            <td>
-                {{result.data.correlationCount|default:'<div class="center">-</div>'}}
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <br/>
-
     <div class="metadata_div">
         <div class="panel-group" id="report_description">
             <div class="panel">
@@ -213,24 +174,25 @@ and limitations under the License.
                 </div>
                 <div id="report_description_detail" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <pre class="report_body">{{result.data.reportBody}}</pre>
+                        <pre class="report_body">{{result.param.report_body}}</pre>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="metadata_div">
         <div class="panel-group" id="report_ioc">
             <div class="panel">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#report_ioc" href="#extracted_iocs">Extracted
-                            Indicators ({{ result.summary.extracted_indicators_count }})</a>
+                        <a data-toggle="collapse" data-parent="#report_ioc" href="#extracted_iocs">Report
+                            Indicators ({{result.summary.total_extracted_indicators}})</a>
                     </h4>
                 </div>
                 <div id="extracted_iocs" class="panel-collapse collapse">
                     <div class="panel-body">
-                        {% for key, val in result.data.indicators.items %}
+                        {% for key, val in result.data.reportIndicators.items %}
                         <div class="metadata_div indicators-div">
                             <div class="panel-group" id="{{key}}">
                                 <div class="panel">
@@ -262,7 +224,7 @@ and limitations under the License.
                                                         </a>
                                                         {% elif key == "BITCOIN_ADDRESS" %}
                                                         <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['trustar bitcoin address'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                                           onclick="context_menu(this, [{'contains': ['splunk intelligence machine bitcoin address'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
                                                             {{ curr_val }}
                                                             &nbsp;
                                                             <span class="fa fa-caret-down"
@@ -318,7 +280,7 @@ and limitations under the License.
                                                         </a>
                                                         {% elif key == "CVE" %}
                                                         <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['trustar cve number'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                                           onclick="context_menu(this, [{'contains': ['splunk intelligence machine cve number'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
                                                             {{ curr_val }}
                                                             &nbsp;
                                                             <span class="fa fa-caret-down"
@@ -326,7 +288,7 @@ and limitations under the License.
                                                         </a>
                                                         {% elif key == "MALWARE" %}
                                                         <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['trustar malware'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                                           onclick="context_menu(this, [{'contains': ['splunk intelligence machine malware'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
                                                             {{ curr_val }}
                                                             &nbsp;
                                                             <span class="fa fa-caret-down"
@@ -334,7 +296,7 @@ and limitations under the License.
                                                         </a>
                                                         {% elif key == "REGISTRY_KEY" %}
                                                         <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['trustar registry key'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                                           onclick="context_menu(this, [{'contains': ['splunk intelligence machine registry key'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
                                                             {{ curr_val }}
                                                             &nbsp;
                                                             <span class="fa fa-caret-down"

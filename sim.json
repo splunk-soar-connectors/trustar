@@ -1,20 +1,20 @@
 {
     "appid": "536ae6e0-72b2-4ae1-9520-810acaddd2d1",
-    "name": "TruSTAR",
-    "description": "This App integrates with TruSTAR to provide various hunting and reporting actions",
+    "name": "Splunk Intelligence Management",
+    "description": "This App integrates with Splunk Intelligence Management to provide various hunting and reporting actions",
     "publisher": "Splunk",
-    "package_name": "phantom_trustar",
+    "package_name": "phantom_splunkintelligencemanagement",
     "license": "Copyright (c) 2017-2022 Splunk Inc.",
-    "main_module": "trustar_connector.py",
+    "main_module": "sim_connector.py",
     "type": "investigative",
-    "app_version": "3.1.7",
+    "app_version": "4.0.0",
     "utctime_updated": "2022-01-28T17:50:25.000000Z",
-    "product_vendor": "TruSTAR Technology",
-    "product_name": "TruSTAR",
+    "product_vendor": "Splunk",
+    "product_name": "Splunk Intelligence Management",
     "product_version_regex": ".*",
     "min_phantom_version": "5.1.0",
-    "logo": "logo_trustar.svg",
-    "logo_dark": "logo_trustar_dark.svg",
+    "logo": "logo_sim.svg",
+    "logo_dark": "logo_sim_dark.svg",
     "python_version": "3",
     "fips_compliant": true,
     "latest_tested_versions": [
@@ -28,7 +28,7 @@
             "order": 0
         },
         "config_enclave_ids": {
-            "description": "(,) separated TruSTAR-generated enclave IDs",
+            "description": "(,) separated Splunk Intelligence Management generated enclave IDs",
             "data_type": "string",
             "order": 1
         },
@@ -82,10 +82,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ],
                     "description": "IOC to hunt",
                     "data_type": "string",
@@ -97,7 +97,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt IOC"
             },
             "output": [
@@ -125,17 +125,17 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -195,7 +195,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt IP"
             },
             "output": [
@@ -221,7 +221,7 @@
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -279,7 +279,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt URL"
             },
             "output": [
@@ -306,7 +306,7 @@
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -367,7 +367,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt File"
             },
             "output": [
@@ -397,7 +397,7 @@
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -454,7 +454,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt Email"
             },
             "output": [
@@ -480,7 +480,7 @@
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -525,7 +525,7 @@
                 "cve_number": {
                     "required": true,
                     "contains": [
-                        "trustar cve number"
+                        "splunk intelligence management cve number"
                     ],
                     "description": "CVE (Common Vulnerability and Exposure) number to hunt",
                     "data_type": "string",
@@ -537,7 +537,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt CVE Number"
             },
             "output": [
@@ -553,7 +553,7 @@
                     "data_path": "action_result.parameter.cve_number",
                     "data_type": "string",
                     "contains": [
-                        "trustar cve number"
+                        "splunk intelligence management cve number"
                     ],
                     "example_values": [
                         "CVE-2013-5760"
@@ -563,7 +563,7 @@
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -608,7 +608,7 @@
                 "malware": {
                     "required": true,
                     "contains": [
-                        "trustar malware"
+                        "splunk intelligence management malware"
                     ],
                     "description": "Malware to hunt",
                     "data_type": "string",
@@ -620,7 +620,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt Malware"
             },
             "output": [
@@ -636,7 +636,7 @@
                     "data_path": "action_result.parameter.malware",
                     "data_type": "string",
                     "contains": [
-                        "trustar malware"
+                        "splunk intelligence management malware"
                     ],
                     "example_values": [
                         "rig"
@@ -646,7 +646,7 @@
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -691,7 +691,7 @@
                 "registry_key": {
                     "required": true,
                     "contains": [
-                        "trustar registry key"
+                        "splunk intelligence management registry key"
                     ],
                     "description": "Registry key to hunt",
                     "data_type": "string",
@@ -703,7 +703,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt Registry Key"
             },
             "output": [
@@ -719,7 +719,7 @@
                     "data_path": "action_result.parameter.registry_key",
                     "data_type": "string",
                     "contains": [
-                        "trustar registry key"
+                        "splunk intelligence management registry key"
                     ],
                     "example_values": [
                         "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\CLSID\\{824634b0-a93b-4db6-9214-722d56a79c97}"
@@ -729,7 +729,7 @@
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -774,7 +774,7 @@
                 "bitcoin_address": {
                     "required": true,
                     "contains": [
-                        "trustar bitcoin address"
+                        "splunk intelligence management bitcoin address"
                     ],
                     "description": "Bitcoin address to hunt",
                     "data_type": "string",
@@ -786,7 +786,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Hunt Bitcoin Address"
             },
             "output": [
@@ -802,7 +802,7 @@
                     "data_path": "action_result.parameter.bitcoin_address",
                     "data_type": "string",
                     "contains": [
-                        "trustar bitcoin address"
+                        "splunk intelligence management bitcoin address"
                     ],
                     "example_values": [
                         "1QAb9S6EmycqjzdWDc1yqWzr6jJLC8sLi"
@@ -812,7 +812,7 @@
                     "data_path": "action_result.data.*.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "a9cd779a-75fc-4118-91d4-a428a63ffa23"
@@ -857,8 +857,8 @@
                 "report_id": {
                     "required": true,
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "description": "Report ID",
                     "data_type": "string",
@@ -879,7 +879,7 @@
                 "width": 12,
                 "height": 5,
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Get Report"
             },
             "output": [
@@ -902,8 +902,8 @@
                     "data_path": "action_result.parameter.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "74e38d07-aec4-4dc5-8a07-c71a6c2b1046"
@@ -942,7 +942,7 @@
                     "data_path": "action_result.data.*.externalTrackingId",
                     "data_type": "string",
                     "contains": [
-                        "trustar tracking id"
+                        "splunk intelligence management tracking id"
                     ]
                 },
                 {
@@ -956,7 +956,7 @@
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "74e38d07-aec4-4dc5-8a07-c71a6c2b1046"
@@ -966,7 +966,7 @@
                     "data_path": "action_result.data.*.indicators.*.BITCOIN_ADDRESS",
                     "data_type": "string",
                     "contains": [
-                        "trustar bitcoin address"
+                        "splunk intelligence management bitcoin address"
                     ],
                     "example_values": [
                         "13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94"
@@ -983,7 +983,7 @@
                     "data_path": "action_result.data.*.indicators.*.CVE",
                     "data_type": "string",
                     "contains": [
-                        "trustar cve number"
+                        "splunk intelligence management cve number"
                     ],
                     "example_values": [
                         "cve-2017-0147"
@@ -1007,7 +1007,7 @@
                     "data_path": "action_result.data.*.indicators.*.MALWARE",
                     "data_type": "string",
                     "contains": [
-                        "trustar malware"
+                        "splunk intelligence management malware"
                     ]
                 },
                 {
@@ -1024,7 +1024,7 @@
                     "data_path": "action_result.data.*.indicators.*.REGISTRY_KEY",
                     "data_type": "string",
                     "contains": [
-                        "trustar registry key"
+                        "splunk intelligence management registry key"
                     ]
                 },
                 {
@@ -1165,8 +1165,8 @@
             "parameters": {
                 "report_id": {
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "description": "Report ID",
                     "data_type": "string",
@@ -1177,7 +1177,7 @@
                 "destination_enclave": {
                     "description": "ID of destination enclave",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "data_type": "string",
                     "required": true,
@@ -1204,7 +1204,7 @@
                     "data_path": "action_result.parameter.destination_enclave",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "e8369a18-3e93-49b7-a485-847c8f38b577"
@@ -1214,8 +1214,8 @@
                     "data_path": "action_result.parameter.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "3b312275-e32a-41a2-886c-28966a726274"
@@ -1241,8 +1241,8 @@
                     "column_name": "New Report ID",
                     "column_order": 0,
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "c272142e-9824-4ea7-afcf-8824a6dfe3a3"
@@ -1282,8 +1282,8 @@
                 "report_id": {
                     "description": "Report ID",
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "data_type": "string",
                     "required": true,
@@ -1293,7 +1293,7 @@
                 "destination_enclave": {
                     "description": "ID of destination enclave",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "data_type": "string",
                     "required": true,
@@ -1320,7 +1320,7 @@
                     "data_path": "action_result.parameter.destination_enclave",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "a8764f8c-7a0a-456b-8d08-dbc614b56ae3"
@@ -1330,8 +1330,8 @@
                     "data_path": "action_result.parameter.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "3b312275-e32a-41a2-886c-28966a726274"
@@ -1357,8 +1357,8 @@
                     "column_name": "New Report ID",
                     "column_order": 0,
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "3b312275-e32a-41a2-886c-28966a726274"
@@ -1399,8 +1399,8 @@
                 "report_id": {
                     "required": true,
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "description": "Report ID",
                     "data_type": "string",
@@ -1443,8 +1443,8 @@
                     "data_path": "action_result.parameter.report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "f2a976e9-0e1a-4657-8de0-c8ad6b1fefd9"
@@ -1486,7 +1486,7 @@
         },
         {
             "action": "submit report",
-            "description": "Submit report to TruSTAR",
+            "description": "Submit report to Splunk Intelligence Management",
             "verbose": "If <b>distribution_type</b> selected is <b>ENCLAVE</b>, <b>enclave_ids</b> must be provided from the ones configured in the asset. If <b>time_discovered</b> is not provided, the action will consider current system time.",
             "type": "generic",
             "identifier": "submit_report",
@@ -1515,10 +1515,10 @@
                     ]
                 },
                 "enclave_ids": {
-                    "description": "(,) separated TruSTAR-generated enclave IDs",
+                    "description": "(,) separated Splunk Intelligence Management generated enclave IDs",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "primary": true,
                     "order": 3
@@ -1533,7 +1533,7 @@
                     "data_type": "string",
                     "order": 5,
                     "contains": [
-                        "trustar tracking id"
+                        "splunk intelligence management tracking id"
                     ],
                     "primary": true
                 },
@@ -1552,7 +1552,7 @@
                 "height": 5,
                 "type": "custom",
                 "title": "Submit Report",
-                "view": "trustar_view.display_action_details"
+                "view": "sim_view.display_action_details"
             },
             "output": [
                 {
@@ -1574,7 +1574,7 @@
                     "data_path": "action_result.parameter.enclave_ids",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "3e9d0a3c-c8cc-47ef-af92-a4c6908b3c9c"
@@ -1584,7 +1584,7 @@
                     "data_path": "action_result.parameter.external_tracking_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar tracking id"
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "c272142e-9824-4ea7-afcf-8824a6dfe3a3"
@@ -1625,14 +1625,14 @@
                     "data_path": "action_result.data.*.reportId",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.reportIndicators.BITCOIN_ADDRESS",
                     "data_type": "string",
                     "contains": [
-                        "trustar bitcoin address"
+                        "splunk intelligence management bitcoin address"
                     ]
                 },
                 {
@@ -1646,7 +1646,7 @@
                     "data_path": "action_result.data.*.reportIndicators.CVE",
                     "data_type": "string",
                     "contains": [
-                        "trustar cve number"
+                        "splunk intelligence management cve number"
                     ]
                 },
                 {
@@ -1667,7 +1667,7 @@
                     "data_path": "action_result.data.*.reportIndicators.MALWARE",
                     "data_type": "string",
                     "contains": [
-                        "trustar malware"
+                        "splunk intelligence management malware"
                     ]
                 },
                 {
@@ -1681,7 +1681,7 @@
                     "data_path": "action_result.data.*.reportIndicators.REGISTRY_KEY",
                     "data_type": "string",
                     "contains": [
-                        "trustar registry key"
+                        "splunk intelligence management registry key"
                     ]
                 },
                 {
@@ -1716,8 +1716,8 @@
                     "data_path": "action_result.summary.new_report_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "c272142e-9824-4ea7-afcf-8824a6dfe3a3"
@@ -1749,7 +1749,7 @@
         },
         {
             "action": "update report",
-            "description": "Update a TruSTAR report ",
+            "description": "Update a Splunk Intelligence Management report ",
             "type": "generic",
             "identifier": "update_report",
             "read_only": false,
@@ -1757,8 +1757,8 @@
                 "report_id": {
                     "required": true,
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ],
                     "description": "Report ID",
                     "data_type": "string",
@@ -1785,10 +1785,10 @@
                     "order": 3
                 },
                 "enclave_ids": {
-                    "description": "(,) separated TruSTAR-generated enclave IDs",
+                    "description": "(,) separated Splunk Intelligence Management generated enclave IDs",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "primary": true,
                     "order": 4
@@ -1803,7 +1803,7 @@
                     "data_type": "string",
                     "order": 6,
                     "contains": [
-                        "trustar tracking id"
+                        "splunk intelligence management tracking id"
                     ],
                     "primary": true
                 },
@@ -1834,7 +1834,7 @@
                     "data_path": "action_result.parameter.enclave_ids",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "3e9d0a3c-c8cc-47ef-af92-a4c6908b3c9c"
@@ -1844,7 +1844,7 @@
                     "data_path": "action_result.parameter.external_tracking_id",
                     "data_type": "string",
                     "contains": [
-                        "trustar tracking id"
+                        "splunk intelligence management tracking id"
                     ],
                     "example_values": [
                         "c272142e-9824-4ea7-afcf-8824a6dfe3a3"
@@ -1883,8 +1883,8 @@
                         "cd6dcce9-8d72-4288-a139-ffb1d0795317"
                     ],
                     "contains": [
-                        "trustar report id",
-                        "trustar tracking id"
+                        "splunk intelligence management report id",
+                        "splunk intelligence management tracking id"
                     ]
                 },
                 {
@@ -1938,7 +1938,7 @@
         {
             "action": "safelist ioc",
             "description": "Add IOCs to the whitelist",
-            "verbose": "Input to <b>ioc</b> parameter must be greater than 3 characters. The type of the IOC will be determined by TruSTAR.",
+            "verbose": "Input to <b>ioc</b> parameter must be greater than 3 characters. The type of the IOC will be determined by Splunk Intelligence Management.",
             "type": "correct",
             "identifier": "safelist_ioc",
             "read_only": false,
@@ -1955,10 +1955,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ],
                     "description": "A comma-separated list of IOCs to add to the whitelist",
                     "data_type": "string",
@@ -1995,10 +1995,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ]
                 },
                 {
@@ -2037,10 +2037,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ]
                 },
                 {
@@ -2077,7 +2077,7 @@
         {
             "action": "unsafelist ioc",
             "description": "Remove IOC from the whitelist",
-            "verbose": "Input to <b>ioc</b> parameter must be greater than 3 characters. The type of the IOC will be determined by TruSTAR.",
+            "verbose": "Input to <b>ioc</b> parameter must be greater than 3 characters. The type of the IOC will be determined by Splunk Intelligence Management.",
             "type": "contain",
             "identifier": "unsafelist_ioc",
             "read_only": false,
@@ -2094,10 +2094,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ],
                     "description": "IOC to remove from the whitelist",
                     "data_type": "string",
@@ -2156,10 +2156,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ]
                 },
                 {
@@ -2205,7 +2205,7 @@
         },
         {
             "action": "list enclaves",
-            "description": "List all the accessible enclaves in TruSTAR",
+            "description": "List all the accessible enclaves in Splunk Intelligence Management",
             "verbose": "This action will only list the enclaves that the user has access to.",
             "type": "investigate",
             "identifier": "list_enclaves",
@@ -2234,7 +2234,7 @@
                         "e7f4907a-2909-48e8-9c2d-74ffc4b22e8c"
                     ],
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "column_name": "ID",
                     "column_order": 0
@@ -2356,7 +2356,7 @@
                     "description": "A comma-separated list of enclave IDs to filter submissions by",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "primary": true,
                     "order": 4
@@ -2364,7 +2364,7 @@
             },
             "render": {
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "List Emails"
             },
             "output": [
@@ -2380,7 +2380,7 @@
                     "data_path": "action_result.parameter.enclave_ids",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "3e9d0a3c-c8cc-47ef-af92-a4c6908b3c9c"
@@ -2434,10 +2434,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ],
                     "example_values": [
                         "167.248.133.82"
@@ -2567,7 +2567,7 @@
                     "description": "A comma-separated list of enclave IDs to filter indicators by",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "primary": true,
                     "order": 5
@@ -2575,7 +2575,7 @@
             },
             "render": {
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "List Indicators"
             },
             "output": [
@@ -2591,7 +2591,7 @@
                     "data_path": "action_result.parameter.enclave_ids",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "3e9d0a3c-c8cc-47ef-af92-a4c6908b3c9c"
@@ -2738,7 +2738,7 @@
                     "description": "A comma-separated list of enclave IDs to filter indicators by",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "primary": true,
                     "order": 2
@@ -2752,7 +2752,7 @@
             },
             "render": {
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Indicator Reputation"
             },
             "output": [
@@ -2768,7 +2768,7 @@
                     "data_path": "action_result.parameter.enclave_ids",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "5285b7ec-3582-4d4a-a967-82d3d4f98bb4"
@@ -2816,7 +2816,7 @@
                     "data_path": "action_result.data.*.enclaveGuid",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "5285b7ec-3582-4d4a-a967-82d3d4f98bb4",
@@ -2877,7 +2877,7 @@
                     "data_path": "action_result.data.*.scoreContexts.*.enclaveGuid",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "d1b45847-28c0-4426-98eb-dcabde9c044f",
@@ -3016,7 +3016,7 @@
                     "description": "A comma-separated list of enclave IDs to filter indicators by",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "primary": true,
                     "order": 1
@@ -3035,7 +3035,7 @@
                     "data_path": "action_result.parameter.enclave_ids",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "d1b45847-28c0-4426-98eb-dcabde9c044f"
@@ -3073,7 +3073,7 @@
                     "data_path": "action_result.data.*.enclaveId",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "d1b45847-28c0-4426-98eb-dcabde9c044f"
@@ -3083,7 +3083,7 @@
                     "data_path": "action_result.data.*.reportId",
                     "data_type": "string",
                     "contains": [
-                        "trustar report id"
+                        "splunk intelligence management report id"
                     ],
                     "example_values": [
                         "9b13f51c-0a14-4fca-b290-14464c1eff31"
@@ -3147,10 +3147,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ]
                 },
                 {
@@ -3184,7 +3184,7 @@
             ],
             "render": {
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Get Indicator Summary"
             },
             "versions": "EQ(*)"
@@ -3212,7 +3212,7 @@
                     "description": "A comma-separated list of enclave IDs to filter indicators by",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "primary": true,
                     "order": 2
@@ -3231,7 +3231,7 @@
                     "data_path": "action_result.parameter.enclave_ids",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "d1b45847-28c0-4426-98eb-dcabde9c044f"
@@ -3262,7 +3262,7 @@
                     "data_path": "action_result.data.*.enclaveIds.*",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "d1b45847-28c0-4426-98eb-dcabde9c044f"
@@ -3325,7 +3325,7 @@
                     "data_path": "action_result.data.*.tags.*.enclaveId",
                     "data_type": "string",
                     "contains": [
-                        "trustar enclave id"
+                        "splunk intelligence management enclave id"
                     ],
                     "example_values": [
                         "d1b45847-28c0-4426-98eb-dcabde9c044f"
@@ -3361,10 +3361,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ]
                 },
                 {
@@ -3398,7 +3398,7 @@
             ],
             "render": {
                 "type": "custom",
-                "view": "trustar_view.display_action_details",
+                "view": "sim_view.display_action_details",
                 "title": "Get Indicator Metadata"
             },
             "versions": "EQ(*)"
@@ -3415,7 +3415,7 @@
                     "data_type": "string",
                     "required": true,
                     "contains": [
-                        "trustar email submission id"
+                        "splunk intelligence management email submission id"
                     ],
                     "order": 0,
                     "primary": true
@@ -3459,7 +3459,7 @@
                     "column_order": 0,
                     "column_name": "Submission ID",
                     "contains": [
-                        "trustar email submission id"
+                        "splunk intelligence management email submission id"
                     ],
                     "example_values": [
                         "1a491fb4-1565-4a81-821d-1c6bfad3710c"
@@ -3547,10 +3547,10 @@
                         "domain",
                         "sha256",
                         "file name",
-                        "trustar malware",
-                        "trustar cve number",
-                        "trustar registry key",
-                        "trustar bitcoin address"
+                        "splunk intelligence management malware",
+                        "splunk intelligence management cve number",
+                        "splunk intelligence management registry key",
+                        "splunk intelligence management bitcoin address"
                     ]
                 },
                 {
@@ -3666,39 +3666,39 @@
         "wheel": [
             {
                 "module": "beautifulsoup4",
-                "input_file": "wheels/beautifulsoup4-4.9.1-py3-none-any.whl"
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/certifi-2021.10.8-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/certifi-2021.10.8-py2.py3-none-any.whl"
             },
             {
                 "module": "chardet",
-                "input_file": "wheels/chardet-3.0.4-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
             },
             {
                 "module": "idna",
-                "input_file": "wheels/idna-2.10-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
             },
             {
                 "module": "python_dateutil",
-                "input_file": "wheels/python_dateutil-2.8.1-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
-                "input_file": "wheels/requests-2.25.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
             },
             {
                 "module": "six",
-                "input_file": "wheels/six-1.16.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
             },
             {
                 "module": "soupsieve",
-                "input_file": "wheels/soupsieve-2.3.1-py3-none-any.whl"
+                "input_file": "wheels/py3/soupsieve-2.3.1-py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/urllib3-1.26.8-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.9-py2.py3-none-any.whl"
             }
         ]
     }

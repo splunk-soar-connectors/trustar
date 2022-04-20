@@ -1,4 +1,4 @@
-# File: trustar_view.py
+# File: sim_view.py
 #
 # Copyright (c) 2017-2022 Splunk Inc.
 #
@@ -21,8 +21,8 @@ import time
 def _parse_data(data):
 
     # Modify time format
-    data['created'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(data['created'] / 1000))
-    data['timeBegan'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(data['timeBegan'] / 1000))
+    data["created"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(data["created"] / 1000))
+    data["timeBegan"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(data["timeBegan"] / 1000))
 
     # Parse data so as to create dictionary that includes ioc_name as key and list of ioc_value as its value
     indicators = data.get("indicators")
@@ -30,8 +30,20 @@ def _parse_data(data):
     if indicators:
         for indicator in indicators:
             for key in indicator:
-                if key not in ['IP', 'CIDR_BLOCK', 'URL', 'SOFTWARE', 'MD5', 'SHA256', 'EMAIL_ADDRESS', 'MALWARE',
-                               'REGISTRY_KEY', 'CVE', 'SHA1', 'BITCOIN_ADDRESS']:
+                if key not in [
+                    "IP",
+                    "CIDR_BLOCK",
+                    "URL",
+                    "SOFTWARE",
+                    "MD5",
+                    "SHA256",
+                    "EMAIL_ADDRESS",
+                    "MALWARE",
+                    "REGISTRY_KEY",
+                    "CVE",
+                    "SHA1",
+                    "BITCOIN_ADDRESS",
+                ]:
                     continue
                 indicator_type = str(key)
                 if indicator_type not in ioc_details.keys():
@@ -76,7 +88,7 @@ def _get_ctx_result(result, provides):
 # Function to provide custom view for all actions
 def display_action_details(provides, all_app_runs, context):
 
-    context['results'] = results = []
+    context["results"] = results = []
     for summary, action_results in all_app_runs:
         for result in action_results:
             ctx_result = _get_ctx_result(result, provides)
@@ -86,27 +98,27 @@ def display_action_details(provides, all_app_runs, context):
 
     # If action is get report
     if provides == "get report":
-        return_page = "trustar_display_report_details.html"
+        return_page = "sim_display_report_details.html"
     # If action is submit report
     elif provides == "submit report":
-        return_page = "trustar_submitted_report_details.html"
+        return_page = "sim_submitted_report_details.html"
     # If action is list emails
     elif provides == "list emails":
-        return_page = "trustar_display_email_details.html"
+        return_page = "sim_display_email_details.html"
     # If action is list indicators
     elif provides == "list indicators":
-        return_page = "trustar_display_indicator_details.html"
+        return_page = "sim_display_indicator_details.html"
     # If action is get indicator summary
     elif provides == "get indicator summary":
-        return_page = "trustar_display_indicator_summary.html"
+        return_page = "sim_display_indicator_summary.html"
     # If action is get indicator metadata
     elif provides == "get indicator metadata":
-        return_page = "trustar_display_indicator_metadata.html"
+        return_page = "sim_display_indicator_metadata.html"
     # If action is indicator reputation
     elif provides == "indicator reputation":
-        return_page = "trustar_display_enrich_indicator.html"
+        return_page = "sim_display_enrich_indicator.html"
     # If action is any of the hunt actions
     else:
-        return_page = "trustar_display_report_ids.html"
+        return_page = "sim_display_report_ids.html"
 
     return return_page
