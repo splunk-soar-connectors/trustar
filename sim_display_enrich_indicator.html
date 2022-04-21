@@ -150,7 +150,7 @@ and limitations under the License.
                     <td>
                         {% if data.enclaveGuid %}
                             <a href="javascript:;"
-                                onclick="context_menu(this, [{'contains': ['splunk intelligence machine enclave id'], 'value': '{{ data.enclaveGuid }}' }], 0, {{ container.id }}, null, false);">
+                                onclick="context_menu(this, [{'contains': ['splunk intelligence management enclave id'], 'value': '{{ data.enclaveGuid }}' }], 0, {{ container.id }}, null, false);">
                                 {{ data.enclaveGuid }}
                                 &nbsp;
                                 <span class="fa fa-caret-down" style="font-size: smaller;"></span>
@@ -218,7 +218,7 @@ and limitations under the License.
                                         <td>
                                             {% if score_context.enclaveGuid %}
                                                 <a href="javascript:;"
-                                                    onclick="context_menu(this, [{'contains': ['splunk intelligence machine enclave id'], 'value': '{{ score_context.enclaveGuid }}' }], 0, {{ container.id }}, null, false);">
+                                                    onclick="context_menu(this, [{'contains': ['splunk intelligence management enclave id'], 'value': '{{ score_context.enclaveGuid }}' }], 0, {{ container.id }}, null, false);">
                                                     {{ score_context.enclaveGuid }}
                                                     &nbsp;
                                                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>

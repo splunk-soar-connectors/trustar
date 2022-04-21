@@ -114,14 +114,14 @@ and limitations under the License.
                 </a>
                 {% elif result.param.ioc %}
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['ip', 'url', 'md5', 'hash', 'sha1', 'email', 'domain', 'sha256', 'file name', 'splunk intelligence machine malware', 'splunk intelligence machine cve number', 'splunk intelligence machine registry key', 'splunk intelligence machine bitcoin address'], 'value': '{{ result.param.ioc }}' }], 0, {{ container.id }}, null, false);">
+                   onclick="context_menu(this, [{'contains': ['ip', 'url', 'md5', 'hash', 'sha1', 'email', 'domain', 'sha256', 'file name', 'splunk intelligence management malware', 'splunk intelligence management cve number', 'splunk intelligence management registry key', 'splunk intelligence management bitcoin address'], 'value': '{{ result.param.ioc }}' }], 0, {{ container.id }}, null, false);">
                     {{ result.param.ioc }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                 </a>
                 {% elif result.param.bitcoin_address %}
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['splunk intelligence machine bitcoin address'], 'value': '{{ result.param.bitcoin_address }}' }], 0, {{ container.id }}, null, false);">
+                   onclick="context_menu(this, [{'contains': ['splunk intelligence management bitcoin address'], 'value': '{{ result.param.bitcoin_address }}' }], 0, {{ container.id }}, null, false);">
                     {{ result.param.bitcoin_address }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
@@ -149,21 +149,21 @@ and limitations under the License.
                 </a>
                 {% elif result.param.cve_number %}
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['splunk intelligence machine cve number'], 'value': '{{ result.param.cve_number }}' }], 0, {{ container.id }}, null, false);">
+                   onclick="context_menu(this, [{'contains': ['splunk intelligence management cve number'], 'value': '{{ result.param.cve_number }}' }], 0, {{ container.id }}, null, false);">
                     {{ result.param.cve_number }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                 </a>
                 {% elif result.param.malware %}
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['splunk intelligence machine malware'], 'value': '{{ result.param.malware }}' }], 0, {{ container.id }}, null, false);">
+                   onclick="context_menu(this, [{'contains': ['splunk intelligence management malware'], 'value': '{{ result.param.malware }}' }], 0, {{ container.id }}, null, false);">
                     {{ result.param.malware }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                 </a>
                 {% elif result.param.registry_key %}
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['splunk intelligence machine registry key'], 'value': '{{ result.param.registry_key }}' }], 0, {{ container.id }}, null, false);">
+                   onclick="context_menu(this, [{'contains': ['splunk intelligence management registry key'], 'value': '{{ result.param.registry_key }}' }], 0, {{ container.id }}, null, false);">
                     {{ result.param.registry_key }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
@@ -187,7 +187,7 @@ and limitations under the License.
         <tr>
             <td>
                 <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['splunk intelligence machine report id'], 'value': '{{ report.report_id }}' }], 0, {{ container.id }}, null, false);">
+                   onclick="context_menu(this, [{'contains': ['splunk intelligence management report id'], 'value': '{{ report.report_id }}' }], 0, {{ container.id }}, null, false);">
                     {{ report.report_id }}
                     &nbsp;
                     <span class="fa fa-caret-down" style="font-size: smaller;"></span>
