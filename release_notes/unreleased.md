@@ -1,1 +1,2 @@
 **Unreleased**
+* Fixed issue with re-generating access token [PAPP-31645]

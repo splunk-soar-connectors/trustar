@@ -1,6 +1,6 @@
 # File: trustar_connector.py
 #
-# Copyright (c) 2017-2022 Splunk Inc.
+# Copyright (c) 2017-2023 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -309,7 +309,7 @@ class TrustarConnector(BaseConnector):
             content_type = response.headers.get("content-type")
             response_data = response.text
             if self.get_action_identifier() == 'submit_report':
-                if endpoint == consts.TRUSTAR_GENERATE_TOKEN_ENDPOINT:
+                if endpoint == consts.TRUSTAR_GENERATE_TOKEN_ENDPOINT or not response.ok:
                     response_data = response.json()
             elif content_type and 'json' in content_type:
                 response_data = response.json()

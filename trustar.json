@@ -4,10 +4,10 @@
     "description": "This App integrates with TruSTAR to provide various hunting and reporting actions",
     "publisher": "Splunk",
     "package_name": "phantom_trustar",
-    "license": "Copyright (c) 2017-2022 Splunk Inc.",
+    "license": "Copyright (c) 2017-2023 Splunk Inc.",
     "main_module": "trustar_connector.py",
     "type": "investigative",
-    "app_version": "3.1.7",
+    "app_version": "3.2.0",
     "utctime_updated": "2022-01-28T17:50:25.000000Z",
     "product_vendor": "TruSTAR Technology",
     "product_name": "TruSTAR",
@@ -18,7 +18,7 @@
     "python_version": "3",
     "fips_compliant": true,
     "latest_tested_versions": [
-        "Cloud, API station.trustar.co, November 09 2021, API version: v1.3, v2.0"
+        "Cloud, API station.trustar.co, September 05 2023, API version: v1.3, v2.0"
     ],
     "configuration": {
         "url": {
