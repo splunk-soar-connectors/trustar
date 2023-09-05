@@ -38,20 +38,20 @@ TRUSTAR_REST_RESP_GATEWAY_TIMEOUT = 504
 TRUSTAR_REST_RESP_GATEWAY_TIMEOUT_MSG = "Gateway Timeout"
 TRUSTAR_REST_TOO_MANY_REQUESTS = 429
 TRUSTAR_REST_TOO_MANY_REQUESTS_MSG = "Request limit exceeded for the current time period"
-TRUSTAR_ERR_API_UNSUPPORTED_METHOD = "Unsupported method {method}"
+TRUSTAR_ERROR_API_UNSUPPORTED_METHOD = "Unsupported method {method}"
 TRUSTAR_EXCEPTION_OCCURRED = "Exception occurred"
-TRUSTAR_ERR_SERVER_CONNECTION = "Connection failed"
-TRUSTAR_ERR_JSON_PARSE = "Unable to parse the response into a dictionary.\nResponse text - {raw_text}"
-TRUSTAR_ERR_FROM_SERVER = "API failed\nStatus code: {status}\nDetail: {detail}"
-TRUSTAR_ERR_MISSING_FIELD = "Could not find '{field}' in REST response"
+TRUSTAR_ERROR_SERVER_CONNECTION = "Connection failed"
+TRUSTAR_ERROR_JSON_PARSE = "Unable to parse the response into a dictionary.\nResponse text - {raw_text}"
+TRUSTAR_ERROR_FROM_SERVER = "API failed\nStatus code: {status}\nDetail: {detail}"
+TRUSTAR_ERROR_MISSING_FIELD = "Could not find '{field}' in REST response"
 TRUSTAR_REST_RESP_OTHER_ERROR_MSG = "Error returned"
 TRUSTAR_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
-TRUSTAR_ERR_TIME_FORMAT = "Timestamp format incorrect"
-TRUSTAR_ERR_TIME_PARSE = "Could not parse given time: {value_error}"
-TRUSTAR_ERR_PRIORITY_EVENT_SCORES = "Not all given priority event scores are valid. Valid options are: -1, 0, 1, 2, 3"
+TRUSTAR_ERROR_TIME_FORMAT = "Timestamp format incorrect"
+TRUSTAR_ERROR_TIME_PARSE = "Could not parse given time: {value_error}"
+TRUSTAR_ERROR_PRIORITY_EVENT_SCORES = "Not all given priority event scores are valid. Valid options are: -1, 0, 1, 2, 3"
 TRUSTAR_STATUSES = ['CONFIRMED', 'IGNORED', 'UNRESOLVED']
-TRUSTAR_ERR_STATUSES = "Not all given statuses are valid. Valid options are: 'CONFIRMED', 'IGNORED', 'UNRESOLVED'"
-TRUSTAR_ERR_MISSING_ENCLAVE_ID = "Mandatory parameter enclave_ids is missing or no enclave_ids are yet configured"
+TRUSTAR_ERROR_STATUSES = "Not all given statuses are valid. Valid options are: 'CONFIRMED', 'IGNORED', 'UNRESOLVED'"
+TRUSTAR_ERROR_MISSING_ENCLAVE_ID = "Mandatory parameter enclave_ids is missing or no enclave_ids are yet configured"
 TRUSTAR_UNKNOWN_ENCLAVE_ID = "Only configured enclave ID(s) should be provided"
 TRUSTAR_CONNECTION_TEST_MSG = "Querying endpoint to verify the credentials provided"
 TRUSTAR_TEST_CONNECTIVITY_FAIL = "Connectivity test failed"
@@ -62,7 +62,7 @@ TRUSTAR_VALID_INT_MSG = "Please provide a valid integer value in the '{param}' p
 TRUSTAR_NON_NEG_NON_ZERO_INT_MSG = "Please provide a valid non-zero positive integer value in '{param}' parameter"
 TRUSTAR_NON_NEG_INT_MSG = "Please provide a valid non-negative integer value in the '{param}' parameter"
 TRUSTAR_GENERATE_TOKEN_ENDPOINT = "/oauth/token"
-TRUSTAR_TOKEN_GENERATION_ERR = "Error while generating token"
+TRUSTAR_TOKEN_GENERATION_ERROR = "Error while generating token"
 TRUSTAR_JSON_REPORT_ID = "report_id"
 TRUSTAR_JSON_REPORT_ID_TYPE = "id_type"
 TRUSTAR_JSON_REPORT_TITLE = "report_title"
@@ -110,7 +110,7 @@ TRUSTAR_INVALID_LIST_MSG = "Please enter the value of {param} parameter in form 
 TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY = "No correlated reports available. There might be no correlated reports in" \
                                            " TruSTAR for the specified IOC or" \
                                            " the specified IOC value might be less than 4 characters."
-TRUSTAR_INVALID_TOKEN_MESSAGES = (
+TRUSTAR_INVALID_TOKEN_MSG = (
         "Expired oauth2 access token",
         "Invalid oauth2 access token"
 )

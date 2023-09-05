@@ -229,8 +229,8 @@ class TrustarConnector(BaseConnector):
                 retry_failure_flag = True
 
             # If token is expired, generate a new token
-            if error_message and ((consts.TRUSTAR_INVALID_TOKEN_MESSAGES[0] in
-                    error_message) or (consts.TRUSTAR_INVALID_TOKEN_MESSAGES[1] in error_message)):
+            if error_message and ((consts.TRUSTAR_INVALID_TOKEN_MSG[0] in
+                    error_message) or (consts.TRUSTAR_INVALID_TOKEN_MSG[1] in error_message)):
                 self.debug_print("Refreshing TRUSTAR API and re-trying request to [{}] "
                     "because API token was expired or invalid with error [{}]".format(endpoint, error_message))
                 ret_val = self._generate_api_token(action_result)
@@ -270,10 +270,10 @@ class TrustarConnector(BaseConnector):
         try:
             request_func = getattr(requests, method)
         except AttributeError:
-            self.debug_print(consts.TRUSTAR_ERR_API_UNSUPPORTED_METHOD.format(method=method))
+            self.debug_print(consts.TRUSTAR_ERROR_API_UNSUPPORTED_METHOD.format(method=method))
             # Set the action_result status to error, the handler function will most probably return as is
             return action_result.set_status(
-                phantom.APP_ERROR, consts.TRUSTAR_ERR_API_UNSUPPORTED_METHOD, method=method
+                phantom.APP_ERROR, consts.TRUSTAR_ERROR_API_UNSUPPORTED_METHOD, method=method
             ), response_data
         except Exception as e:
             self.debug_print(consts.TRUSTAR_EXCEPTION_OCCURRED, e)
@@ -291,9 +291,9 @@ class TrustarConnector(BaseConnector):
                 response = request_func("{base_url}{endpoint}".format(base_url=self._url, endpoint=endpoint),
                                         auth=auth, data=data, json=json, verify=False, timeout=timeout)
         except Exception as e:
-            self.debug_print(consts.TRUSTAR_ERR_SERVER_CONNECTION, e)
+            self.debug_print(consts.TRUSTAR_ERROR_SERVER_CONNECTION, e)
             # Set the action_result status to error, the handler function will most probably return as is
-            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_SERVER_CONNECTION, e), response_data
+            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_SERVER_CONNECTION, e), response_data
 
         # Store response status_code, text and headers in debug data, it will get dumped in the logs
         if hasattr(action_result, 'add_debug_data'):
@@ -316,7 +316,7 @@ class TrustarConnector(BaseConnector):
 
         except Exception as e:
             # r.text is guaranteed to be NON None, it will be empty, but not None
-            msg_string = consts.TRUSTAR_ERR_JSON_PARSE.format(raw_text=response.text)
+            msg_string = consts.TRUSTAR_ERROR_JSON_PARSE.format(raw_text=response.text)
             self.debug_print(msg_string, e)
             # Set the action_result status to error, the handler function will most probably return as is
             return action_result.set_status(phantom.APP_ERROR, msg_string, e), response_data
@@ -331,9 +331,9 @@ class TrustarConnector(BaseConnector):
 
                 message = ". ".join(error_messages)
 
-            self.debug_print(consts.TRUSTAR_ERR_FROM_SERVER.format(status=response.status_code, detail=message))
+            self.debug_print(consts.TRUSTAR_ERROR_FROM_SERVER.format(status=response.status_code, detail=message))
             # Set the action_result status to error, the handler function will most probably return as is
-            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_FROM_SERVER,
+            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_FROM_SERVER,
                                             status=response.status_code, detail=message), response_data
 
         # In case of success scenario
@@ -359,11 +359,11 @@ class TrustarConnector(BaseConnector):
 
             message = ". ".join(error_messages)
 
-        self.debug_print(consts.TRUSTAR_ERR_FROM_SERVER.format(status=response.status_code, detail=message))
+        self.debug_print(consts.TRUSTAR_ERROR_FROM_SERVER.format(status=response.status_code, detail=message))
 
         # All other response codes from REST call
         # Set the action_result status to error, the handler function will most probably return as is
-        return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_FROM_SERVER,
+        return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_FROM_SERVER,
                                         status=response.status_code,
                                         detail=message), response_data
 
@@ -449,7 +449,7 @@ class TrustarConnector(BaseConnector):
                 total_results = response.get('responseMetadata', {}).get('totalItems', None)
 
                 if total_results is None:
-                    return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_FIELD.format(field='totalItems')), None
+                    return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_MISSING_FIELD.format(field='totalItems')), None
 
             if limit and len(results) >= limit:
                 results = results[:limit]
@@ -462,7 +462,7 @@ class TrustarConnector(BaseConnector):
             cursor = response.get('responseMetadata', {}).get('nextCursor', None)
 
             if not cursor:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_FIELD.format(field='nextCursor')), None
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_MISSING_FIELD.format(field='nextCursor')), None
 
             body['cursor'] = cursor
 
@@ -498,8 +498,8 @@ class TrustarConnector(BaseConnector):
         if not self._access_token:
             # Failed to generate new token. Delete the previously generated token in case the credentials are changed.
             self._app_state.pop(consts.TRUSTAR_OAUTH_TOKEN_STRING, {})
-            self.debug_print(consts.TRUSTAR_TOKEN_GENERATION_ERR)
-            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_TOKEN_GENERATION_ERR)
+            self.debug_print(consts.TRUSTAR_TOKEN_GENERATION_ERROR)
+            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_TOKEN_GENERATION_ERROR)
 
         self._app_state[consts.TRUSTAR_OAUTH_TOKEN_STRING] = response
         self.save_state(self._app_state)
@@ -849,13 +849,13 @@ class TrustarConnector(BaseConnector):
             try:
                 body['from'] = int(parser.parse(start_time).timestamp()) * 1000
             except ValueError as e:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_PARSE.format(value_error=e))
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_TIME_PARSE.format(value_error=e))
 
         if end_time:
             try:
                 body['to'] = int(parser.parse(end_time).timestamp()) * 1000
             except ValueError as e:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_PARSE.format(value_error=e))
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_TIME_PARSE.format(value_error=e))
 
         if pes:
             try:
@@ -864,7 +864,7 @@ class TrustarConnector(BaseConnector):
                 if not all(x in priority_event_scores for x in pes_list):
                     raise ValueError
             except ValueError:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIORITY_EVENT_SCORES)
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_PRIORITY_EVENT_SCORES)
             body['priorityEventScore'] = pes_list
 
         if status:
@@ -873,7 +873,7 @@ class TrustarConnector(BaseConnector):
                 if not all(x in consts.TRUSTAR_STATUSES for x in status_list):
                     raise ValueError
             except ValueError:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_STATUSES)
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_STATUSES)
             body['status'] = status_list
 
         if enclave_ids:
@@ -1060,13 +1060,13 @@ class TrustarConnector(BaseConnector):
             try:
                 body['from'] = int(parser.parse(start_time).timestamp()) * 1000
             except ValueError as e:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_PARSE.format(value_error=e))
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_TIME_PARSE.format(value_error=e))
 
         if end_time:
             try:
                 body['to'] = int(parser.parse(end_time).timestamp()) * 1000
             except ValueError as e:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_PARSE.format(value_error=e))
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_TIME_PARSE.format(value_error=e))
 
         if pes:
             try:
@@ -1075,20 +1075,20 @@ class TrustarConnector(BaseConnector):
                 if not all(x in priority_event_scores for x in pes_list):
                     raise ValueError
             except ValueError:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIORITY_EVENT_SCORES)
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_PRIORITY_EVENT_SCORES)
             body['priorityEventScore'] = pes_list
 
         if nis:
             try:
                 nis_list = [int(x) for x in nis.split(',')]
             except ValueError:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_PRIORITY_EVENT_SCORES)
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_PRIORITY_EVENT_SCORES)
             body['normalizedIndicatorScore'] = nis_list
 
         if status:
             status_list = [x.strip() for x in status.split(',')]
             if not all(x in consts.TRUSTAR_STATUSES for x in status_list):
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_STATUSES)
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_STATUSES)
             body['status'] = status_list
 
         if enclave_ids:
@@ -1366,7 +1366,7 @@ class TrustarConnector(BaseConnector):
         # Normalize timestamp
         report_time_began = self._normalize_timestamp(time_discovered)
         if not report_time_began:
-            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_FORMAT)
+            return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_TIME_FORMAT)
 
         # Prepare request data
         submit_report_payload = {
@@ -1381,7 +1381,7 @@ class TrustarConnector(BaseConnector):
 
             # If there are no given enclave IDs
             if not (enclave_ids or self._config_enclave_ids):
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_ENCLAVE_ID)
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_MISSING_ENCLAVE_ID)
 
             enclave_id_list = []
 
@@ -1497,7 +1497,7 @@ class TrustarConnector(BaseConnector):
             # Normalize timestamp
             report_time_began = self._normalize_timestamp(time_discovered)
             if not report_time_began:
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_TIME_FORMAT)
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_TIME_FORMAT)
             payload['timeBegan'] = time_discovered
         else:
             payload['timeBegan'] = response['timeBegan']
@@ -1507,7 +1507,7 @@ class TrustarConnector(BaseConnector):
 
             # If there are no given enclave IDs
             if not (enclave_ids or self._config_enclave_ids):
-                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERR_MISSING_ENCLAVE_ID)
+                return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_MISSING_ENCLAVE_ID)
 
             enclave_id_list = []
 
