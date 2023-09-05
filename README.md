@@ -6,7 +6,7 @@ Connector Version: 3.2.0
 Product Vendor: TruSTAR Technology  
 Product Name: TruSTAR  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 5.1.0  
+Minimum Product Version: 6.0.2  
 
 This App integrates with TruSTAR to provide various hunting and reporting actions
 
