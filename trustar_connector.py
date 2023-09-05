@@ -523,7 +523,7 @@ class TrustarConnector(BaseConnector):
         # Something went wrong while generating token
         if phantom.is_fail(token_generation_status):
             self.save_progress(action_result.get_message())
-            action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_TEST_CONNECTIVITY_FAIL)
+            action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_TEST_CONNECTIVITY_FAILED)
             return action_result.get_status()
 
         self.save_progress(consts.TRUSTAR_TEST_CONNECTIVITY_PASS)

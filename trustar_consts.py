@@ -15,7 +15,7 @@
 TRUSTAR_CONFIG_URL = "url"
 TRUSTAR_CONFIG_ENCLAVE_IDS = "config_enclave_ids"
 TRUSTAR_CONFIG_CLIENT_ID = "client_id"
-TRUSTAR_CONFIG_CLIENT_SECRET = "client_secret"
+TRUSTAR_CONFIG_CLIENT_SECRET = "client_secret"  # pragma: allowlist secret
 TRUSTAR_CONFIG_WAIT_TIME = "max_wait_time"
 TRUSTAR_PAGE_SIZE = 100
 TRUSTAR_PAGE_SIZE_API_2 = 999
@@ -54,7 +54,7 @@ TRUSTAR_ERROR_STATUSES = "Not all given statuses are valid. Valid options are: '
 TRUSTAR_ERROR_MISSING_ENCLAVE_ID = "Mandatory parameter enclave_ids is missing or no enclave_ids are yet configured"
 TRUSTAR_UNKNOWN_ENCLAVE_ID = "Only configured enclave ID(s) should be provided"
 TRUSTAR_CONNECTION_TEST_MSG = "Querying endpoint to verify the credentials provided"
-TRUSTAR_TEST_CONNECTIVITY_FAIL = "Connectivity test failed"
+TRUSTAR_TEST_CONNECTIVITY_FAILED = "Connectivity test failed"
 TRUSTAR_TEST_CONNECTIVITY_PASS = "Connectivity test succeeded"
 TRUSTAR_UNEXPECTED_RESPONSE = "Expected response not found: {response}"
 TRUSTAR_BAD_REPORT_ID = "Server did not return a proper UUID: {response}"
