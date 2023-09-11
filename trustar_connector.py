@@ -25,6 +25,7 @@ import phantom.app as phantom
 import requests
 from bs4 import UnicodeDammit
 from dateutil import parser, tz
+from encryption_helper import decrypt, encrypt
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
@@ -90,6 +91,7 @@ class TrustarConnector(BaseConnector):
         self._access_token = None
         self._app_state = dict()
         self._max_wait_time = None
+        self._asset_id = None
 
         return
 
@@ -103,6 +105,7 @@ class TrustarConnector(BaseConnector):
 
         # Get configuration dictionary
         config = self.get_config()
+        self._asset_id = self.get_asset_id()
         self._url = config[consts.TRUSTAR_CONFIG_URL].strip('/')
         self._config_enclave_ids = config.get(consts.TRUSTAR_CONFIG_ENCLAVE_IDS)
         self._client_id = config[consts.TRUSTAR_CONFIG_CLIENT_ID]
@@ -120,12 +123,77 @@ class TrustarConnector(BaseConnector):
             self._app_state = {
                 "app_version": self.get_app_json().get('app_version')
             }
-
-        self._access_token = self._app_state.get(consts.TRUSTAR_OAUTH_TOKEN_STRING, {}).get(consts.TRUSTAR_OAUTH_ACCESS_TOKEN_STRING)
+        self.decrypt_state()
+        if self._client_id == self._app_state.get(consts.TRUSTAR_CONFIG_CLIENT_ID, ""):
+            self._access_token = self._app_state.get(consts.TRUSTAR_OAUTH_TOKEN_STRING, {}).get(consts.TRUSTAR_OAUTH_ACCESS_TOKEN_STRING)
         # Custom validation for IP address
         self.set_validator(consts.TRUSTAR_HUNT_IP_PARAM, self._is_ip)
 
         return phantom.APP_SUCCESS
+
+    def _get_error_message_from_exception(self, e):
+        """
+        Get appropriate error message from the exception.
+        :param e: Exception object
+        :return: error message
+        """
+
+        error_code = None
+        error_message = consts.TRUSTAR_ERROR_MESSAGE_UNAVAILABLE
+        self.error_print("Exception Occurred.", dump_object=e)
+        try:
+            if hasattr(e, "args"):
+                if len(e.args) > 1:
+                    error_code = e.args[0]
+                    error_message = e.args[1]
+                elif len(e.args) == 1:
+                    error_message = e.args[0]
+        except Exception as e:
+            self.debug_print("Error occurred while getting message from response. Error : {}".format(e))
+
+        if not error_code:
+            error_text = "Error Message: {}".format(error_message)
+        else:
+            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_message)
+
+        return error_text
+
+    def encrypt_state(self):
+
+        if self._app_state.get(consts.TRUSTAR_STATE_IS_ENCRYPTED):
+            return
+
+        access_token = self._app_state.get(consts.TRUSTAR_OAUTH_TOKEN_STRING, {}).get(consts.TRUSTAR_OAUTH_ACCESS_TOKEN_STRING)
+        if access_token:
+            try:
+                self._app_state[consts.TRUSTAR_OAUTH_TOKEN_STRING][consts.TRUSTAR_OAUTH_ACCESS_TOKEN_STRING] = \
+                    encrypt(access_token, self._asset_id)
+                self._app_state[consts.TRUSTAR_STATE_IS_ENCRYPTED] = True
+            except Exception as ex:
+                self.debug_print("{}: {}"
+                                 .format(consts.TRUSTAR_ENCRYPTION_ERROR, self._get_error_message_from_exception(ex)))
+                self.reset_state_file()
+
+    def decrypt_state(self):
+
+        if not self._app_state.get(consts.TRUSTAR_STATE_IS_ENCRYPTED):
+            return
+
+        access_token = self._app_state.get(consts.TRUSTAR_OAUTH_TOKEN_STRING, {}).get(consts.TRUSTAR_OAUTH_ACCESS_TOKEN_STRING)
+        if access_token:
+            try:
+                self._app_state[consts.TRUSTAR_OAUTH_TOKEN_STRING][consts.TRUSTAR_OAUTH_ACCESS_TOKEN_STRING] = \
+                    decrypt(access_token, self._asset_id)
+                self._app_state[consts.TRUSTAR_STATE_IS_ENCRYPTED] = False
+            except Exception as ex:
+                self.debug_print("{}: {}"
+                                 .format(consts.TRUSTAR_DECRYPTION_ERROR, self._get_error_message_from_exception(ex)))
+                self.reset_state_file()
+
+    def reset_state_file(self):
+        self._app_state.pop(consts.TRUSTAR_OAUTH_TOKEN_STRING, {})
+        self._app_state.pop(consts.TRUSTAR_STATE_IS_ENCRYPTED, {})
+        self._app_state.pop(consts.TRUSTAR_CONFIG_CLIENT_ID, {})
 
     def _is_ip(self, cidr_ip_address):
         """ Function that checks given address and return True if address is valid IPv4/IPv6 address.
@@ -199,7 +267,7 @@ class TrustarConnector(BaseConnector):
         headers.update({
                 'Authorization': consts.TRUSTAR_AUTHORIZATION_HEADER.format(token=self._access_token)
             })
-        # token = self._app_state.get(consts.TRUSTAR_OAUTH_TOKEN_STRING, {})
+
         if not self._access_token:
             ret_val = self._generate_api_token(action_result)
 
@@ -276,7 +344,7 @@ class TrustarConnector(BaseConnector):
                 phantom.APP_ERROR, consts.TRUSTAR_ERROR_API_UNSUPPORTED_METHOD, method=method
             ), response_data
         except Exception as e:
-            self.debug_print(consts.TRUSTAR_EXCEPTION_OCCURRED, e)
+            self.debug_print(consts.TRUSTAR_EXCEPTION_OCCURRED, self._get_error_message_from_exception(e))
             # Set the action_result status to error, the handler function will most probably return as is
             return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_EXCEPTION_OCCURRED, e), response_data
 
@@ -291,7 +359,7 @@ class TrustarConnector(BaseConnector):
                 response = request_func("{base_url}{endpoint}".format(base_url=self._url, endpoint=endpoint),
                                         auth=auth, data=data, json=json, verify=False, timeout=timeout)
         except Exception as e:
-            self.debug_print(consts.TRUSTAR_ERROR_SERVER_CONNECTION, e)
+            self.debug_print(consts.TRUSTAR_ERROR_SERVER_CONNECTION, self._get_error_message_from_exception(e))
             # Set the action_result status to error, the handler function will most probably return as is
             return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_ERROR_SERVER_CONNECTION, e), response_data
 
@@ -317,7 +385,7 @@ class TrustarConnector(BaseConnector):
         except Exception as e:
             # r.text is guaranteed to be NON None, it will be empty, but not None
             msg_string = consts.TRUSTAR_ERROR_JSON_PARSE.format(raw_text=response.text)
-            self.debug_print(msg_string, e)
+            self.debug_print(msg_string, self._get_error_message_from_exception(e))
             # Set the action_result status to error, the handler function will most probably return as is
             return action_result.set_status(phantom.APP_ERROR, msg_string, e), response_data
 
@@ -488,7 +556,7 @@ class TrustarConnector(BaseConnector):
         # Something went wrong
         if phantom.is_fail(status):
             # Failed to generate new token. Delete the previously generated token in case the credentials are changed.
-            self._app_state.pop(consts.TRUSTAR_OAUTH_TOKEN_STRING, {})
+            self.reset_state_file()
             return action_result.get_status()
 
         # Get access token
@@ -497,11 +565,13 @@ class TrustarConnector(BaseConnector):
         # Validate access token
         if not self._access_token:
             # Failed to generate new token. Delete the previously generated token in case the credentials are changed.
-            self._app_state.pop(consts.TRUSTAR_OAUTH_TOKEN_STRING, {})
+            self.reset_state_file()
             self.debug_print(consts.TRUSTAR_TOKEN_GENERATION_ERROR)
             return action_result.set_status(phantom.APP_ERROR, consts.TRUSTAR_TOKEN_GENERATION_ERROR)
 
         self._app_state[consts.TRUSTAR_OAUTH_TOKEN_STRING] = response
+        self._app_state[consts.TRUSTAR_CONFIG_CLIENT_ID] = self._client_id
+        self.encrypt_state()
         self.save_state(self._app_state)
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -1299,7 +1369,7 @@ class TrustarConnector(BaseConnector):
                 datetime_dt = date_time
 
         except Exception as e:
-            self.debug_print(consts.TRUSTAR_EXCEPTION_OCCURRED, e)
+            self.debug_print(consts.TRUSTAR_EXCEPTION_OCCURRED, self._get_error_message_from_exception(e))
             return None
 
         # If timestamp is timezone naive, add timezone
@@ -1644,6 +1714,7 @@ class TrustarConnector(BaseConnector):
         """
 
         # Save current state of the app
+        self.encrypt_state()
         self.save_state(self._app_state)
 
         return phantom.APP_SUCCESS

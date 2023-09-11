@@ -114,4 +114,10 @@ TRUSTAR_INVALID_TOKEN_MSG = (
         "Expired oauth2 access token",
         "Invalid oauth2 access token"
 )
+TRUSTAR_STATE_IS_ENCRYPTED = "is_encrypted"
+TRUSTAR_ERROR_MESSAGE_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters"
+TRUSTAR_ENCRYPTION_ERROR = "Error occurred while encrypting the state file"
+TRUSTAR_DECRYPTION_ERROR = "Error occurred while decrypting the state file"
+
+
 TRUSTAR_DEFAULT_TIMEOUT = 30

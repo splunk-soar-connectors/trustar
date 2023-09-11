@@ -2789,6 +2789,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        222
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.attributes.*.type",
                     "data_type": "string",
                     "example_values": [
@@ -2986,13 +2993,6 @@
                     "data_type": "numeric",
                     "example_values": [
                         1
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        222
                     ]
                 }
             ],
