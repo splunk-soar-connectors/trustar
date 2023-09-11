@@ -697,6 +697,7 @@ action_result.status | string |  |   success  failed
 action_result.parameter.enclave_ids | string |  `trustar enclave id`  |   5285b7ec-3582-4d4a-a967-82d3d4f98bb4 
 action_result.parameter.indicator_types | string |  |   URL 
 action_result.parameter.indicator_value | string |  |   5.3 
+action_result.parameter.limit | numeric |  |   222 
 action_result.data.\*.attributes.\*.type | string |  |   THREAT_ACTOR  MALWARE 
 action_result.data.\*.attributes.\*.value | string |  |   SOMENAME_2  MYDOOM 
 action_result.data.\*.created | numeric |  |   1634119674000  1639175447562 
@@ -721,8 +722,7 @@ action_result.data.\*.workflowGuid | string |  |   a9cbe8c6-85fb-4a57-b78f-77a29
 action_result.summary.indicators_found | numeric |  |   3  222 
 action_result.message | string |  |   Indicators found: 3  Indicators found: 222 
 summary.total_objects | numeric |  |   1 
-summary.total_objects_successful | numeric |  |   1 
-action_result.parameter.limit | numeric |  |   222   
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get indicator summary'
 Get the structured summaries about indicators
