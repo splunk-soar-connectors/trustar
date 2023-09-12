@@ -139,7 +139,7 @@ class TrustarConnector(BaseConnector):
         """
 
         error_code = None
-        error_message = consts.TRUSTAR_ERROR_MESSAGE_UNAVAILABLE
+        error_message = consts.TRUSTAR_ERROR_UNAVAILABLE_MSG
         self.error_print("Exception Occurred.", dump_object=e)
         try:
             if hasattr(e, "args"):
