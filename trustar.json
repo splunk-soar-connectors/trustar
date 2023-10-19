@@ -18,7 +18,7 @@
     "python_version": "3",
     "fips_compliant": true,
     "latest_tested_versions": [
-        "Cloud, API station.trustar.co, September 05 2023, API version: v1.3, v2.0"
+        "Cloud, API station.trustar.co, October 19 2023, API version: v1.3, v2.0"
     ],
     "configuration": {
         "url": {
