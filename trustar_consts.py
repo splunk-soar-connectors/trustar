@@ -1,6 +1,6 @@
 # File: trustar_consts.py
 #
-# Copyright (c) 2017-2023 Splunk Inc.
+# Copyright (c) 2017-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +21,22 @@ TRUSTAR_PAGE_SIZE = 100
 TRUSTAR_PAGE_SIZE_API_2 = 999
 TRUSTAR_PAGE_NUMBER = 0
 TRUSTAR_DEFAULT_MAX_WAIT_TIME = 10
-TRUSTAR_OBSERVABLE_TYPES = ["BITCOIN_ADDRESS", "CIDR_BLOCK", "EMAIL_ADDRESS", "IP4", "IP6", "MD5",
-    "PHONE_NUMBER", "REGISTRY_KEY", "SHA1", "SHA256", "SOFTWARE", "URL", "X_ID", "DOMAIN"]
+TRUSTAR_OBSERVABLE_TYPES = [
+    "BITCOIN_ADDRESS",
+    "CIDR_BLOCK",
+    "EMAIL_ADDRESS",
+    "IP4",
+    "IP6",
+    "MD5",
+    "PHONE_NUMBER",
+    "REGISTRY_KEY",
+    "SHA1",
+    "SHA256",
+    "SOFTWARE",
+    "URL",
+    "X_ID",
+    "DOMAIN",
+]
 TRUSTAR_REST_RESP_SUCCESS = 200
 TRUSTAR_REST_RESP_BAD_REQUEST = 400
 TRUSTAR_REST_RESP_BAD_REQUEST_MSG = "Bad Request"
@@ -49,7 +63,7 @@ TRUSTAR_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 TRUSTAR_ERROR_TIME_FORMAT = "Timestamp format incorrect"
 TRUSTAR_ERROR_TIME_PARSE = "Could not parse given time: {value_error}"
 TRUSTAR_ERROR_PRIORITY_EVENT_SCORES = "Not all given priority event scores are valid. Valid options are: -1, 0, 1, 2, 3"
-TRUSTAR_STATUSES = ['CONFIRMED', 'IGNORED', 'UNRESOLVED']
+TRUSTAR_STATUSES = ["CONFIRMED", "IGNORED", "UNRESOLVED"]
 TRUSTAR_ERROR_STATUSES = "Not all given statuses are valid. Valid options are: 'CONFIRMED', 'IGNORED', 'UNRESOLVED'"
 TRUSTAR_ERROR_MISSING_ENCLAVE_ID = "Mandatory parameter enclave_ids is missing or no enclave_ids are yet configured"
 TRUSTAR_UNKNOWN_ENCLAVE_ID = "Only configured enclave ID(s) should be provided"
@@ -107,13 +121,12 @@ TRUSTAR_INGESTION_REQUEST_TIME_ERROR = "Invalid request time encountered"
 TRUSTAR_LESS_INDICATOR_TYPE = "Please provide indicator type for every value."
 TRUSTAR_LESS_VALUE = "Please provide value for every indicator type."
 TRUSTAR_INVALID_LIST_MSG = "Please enter the value of {param} parameter in form of list"
-TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY = "No correlated reports available. There might be no correlated reports in" \
-                                           " TruSTAR for the specified IOC or" \
-                                           " the specified IOC value might be less than 4 characters."
-TRUSTAR_INVALID_TOKEN_MSG = (
-        "Expired oauth2 access token",
-        "Invalid oauth2 access token"
+TRUSTAR_REASON_FOR_REPORT_UNAVAILABILITY = (
+    "No correlated reports available. There might be no correlated reports in"
+    " TruSTAR for the specified IOC or"
+    " the specified IOC value might be less than 4 characters."
 )
+TRUSTAR_INVALID_TOKEN_MSG = ("Expired oauth2 access token", "Invalid oauth2 access token")
 TRUSTAR_STATE_IS_ENCRYPTED = "is_encrypted"
 TRUSTAR_ERROR_UNAVAILABLE_MSG = "Error message unavailable. Please check the asset configuration and|or action parameters"
 TRUSTAR_ENCRYPTION_ERROR = "Error occurred while encrypting the state file"
