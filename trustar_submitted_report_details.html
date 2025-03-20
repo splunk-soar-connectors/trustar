@@ -1,16 +1,17 @@
 {% extends 'widgets/widget_template.html' %}
 {% load custom_template %}
-
-{% block custom_title_prop %}{% if title_logo %}style="background-size: auto 60%; background-position: 50%; background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"{% endif %}{% endblock %}
+{% block custom_title_prop %}
+  {% if title_logo %}
+    style="background-size: auto 60%; background-position: 50%; background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"
+  {% endif %}
+{% endblock %}
 {% block title1 %}{{ title1 }}{% endblock %}
 {% block title2 %}{{ title2 }}{% endblock %}
-{% block custom_tools %}
-{% endblock %}
-
-{% block widget_content %} <!-- Main Start Block -->
-
-<!-- File: trustar_submitted_report_details.html
-  Copyright (c) 2017-2023 Splunk Inc.
+{% block custom_tools %}{% endblock %}
+{% block widget_content %}
+  <!-- Main Start Block -->
+  <!-- File: trustar_submitted_report_details.html
+  Copyright (c) 2017-2025 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,9 +24,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 -->
-
-<style>
-
+  <style>
     .trustar a:link {
     }
 
@@ -113,222 +112,207 @@ and limitations under the License.
     display:none;
     height: 0px;
     }
-</style>
-
-<div class="trustar" style="overflow: auto; width: 100%; height: 100%; padding-left:10px; padding-right:10px">
+  </style>
+  <div class="trustar"
+       style="overflow: auto;
+              width: 100%;
+              height: 100%;
+              padding-left:10px;
+              padding-right:10px">
     <!-- Main Div -->
-
-    {% for result in results %} <!-- loop for each result -->
-    {% if not result.data %}
-    <h4 class="wf-h4-style">Data not found</h4>
-    {% else %}
-    <h4 class="wf-h4-style">Info</h4>
-    <table class="wf-table-vertical">
-        <tr>
+    {% for result in results %}
+      <!-- loop for each result -->
+      {% if not result.data %}
+        <h4 class="wf-h4-style">Data not found</h4>
+      {% else %}
+        <h4 class="wf-h4-style">Info</h4>
+        <table class="wf-table-vertical">
+          <tr>
+            <td>Report ID</td>
             <td>
-                Report ID
+              <a href="javascript:;"
+                 onclick="context_menu(this, [{'contains': ['trustar report id'], 'value': '{{ result.data.reportId }}' }], 0, {{ container.id }}, null, false);">
+                {{ result.data.reportId }}
+                &nbsp;
+                <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+              </a>
             </td>
-            <td>
-                <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['trustar report id'], 'value': '{{ result.data.reportId }}' }], 0, {{ container.id }}, null, false);">
-                    {{ result.data.reportId }}
-                    &nbsp;
-                    <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Report Title
-            </td>
-            <td>
-                {{ result.param.report_title }}
-            </td>
-        </tr>
-        {% if result.param.external_tracking_id %}
-        <tr>
-            <td>
-                External Tracking ID
-            </td>
-            <td>
+          </tr>
+          <tr>
+            <td>Report Title</td>
+            <td>{{ result.param.report_title }}</td>
+          </tr>
+          {% if result.param.external_tracking_id %}
+            <tr>
+              <td>External Tracking ID</td>
+              <td>
                 <a href="javascript:;"
                    onclick="context_menu(this, [{'contains': ['trustar tracking id'], 'value': '{{ result.param.external_tracking_id }}' }], 0, {{ container.id }}, null, false);">
-                    {{ result.param.external_tracking_id }}
-                    &nbsp;
-                    <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                  {{ result.param.external_tracking_id }}
+                  &nbsp;
+                  <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                 </a>
-            </td>
-        </tr>
-        {% endif %}
-    </table>
-    <br/>
-    <h4 class="wf-h4-style">Report Details</h4>
-    <div class="metadata_div">
-        <div class="panel-group" id="report_description">
+              </td>
+            </tr>
+          {% endif %}
+        </table>
+        <br />
+        <h4 class="wf-h4-style">Report Details</h4>
+        <div class="metadata_div">
+          <div class="panel-group" id="report_description">
             <div class="panel">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#report_description" href="#report_description_detail">Report
-                            Content</a>
-                    </h4>
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse"
+                     data-parent="#report_description"
+                     href="#report_description_detail">Report
+                  Content</a>
+                </h4>
+              </div>
+              <div id="report_description_detail" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <pre class="report_body">{{result.param.report_body}}</pre>
                 </div>
-                <div id="report_description_detail" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <pre class="report_body">{{result.param.report_body}}</pre>
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-
-    <div class="metadata_div">
-        <div class="panel-group" id="report_ioc">
+        <div class="metadata_div">
+          <div class="panel-group" id="report_ioc">
             <div class="panel">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#report_ioc" href="#extracted_iocs">Report
-                            Indicators ({{result.summary.total_extracted_indicators}})</a>
-                    </h4>
-                </div>
-                <div id="extracted_iocs" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        {% for key, val in result.data.reportIndicators.items %}
-                        <div class="metadata_div indicators-div">
-                            <div class="panel-group" id="{{key}}">
-                                <div class="panel">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#{{key}}" href="#{{key}}_data">{{key}} ({{val|length}})</a>
-                                        </h4>
-                                    </div>
-                                    <div id="{{key}}_data" class="panel-collapse collapse">
-                                        <div class="panel-body">
-
-                                            <table class="wf-table-horizontal datatable">
-                                                <thead class="hide_header">
-                                                <tr>
-                                                    <th></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for curr_val in val %}
-                                                <tr>
-                                                    <td>
-                                                        {% if key == "URL" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "BITCOIN_ADDRESS" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['trustar bitcoin address'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "IP" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "SOFTWARE" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['file name'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "MD5" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['md5'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "SHA1" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['sha1'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "SHA256" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['sha256'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "EMAIL_ADDRESS" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['email'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "CVE" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['trustar cve number'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "MALWARE" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['trustar malware'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% elif key == "REGISTRY_KEY" %}
-                                                        <a href="javascript:;"
-                                                           onclick="context_menu(this, [{'contains': ['trustar registry key'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
-                                                            {{ curr_val }}
-                                                            &nbsp;
-                                                            <span class="fa fa-caret-down"
-                                                                  style="font-size: smaller;"></span>
-                                                        </a>
-                                                        {% else %}
-                                                        {{ curr_val }}
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
-
-
-                                        </div>
-                                    </div>
-                                </div>
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse"
+                     data-parent="#report_ioc"
+                     href="#extracted_iocs">Report
+                  Indicators ({{ result.summary.total_extracted_indicators }})</a>
+                </h4>
+              </div>
+              <div id="extracted_iocs" class="panel-collapse collapse">
+                <div class="panel-body">
+                  {% for key, val in result.data.reportIndicators.items %}
+                    <div class="metadata_div indicators-div">
+                      <div class="panel-group" id="{{ key }}">
+                        <div class="panel">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a data-toggle="collapse"
+                                 data-parent="#{{ key }}"
+                                 href="#{{ key }}_data">{{ key }} ({{ val|length }})</a>
+                            </h4>
+                          </div>
+                          <div id="{{ key }}_data" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <table class="wf-table-horizontal datatable">
+                                <thead class="hide_header">
+                                  <tr>
+                                    <th></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for curr_val in val %}
+                                    <tr>
+                                      <td>
+                                        {% if key == "URL" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "BITCOIN_ADDRESS" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['trustar bitcoin address'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "IP" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "SOFTWARE" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['file name'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "MD5" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['md5'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "SHA1" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['sha1'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "SHA256" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['sha256'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "EMAIL_ADDRESS" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['email'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "CVE" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['trustar cve number'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "MALWARE" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['trustar malware'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% elif key == "REGISTRY_KEY" %}
+                                          <a href="javascript:;"
+                                             onclick="context_menu(this, [{'contains': ['trustar registry key'], 'value': '{{ curr_val }}' }], 0, {{ container.id }}, null, false);">
+                                            {{ curr_val }}
+                                            &nbsp;
+                                            <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                                          </a>
+                                        {% else %}
+                                          {{ curr_val }}
+                                        {% endif %}
+                                      </td>
+                                    </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
                             </div>
+                          </div>
                         </div>
-                        {% endfor %}
+                      </div>
                     </div>
+                  {% endfor %}
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-    {% endif %}
+      {% endif %}
     {% endfor %}
-
-</div>
-
-<script>
+  </div>
+  <script>
 $.extend(true, $.fn.dataTable.defaults, {
     "searching": true,
     "bLengthChange": false,
@@ -349,6 +333,5 @@ $.extend(true, $.fn.dataTable.defaults, {
 
 
 
-</script>
-
+  </script>
 {% endblock %}

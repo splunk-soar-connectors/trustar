@@ -1,16 +1,17 @@
 {% extends 'widgets/widget_template.html' %}
 {% load custom_template %}
-
-{% block custom_title_prop %}{% if title_logo %}style="background-size: auto 60%; background-position: 50%; background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"{% endif %}{% endblock %}
+{% block custom_title_prop %}
+  {% if title_logo %}
+    style="background-size: auto 60%; background-position: 50%; background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"
+  {% endif %}
+{% endblock %}
 {% block title1 %}{{ title1 }}{% endblock %}
 {% block title2 %}{{ title2 }}{% endblock %}
-{% block custom_tools %}
-{% endblock %}
-
-{% block widget_content %} <!-- Main Start Block -->
-
-<!-- File: trustar_display_email_details.html
-  Copyright (c) 2017-2023 Splunk Inc.
+{% block custom_tools %}{% endblock %}
+{% block widget_content %}
+  <!-- Main Start Block -->
+  <!-- File: trustar_display_email_details.html
+  Copyright (c) 2017-2025 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,9 +24,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 -->
-
-<style>
-
+  <style>
     .trustar a:link {
     }
 
@@ -82,67 +81,62 @@ and limitations under the License.
     float: left;
     }
 
-</style>
-
-<div class="trustar" style="overflow: auto; width: 100%; height: 100%; padding-left:10px; padding-right:10px"> <!-- Main Div -->
-
-    {% for result in results %} <!-- loop for each result -->
-    {% if not result.data %}
-    <h4 class="wf-h4-style">Data not found</h4>
-    {% else %}
-    <div class="email_submissions">
-    <table id="watch-list-table" class="wf-table-horizontal datatable">
-        <thead>
-        <tr>
-            <th>Submission ID</th>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Priority Event Score</th>
-            <th>Indicators</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for email in result.data %}
-        <tr>
-            <td>
-                <a href="javascript:;"
-                   onclick="context_menu(this, [{'contains': ['trustar email submission id'], 'value': '{{ email.submissionId }}' }], 0, {{ container.id }}, null, false);">
-                    {{ email.submissionId }}
-                    &nbsp;
-                    <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                </a>
-            </td>
-            <td>
-                {{ email.title }}
-            </td>
-            <td>
-                {{ email.status }}
-            </td>
-            <td>
-                {{ email.priorityEventScore }}
-            </td>
-            <td>
-                <table class="wf-table-vertical">
-                {% for indicator in email.context %}
+  </style>
+  <div class="trustar"
+       style="overflow: auto;
+              width: 100%;
+              height: 100%;
+              padding-left:10px;
+              padding-right:10px">
+    <!-- Main Div -->
+    {% for result in results %}
+      <!-- loop for each result -->
+      {% if not result.data %}
+        <h4 class="wf-h4-style">Data not found</h4>
+      {% else %}
+        <div class="email_submissions">
+          <table id="watch-list-table" class="wf-table-horizontal datatable">
+            <thead>
+              <tr>
+                <th>Submission ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority Event Score</th>
+                <th>Indicators</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for email in result.data %}
                 <tr>
-                    <td>
-                        {{ indicator.indicatorValue }}
-                    </td>
+                  <td>
+                    <a href="javascript:;"
+                       onclick="context_menu(this, [{'contains': ['trustar email submission id'], 'value': '{{ email.submissionId }}' }], 0, {{ container.id }}, null, false);">
+                      {{ email.submissionId }}
+                      &nbsp;
+                      <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                    </a>
+                  </td>
+                  <td>{{ email.title }}</td>
+                  <td>{{ email.status }}</td>
+                  <td>{{ email.priorityEventScore }}</td>
+                  <td>
+                    <table class="wf-table-vertical">
+                      {% for indicator in email.context %}
+                        <tr>
+                          <td>{{ indicator.indicatorValue }}</td>
+                        </tr>
+                      {% endfor %}
+                    </table>
+                  </td>
                 </tr>
-                {% endfor %}
-            </table>
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    </div>
-    {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
     {% endfor %}
-
-</div>
-
-<script>
+  </div>
+  <script>
 $.extend(true, $.fn.dataTable.defaults, {
     "searching": true,
     "bLengthChange": false,
@@ -160,6 +154,5 @@ $.extend(true, $.fn.dataTable.defaults, {
     }
   });
   $('.datatable').DataTable();
-</script>
-
+  </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 # File: trustar_view.py
 #
-# Copyright (c) 2017-2023 Splunk Inc.
+# Copyright (c) 2017-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,9 @@ import time
 
 
 def _parse_data(data):
-
     # Modify time format
-    data['created'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(data['created'] / 1000))
-    data['timeBegan'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(data['timeBegan'] / 1000))
+    data["created"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(data["created"] / 1000))
+    data["timeBegan"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(data["timeBegan"] / 1000))
 
     # Parse data so as to create dictionary that includes ioc_name as key and list of ioc_value as its value
     indicators = data.get("indicators")
@@ -30,8 +29,20 @@ def _parse_data(data):
     if indicators:
         for indicator in indicators:
             for key in indicator:
-                if key not in ['IP', 'CIDR_BLOCK', 'URL', 'SOFTWARE', 'MD5', 'SHA256', 'EMAIL_ADDRESS', 'MALWARE',
-                               'REGISTRY_KEY', 'CVE', 'SHA1', 'BITCOIN_ADDRESS']:
+                if key not in [
+                    "IP",
+                    "CIDR_BLOCK",
+                    "URL",
+                    "SOFTWARE",
+                    "MD5",
+                    "SHA256",
+                    "EMAIL_ADDRESS",
+                    "MALWARE",
+                    "REGISTRY_KEY",
+                    "CVE",
+                    "SHA1",
+                    "BITCOIN_ADDRESS",
+                ]:
                     continue
                 indicator_type = str(key)
                 if indicator_type not in ioc_details.keys():
@@ -46,7 +57,6 @@ def _parse_data(data):
 
 
 def _get_ctx_result(result, provides):
-
     ctx_result = {}
 
     param = result.get_param()
@@ -75,8 +85,7 @@ def _get_ctx_result(result, provides):
 
 # Function to provide custom view for all actions
 def display_action_details(provides, all_app_runs, context):
-
-    context['results'] = results = []
+    context["results"] = results = []
     for summary, action_results in all_app_runs:
         for result in action_results:
             ctx_result = _get_ctx_result(result, provides)

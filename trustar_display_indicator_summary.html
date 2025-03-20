@@ -1,18 +1,18 @@
 {% extends 'widgets/widget_template.html' %}
 {% load custom_template %}
-
-{% block custom_title_prop %}{% if title_logo %}style="background-size: auto 60%; background-position: 50%;
-background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"{% endif %}{% endblock %}
+{% block custom_title_prop %}
+  {% if title_logo %}
+    style="background-size: auto 60%; background-position: 50%;
+    background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"
+  {% endif %}
+{% endblock %}
 {% block title1 %}{{ title1 }}{% endblock %}
 {% block title2 %}{{ title2 }}{% endblock %}
-{% block custom_tools %}
-{% endblock %}
-
+{% block custom_tools %}{% endblock %}
 {% block widget_content %}
-<!-- Main Start Block -->
-
-<!-- File: trustar_display_indicator_summary.html
-  Copyright (c) 2017-2023 Splunk Inc.
+  <!-- Main Start Block -->
+  <!-- File: trustar_display_indicator_summary.html
+  Copyright (c) 2017-2025 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,8 +25,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 -->
-
-<style>
+  <style>
     .trustar a:hover {
         text-decoration: underline;
     }
@@ -92,100 +91,99 @@ and limitations under the License.
     .trustar a.nowrap {
         white-space: nowrap;
     }
-</style>
-<div class="trustar" style="overflow: auto; width: 100%; height: 100%; padding-left:10px; padding-right:10px">
+  </style>
+  <div class="trustar"
+       style="overflow: auto;
+              width: 100%;
+              height: 100%;
+              padding-left:10px;
+              padding-right:10px">
     <!-- Main Div -->
     {% for result in results %}
-    <!-- loop for each result -->
-    <br>
-
-    <!------------------- For each Result ---------------------->
-    {% if not result.data %}
-    <h4 class="wf-h4-style">No data found</h4>
-
-    {% else %}
-    <div class="results">
-        <h4 class="wf-h4-style">Indicator Summary</h4>
-
-        <!--Default View-->
-        <table class="wf-table-horizontal datatable">
+      <!-- loop for each result -->
+      <br>
+      <!------------------- For each Result ---------------------->
+      {% if not result.data %}
+        <h4 class="wf-h4-style">No data found</h4>
+      {% else %}
+        <div class="results">
+          <h4 class="wf-h4-style">Indicator Summary</h4>
+          <!--Default View-->
+          <table class="wf-table-horizontal datatable">
             <thead>
-                <tr>
-                    <th>Indicator Type</th>
-                    <th>Indicator Value</th>
-                    <th>Description</th>
-                    <th>Score Name</th>
-                    <th>Score Value</th>
-                    <th>Severity Level</th>
-                    <th>Attributes</th>
-                </tr>
+              <tr>
+                <th>Indicator Type</th>
+                <th>Indicator Value</th>
+                <th>Description</th>
+                <th>Score Name</th>
+                <th>Score Value</th>
+                <th>Severity Level</th>
+                <th>Attributes</th>
+              </tr>
             </thead>
             <tbody>
-                {% for data in result.data %}
+              {% for data in result.data %}
                 <tr>
-                    <td>
-                        {% if data.type %}
-                            {{ data.type }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if data.value %}
-                            {{ data.value }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if data.description %}
-                            {{ data.description }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if data.score.name %}
-                            {{ data.score.name }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if data.score.value %}
-                            {{ data.score.value }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if data.severityLevel != None %}
-                            {{ data.severityLevel }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td class="no-word-wrap">
-                        {% if data.attributes %}
-                            {% for attribute in data.attributes %}
-                                <li>{{ attribute.name }}: {{ attribute.value }}</li>
-                            {% endfor %}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
+                  <td>
+                    {% if data.type %}
+                      {{ data.type }}
+                    {% else %}
+                      None
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if data.value %}
+                      {{ data.value }}
+                    {% else %}
+                      None
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if data.description %}
+                      {{ data.description }}
+                    {% else %}
+                      None
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if data.score.name %}
+                      {{ data.score.name }}
+                    {% else %}
+                      None
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if data.score.value %}
+                      {{ data.score.value }}
+                    {% else %}
+                      None
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if data.severityLevel != None %}
+                      {{ data.severityLevel }}
+                    {% else %}
+                      None
+                    {% endif %}
+                  </td>
+                  <td class="no-word-wrap">
+                    {% if data.attributes %}
+                      {% for attribute in data.attributes %}<li>{{ attribute.name }}: {{ attribute.value }}</li>{% endfor %}
+                    {% else %}
+                      None
+                    {% endif %}
+                  </td>
                 </tr>
-                {% endfor %}
+              {% endfor %}
             </tbody>
-        </table>
-    </div>
-    {% endif %}
+          </table>
+        </div>
+      {% endif %}
     {% endfor %}
     <!-- loop for each result end -->
-</div> <!-- Main Div -->
-
-
-<script>
+  </div>
+  <!-- Main Div -->
+  <script>
     $.extend(true, $.fn.dataTable.defaults, {
         "searching": false,
         "bLengthChange": false,
@@ -203,6 +201,6 @@ and limitations under the License.
     });
     $.fn.DataTable.ext.pager.numbers_length = 5;
     $('.datatable').DataTable();
-</script>
+  </script>
 {% endblock %}
 <!-- Main Start Block -->
