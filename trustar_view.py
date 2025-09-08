@@ -18,13 +18,13 @@
 import time
 
 
-def _parse_data(data):
+def _parse_data(parse_data):
     # Modify time format
-    data["created"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(data["created"] / 1000))
-    data["timeBegan"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(data["timeBegan"] / 1000))
+    parse_data["created"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(parse_data["created"] / 1000))
+    parse_data["timeBegan"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(parse_data["timeBegan"] / 1000))
 
     # Parse data so as to create dictionary that includes ioc_name as key and list of ioc_value as its value
-    indicators = data.get("indicators")
+    indicators = parse_data.get("indicators")
     ioc_details = dict()
     if indicators:
         for indicator in indicators:
@@ -52,8 +52,8 @@ def _parse_data(data):
                     ioc_details[indicator_type].append(indicator[indicator_type])
 
     # Overriding "indicators" key in response
-    data["indicators"] = ioc_details
-    return data
+    parse_data["indicators"] = ioc_details
+    return parse_data
 
 
 def _get_ctx_result(result, provides):
@@ -61,24 +61,24 @@ def _get_ctx_result(result, provides):
 
     param = result.get_param()
     summary = result.get_summary()
-    data = result.get_data()
+    result_data = result.get_data()
 
     ctx_result["param"] = param
 
     if summary:
         ctx_result["summary"] = summary
 
-    if not data:
+    if not result_data:
         ctx_result["data"] = dict()
         return ctx_result
 
     if provides == "get report":
-        data = _parse_data(data[0])
+        result_data = _parse_data(result_data[0])
 
     if provides == "submit report":
-        data = data[0]
+        result_data = result_data[0]
 
-    ctx_result["data"] = data
+    ctx_result["data"] = result_data
 
     return ctx_result
 

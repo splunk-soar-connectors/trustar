@@ -277,6 +277,7 @@ class TrustarConnector(BaseConnector):
 
         if phantom.is_fail(ret_val):
             error_message = action_result.get_message()
+            ret_val_2 = None
 
             # Handling of too many requests
             if error_message and consts.TRUSTAR_REST_TOO_MANY_REQUESTS_MSG in error_message:
