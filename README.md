@@ -1,9 +1,9 @@
 # TruSTAR
 
-Publisher: Splunk \
-Connector Version: 3.2.0 \
-Product Vendor: TruSTAR Technology \
-Product Name: TruSTAR \
+Publisher: Splunk <br>
+Connector Version: 3.2.0 <br>
+Product Vendor: TruSTAR Technology <br>
+Product Name: TruSTAR <br>
 Minimum Product Version: 6.1.0
 
 This App integrates with TruSTAR to provide various hunting and reporting actions
@@ -27,39 +27,39 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate credentials provided for connectivity \
-[hunt ioc](#action-hunt-ioc) - Get report IDs associated with an IOC \
-[hunt ip](#action-hunt-ip) - Get report IDs associated with an IP/CIDR \
-[hunt url](#action-hunt-url) - Get report IDs associated with a URL \
-[hunt file](#action-hunt-file) - Get report IDs associated with a file \
-[hunt email](#action-hunt-email) - Get report IDs associated with an email address \
-[hunt cve](#action-hunt-cve) - Get report IDs associated with a CVE (Common Vulnerability and Exposure) number \
-[hunt malware](#action-hunt-malware) - Get report IDs associated with a malware indicator \
-[hunt registry key](#action-hunt-registry-key) - Get report IDs associated with a registry key \
-[hunt bitcoin address](#action-hunt-bitcoin-address) - Get report IDs associated with a bitcoin address \
-[get report](#action-get-report) - Get report details \
-[copy report](#action-copy-report) - Copy a report to another enclave \
-[move report](#action-move-report) - Move a report to another enclave \
-[delete report](#action-delete-report) - Delete a report \
-[submit report](#action-submit-report) - Submit report to TruSTAR \
-[update report](#action-update-report) - Update a TruSTAR report \
-[safelist ioc](#action-safelist-ioc) - Add IOCs to the whitelist \
-[unsafelist ioc](#action-unsafelist-ioc) - Remove IOC from the whitelist \
-[list enclaves](#action-list-enclaves) - List all the accessible enclaves in TruSTAR \
-[list emails](#action-list-emails) - Get a list of emails submitted to Phishing Triage \
-[list indicators](#action-list-indicators) - Get a list of indictors found in phishing submissions \
-[indicator reputation](#action-indicator-reputation) - Get enriched information of the indictor \
-[get indicator summary](#action-get-indicator-summary) - Get the structured summaries about indicators \
-[get indicator metadata](#action-get-indicator-metadata) - Get the metadata associated with the indicator \
-[triage email](#action-triage-email) - Change the status of an email submission \
-[parse entities](#action-parse-entities) - Find all of the entity terms that can be found from applying extraction rules on a chunk of text \
+[test connectivity](#action-test-connectivity) - Validate credentials provided for connectivity <br>
+[hunt ioc](#action-hunt-ioc) - Get report IDs associated with an IOC <br>
+[hunt ip](#action-hunt-ip) - Get report IDs associated with an IP/CIDR <br>
+[hunt url](#action-hunt-url) - Get report IDs associated with a URL <br>
+[hunt file](#action-hunt-file) - Get report IDs associated with a file <br>
+[hunt email](#action-hunt-email) - Get report IDs associated with an email address <br>
+[hunt cve](#action-hunt-cve) - Get report IDs associated with a CVE (Common Vulnerability and Exposure) number <br>
+[hunt malware](#action-hunt-malware) - Get report IDs associated with a malware indicator <br>
+[hunt registry key](#action-hunt-registry-key) - Get report IDs associated with a registry key <br>
+[hunt bitcoin address](#action-hunt-bitcoin-address) - Get report IDs associated with a bitcoin address <br>
+[get report](#action-get-report) - Get report details <br>
+[copy report](#action-copy-report) - Copy a report to another enclave <br>
+[move report](#action-move-report) - Move a report to another enclave <br>
+[delete report](#action-delete-report) - Delete a report <br>
+[submit report](#action-submit-report) - Submit report to TruSTAR <br>
+[update report](#action-update-report) - Update a TruSTAR report <br>
+[safelist ioc](#action-safelist-ioc) - Add IOCs to the whitelist <br>
+[unsafelist ioc](#action-unsafelist-ioc) - Remove IOC from the whitelist <br>
+[list enclaves](#action-list-enclaves) - List all the accessible enclaves in TruSTAR <br>
+[list emails](#action-list-emails) - Get a list of emails submitted to Phishing Triage <br>
+[list indicators](#action-list-indicators) - Get a list of indictors found in phishing submissions <br>
+[indicator reputation](#action-indicator-reputation) - Get enriched information of the indictor <br>
+[get indicator summary](#action-get-indicator-summary) - Get the structured summaries about indicators <br>
+[get indicator metadata](#action-get-indicator-metadata) - Get the metadata associated with the indicator <br>
+[triage email](#action-triage-email) - Change the status of an email submission <br>
+[parse entities](#action-parse-entities) - Find all of the entity terms that can be found from applying extraction rules on a chunk of text <br>
 [list observable types](#action-list-observable-types) - Get all valid observable types
 
 ## action: 'test connectivity'
 
 Validate credentials provided for connectivity
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -74,7 +74,7 @@ No Output
 
 Get report IDs associated with an IOC
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>ioc</b> parameter must be greater than 3 characters.
@@ -101,7 +101,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report IDs associated with an IP/CIDR
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>ip</b> parameter must be greater than 3 characters.
@@ -128,7 +128,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report IDs associated with a URL
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>url</b> parameter must be greater than 3 characters.
@@ -155,7 +155,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report IDs associated with a file
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>file</b> parameter must be greater than 3 characters.
@@ -182,7 +182,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report IDs associated with an email address
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>email</b> parameter must be greater than 3 characters.
@@ -209,7 +209,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report IDs associated with a CVE (Common Vulnerability and Exposure) number
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>cve_number</b> parameter must be greater than 3 characters.
@@ -236,7 +236,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report IDs associated with a malware indicator
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>malware</b> parameter must be greater than 3 characters.
@@ -263,7 +263,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report IDs associated with a registry key
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>registry_key</b> parameter must be greater than 3 characters.
@@ -290,7 +290,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report IDs associated with a bitcoin address
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Input to <b>bitcoin_address</b> parameter must be greater than 3 characters.
@@ -317,7 +317,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get report details
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 The <b>id_type</b> parameter can be one of the following values:<ul><li>internal</li><li>external</li></ul>
@@ -375,7 +375,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Copy a report to another enclave
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -403,7 +403,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Move a report to another enclave
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -431,7 +431,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Delete a report
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 The <b>id_type</b> parameter can be one of the following values:<ul><li>internal</li><li>external</li></ul>
@@ -460,7 +460,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Submit report to TruSTAR
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 If <b>distribution_type</b> selected is <b>ENCLAVE</b>, <b>enclave_ids</b> must be provided from the ones configured in the asset. If <b>time_discovered</b> is not provided, the action will consider current system time.
@@ -511,7 +511,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Update a TruSTAR report
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -550,7 +550,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add IOCs to the whitelist
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 Input to <b>ioc</b> parameter must be greater than 3 characters. The type of the IOC will be determined by TruSTAR.
@@ -579,7 +579,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Remove IOC from the whitelist
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 Input to <b>ioc</b> parameter must be greater than 3 characters. The type of the IOC will be determined by TruSTAR.
@@ -608,7 +608,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List all the accessible enclaves in TruSTAR
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 This action will only list the enclaves that the user has access to.
@@ -639,7 +639,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get a list of emails submitted to Phishing Triage
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 If the parameters <b>start_time</b> and <b>end_time</b> are not provided, then last 24 hours data will be fetched. The <b>start_time</b> of the time window must be within 1 month from the current time.
@@ -683,7 +683,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get a list of indictors found in phishing submissions
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 If the parameters <b>start_time</b> and <b>end_time</b> are not provided, then last 24 hours data will be fetched. The <b>start_time</b> of the time window must be within 1 month from the current time.
@@ -726,7 +726,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get enriched information of the indictor
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 If the value of the action parameter <b>enclave ids</b> is kept empty, then the value will be considered the same as a configuration parameter's value. If the configuration parameter is also kept empty, nothing will be passed in <b>enclave ids</b> parameter, and data from all the enclaves for which the user has READ access will be fetched.<br/>This action will fetch the data for the past one year.
@@ -779,7 +779,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get the structured summaries about indicators
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 If the value of the action parameter <b>enclave ids</b> is kept empty, then the value will be considered the same as a configuration parameter's value. If the configuration parameter is also kept empty, nothing will be passed in <b>enclave ids</b> parameter, and data from all the enclaves for which the user has READ access will be fetched.
@@ -819,7 +819,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get the metadata associated with the indicator
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 <p>If the <b>indicator types</b> field is used, it must be present for all entries in the <b>indicator values</b> parameter. i.e. The length of <b>indicator types</b> and <b>indicator values</b> parameters should be the same.</p><p>If the value of the action parameter <b>enclave ids</b> is kept empty, then the value will be considered the same as a configuration parameter's value. If the configuration parameter is also kept empty, nothing will be passed in <b>enclave ids</b> parameter, and data from all the enclaves for which the user has READ access will be fetched.</p>
@@ -863,7 +863,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Change the status of an email submission
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -890,7 +890,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Find all of the entity terms that can be found from applying extraction rules on a chunk of text
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -916,7 +916,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get all valid observable types
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
