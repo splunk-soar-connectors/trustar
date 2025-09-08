@@ -1,7 +1,7 @@
 # TruSTAR
 
 Publisher: Splunk <br>
-Connector Version: 3.2.0 <br>
+Connector Version: 3.2.1 <br>
 Product Vendor: TruSTAR Technology <br>
 Product Name: TruSTAR <br>
 Minimum Product Version: 6.1.0
